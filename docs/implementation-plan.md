@@ -20,20 +20,22 @@
 
 ## Phase 04 Implementation
 
-- `core.registry` と JSON validator を実装する。
-- `core.plan` で status classification と dry-run report を生成する。
-- `adapters.git` と `adapters.local` の MVP を実装する。
-- Blender アドオン shell、panel、operator、Link inspector、reload operator を実装する。
+- [x] `core.registry` と JSON validator を実装する。
+- [x] `core.plan` で status classification と dry-run report を生成する。
+- [x] `adapters.git` と `adapters.local` の MVP を実装する。
+- [x] Blender アドオン shell、panel、operator、Link inspector、reload operator を実装する。
+- [x] Windows companion launcher、settings 保存、installer dry-run を実装する。
 
 ## Phase 05 Test
 
-- Node または Python の unit test で registry / plan / adapter を検証する。
-- Git fixture で remote-newer、local-dirty、conflict-risk を再現する。
-- Blender runtime gate で Integration File が Part File を Link し、reload できることを確認する。
-- 文字化け、JSON schema、docs completeness を `npm test` に含める。
+- [x] Python unit test で registry / plan / adapter を検証する。
+- [x] Git runner fixture で remote-newer、local-dirty、conflict-risk を再現する。
+- [x] Windows runtime gate で local executable、installer dry-run、settings 保存を確認する。
+- [ ] Blender runtime gate で Integration File が Part File を Link し、reload できることを確認する。alpha release 後に手動で実施する。
+- [x] 文字化け、JSON schema、docs completeness を `npm test` に含める。
 
 ## Phase 06 Release
 
-- インストール手順、ユーザーガイド、manual test、QCDS、competitive benchmark を更新する。
-- closed alpha prerelease 用の docs ZIP と release notes を作成する。
-- GitHub Release は prerelease とし、手動テスト未実施項目を明記する。
+- [x] インストール手順、ユーザーガイド、manual test、QCDS、competitive benchmark を更新する。
+- [x] alpha prerelease 用の add-on ZIP、docs ZIP、release notes を作成する。
+- [x] GitHub Release は prerelease とし、Blender 手動テスト未実施項目を明記する。

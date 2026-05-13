@@ -1,6 +1,6 @@
 # Blender Linked Part Version Manager
 
-Blender Linked Part Version Manager は、統合用 `.blend` と部位別作業 `.blend` を分けて共同制作するチーム向けの Blender アドオン案です。Hair、Body、Face、Accessories などの部位タグ、外部リポジトリまたはファイル管理システムからの取得、Blender Link の再読み込み、更新前プレビューを同じ作業単位で扱います。
+Blender Linked Part Version Manager は、統合用 `.blend` と部位別作業 `.blend` を分けて共同制作するチーム向けの Blender アドオンと Windows companion launcher です。Hair、Body、Face、Accessories などの部位タグ、外部リポジトリまたはファイル管理システムからの取得、Blender Link の再読み込み、更新前プレビューを同じ作業単位で扱います。
 
 ## Source
 
@@ -9,7 +9,7 @@ Blender Linked Part Version Manager は、統合用 `.blend` と部位別作業 
 - Public repo: `https://github.com/Sunmax0731/blender-linked-part-version-manager`
 - created_idea: `D:/AI/BlenderAddon/created_idea_007_blender-linked-part-version-manager`
 - 同梱 ZIP: `D:/AI/BlenderAddon/created_idea_007_blender-linked-part-version-manager/idea_007_blender-linked-part-version-manager.zip`
-- 主な公開先: GitHub Release / Blender Extensions
+- 主な公開先: GitHub Release / Blender Extensions / Windows alpha launcher
 
 ## 目標
 
@@ -20,10 +20,19 @@ Blender Linked Part Version Manager は、統合用 `.blend` と部位別作業 
 ## MVP スコープ
 
 - 部位レジストリ JSON の定義と検証
-- GitHub / ローカルファイル管理を抽象化する同期アダプタ設計
-- Blender Link 対象の検出、再読み込み、更新前 dry-run の仕様化
+- Git / ローカルファイル管理を抽象化する同期アダプタ MVP
+- Blender Link 対象の検出、再読み込み、更新前 dry-run のアドオン shell
+- Windows companion launcher による registry 検証、状態 preview、設定保存
 - 代表シナリオと手動検証手順
-- QCDS、競合比較、release checklist の初期版
+- QCDS、release checklist、docs ZIP、closed alpha release evidence
+
+## 主要コンポーネント
+
+- `addon/blender_linked_part_version_manager/`: Blender 4.2 以降向けアドオン。
+- `addon/blender_linked_part_version_manager/core/`: Blender 非依存の registry validation と sync plan。
+- `addon/blender_linked_part_version_manager/adapters/`: Git / local folder の dry-run adapter。
+- `windows/`: Windows companion launcher と alpha installer dry-run。
+- `scripts/`: docs、unit test、runtime gate、release package の検証。
 
 ## 開発コマンド
 
@@ -32,4 +41,19 @@ cd D:\AI\BlenderAddon\blender-linked-part-version-manager
 npm test
 ```
 
-現時点では実装前の開発準備段階です。`npm test` は必須ドキュメント、JSON、文字化け断片、代表シナリオ定義を検査します。
+`npm test` は docs/JSON/文字化け検査、Python unit test、Windows runtime gate、release package 生成、release artifact 検査を実行します。
+
+## Windows Alpha Launcher
+
+```powershell
+windows\blpvm-companion.cmd --version
+windows\blpvm-companion.cmd validate-registry --registry samples\representative-suite.json
+windows\blpvm-companion.cmd init-settings --registry samples\representative-suite.json
+windows\install-alpha.cmd --dry-run
+```
+
+`init-settings` は `%APPDATA%\BlenderLinkedPartVersionManager\settings.json` に設定を保存します。credential、token、`.blend` 本体は保存しません。
+
+## Alpha Release Notes
+
+`v0.1.0-alpha.1` は prerelease として公開し、リリース後に Blender 実機で Link reload の手動確認を行います。Codex 実行環境では Blender CLI が PATH 上になかったため、Blender host runtime gate は `manual-pending` として扱います。

@@ -9,6 +9,7 @@
 | Part Registry | 部位と Link、外部取得元、担当者、バージョン参照を保持する JSON。 |
 | Sync Plan | 取得、reload、検証、push 前確認の予定をまとめた dry-run 結果。 |
 | Sync Adapter | GitHub、Git CLI、ローカル共有フォルダなど外部取得元を抽象化する実装境界。 |
+| Windows Companion | Blender 外で registry 検証、status preview、設定保存を行う alpha 用 launcher。 |
 
 ## Registry Schema
 
@@ -81,3 +82,16 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 - 認証情報は registry に保存しない。
 - GitHub token を扱う場合もアドオン設定へ平文保存しない。
 - ローカルパスを外部レポートへ出す場合は、ユーザーが明示的に export した場合だけにする。
+
+## Windows Companion Contract
+
+`windows/blpvm-companion.cmd` は次の command を提供する。
+
+| Command | 内容 |
+| --- | --- |
+| `--version` | launcher version を表示する。 |
+| `validate-registry --registry <path>` | registry JSON の必須項目と重複を検査する。 |
+| `status --registry <path>` | registry の代表 status を JSON で表示する。 |
+| `init-settings --registry <path>` | `%APPDATA%` 配下に設定 JSON を保存する。 |
+
+`windows/install-alpha.cmd --dry-run` は installer 起動確認用であり、dry-run ではファイルコピーを行わない。

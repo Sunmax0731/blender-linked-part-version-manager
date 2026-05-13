@@ -1,6 +1,6 @@
 # Blender UI と更新前プレビューの導線を固める
 
-- Status: open
+- Status: done
 - Priority: P2
 - Phase: 03-design
 - Linked TODO: [TODO.md](../TODO.md)
@@ -12,7 +12,11 @@
 
 ## Acceptance Criteria
 
-- [ ] Part Registry、Sync Preview、Link Health、Publish Part の表示項目が確定している。
-- [ ] `local-dirty` と `conflict-risk` の操作制限が設計されている。
-- [ ] broken link の復旧候補の表示方針が決まっている。
-- [ ] `docs/design.md` と `docs/manual-test.md` が更新されている。
+- [x] Part Registry、Sync Preview、Link Health、Publish Part の表示項目が確定している。
+- [x] `local-dirty` と `conflict-risk` の操作制限が設計されている。
+- [x] broken link の復旧候補の表示方針が決まっている。
+- [x] `docs/design.md` と `docs/manual-test.md` が更新されている。
+
+## Resolution
+
+Blender Sidebar の `Linked Parts` パネルで registry validation、sync preview、dry-run reload を提供する。alpha では Publish Part は preview contract までに留め、push 実行は docs 手順に残す。

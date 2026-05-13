@@ -10,6 +10,8 @@
 | Sync plan classification | status classifier | `current`、`remote-newer`、`local-dirty`、`missing-link`、`broken-link`、`conflict-risk` を分類できる。 |
 | Git fixture | Git adapter | fetch / status / pull dry-run の結果を安定して返す。 |
 | Local fixture | local adapter | 共有フォルダ mirror の存在、更新日時、コピー候補を分類できる。 |
+| Windows runtime gate | companion launcher / installer | local executable 起動、settings 保存、installer dry-run が成功する。 |
+| Release artifact check | dist / docs | add-on ZIP、docs ZIP、test summary、runtime gate、QCDS metrics が存在する。 |
 
 ## Blender Runtime Gate
 
@@ -33,4 +35,4 @@
 
 ## Current Status
 
-現時点では実装前のため、`npm test` は docs / JSON / 文字化け検査のみを行う。Blender runtime gate は未実施であり、QCDS の Quality と Satisfaction は `B+` 以下に留める。
+`npm test` は docs / JSON / 文字化け検査、Python unit test、Windows runtime gate、release package、release artifact check を行う。Codex 実行環境では Blender CLI が PATH 上にないため、Blender runtime gate はリリース後の手動確認として残す。

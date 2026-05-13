@@ -15,13 +15,25 @@ const requiredFiles = [
   "docs/implementation-plan.md",
   "docs/test-plan.md",
   "docs/manual-test.md",
+  "docs/installation-guide.md",
+  "docs/user-guide.md",
+  "docs/strict-manual-test-addendum.md",
   "docs/release-checklist.md",
   "docs/competitive-benchmark.md",
   "docs/evaluation-criteria.md",
   "docs/qcds-evaluation.md",
+  "docs/qcds-strict-metrics.json",
   "docs/source-idea-pack.json",
+  "docs/release-evidence.json",
+  "docs/releases/v0.1.0-alpha.1.md",
   "samples/representative-suite.json",
-  "Issues/README.md"
+  "Issues/README.md",
+  "Issues/0004-alpha-mvp-release.md",
+  "windows/blpvm-companion.mjs",
+  "windows/blpvm-companion.cmd",
+  "windows/install-alpha.cmd",
+  "windows/README.md",
+  "addon/blender_linked_part_version_manager/blender_manifest.toml"
 ];
 
 const suspiciousCodePoints = new Set([0x7e67, 0x90e2, 0x9aeb, 0xfffd]);
@@ -73,6 +85,19 @@ for (const part of suite.parts) {
       throw new Error(`Representative part is missing ${field}: ${JSON.stringify(part)}`);
     }
   }
+}
+
+const metrics = JSON.parse(readText("docs/qcds-strict-metrics.json"));
+const allowedGrades = new Set(["S+", "S-", "A+", "A-", "B+", "B-", "C+", "C-", "D+", "D-"]);
+for (const key of ["Quality", "Cost", "Delivery", "Satisfaction"]) {
+  if (!allowedGrades.has(metrics.grades?.[key])) {
+    throw new Error(`Invalid QCDS grade for ${key}.`);
+  }
+}
+
+const releaseEvidence = JSON.parse(readText("docs/release-evidence.json"));
+if (releaseEvidence.version !== "0.1.0-alpha.1") {
+  throw new Error("release-evidence.json version must match alpha release.");
 }
 
 console.log("Docs completeness check passed.");

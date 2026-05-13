@@ -25,6 +25,8 @@ MVP は Option A を採用する。処理が重くなる場合は adapter 実行
 | `adapters.local` | 共有フォルダやローカル mirror の存在確認とコピー計画 |
 | `blender.link` | linked library 検出、Link 追加、reload、broken link レポート |
 | `report` | JSON / Markdown レポート、QCDS / release evidence 連携 |
+| `windows` | Blender 外の registry 検証、設定保存、installer dry-run |
+| `scripts` | docs、unit test、runtime gate、release package 検証 |
 
 ## Data Flow
 
@@ -39,6 +41,8 @@ flowchart LR
   G --> H["Fetch / Pull"]
   H --> I["Link Reload"]
   I --> J["Validation Result"]
+  K["Windows Companion"] --> A
+  K --> F
 ```
 
 ## Failure Policy
@@ -47,3 +51,4 @@ flowchart LR
 - `broken-link` は registry と Blender 側 Link の両方を表示し、ユーザーに修正候補を選ばせる。
 - adapter 実行失敗時は `.blend` を保存せず、result JSON に終了コード、標準エラー要約、対象部位を残す。
 - scheduled pull は MVP 後とし、まず manual / batch 操作を安定させる。
+- Windows companion は `.blend` を開かず、設定保存と registry preview に限定する。

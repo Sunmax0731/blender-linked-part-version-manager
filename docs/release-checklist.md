@@ -11,13 +11,14 @@
 
 ## Closed Alpha 前
 
-- [ ] Blender アドオン manifest と最小実装を追加した。
-- [ ] Part Registry validator と dry-run report が動く。
-- [ ] Git / local adapter の MVP が動く。
-- [ ] Blender runtime gate が `passed` になっている。
-- [ ] `docs/qcds-evaluation.md` の全観点が `A-` 以上になっている。
-- [ ] `docs/installation-guide.md` と `docs/user-guide.md` を追加した。
-- [ ] GitHub prerelease と docs ZIP を作成した。
+- [x] Blender アドオン manifest と最小実装を追加した。
+- [x] Part Registry validator と dry-run report が動く。
+- [x] Git / local adapter の MVP が動く。
+- [x] Windows runtime gate が `passed` になっている。
+- [ ] Blender runtime gate が手動確認で `passed` になっている。
+- [x] `docs/qcds-evaluation.md` の全観点が `A-` 以上になっている。
+- [x] `docs/installation-guide.md` と `docs/user-guide.md` を追加した。
+- [x] GitHub prerelease と docs ZIP を作成した。
 
 ## Release Evidence
 

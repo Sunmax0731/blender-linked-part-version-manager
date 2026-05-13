@@ -12,6 +12,7 @@
 | Sync Preview | pull / reload 前の影響範囲を確認する。 | plannedActions、risk、missing/broken links |
 | Link Health | 統合 `.blend` 内の library と registry の差分を見る。 | current、missing-link、broken-link、collection mismatch |
 | Publish Part | 担当部位の push 前チェックを行う。 | dirty files、commit message candidate、manual checks |
+| Windows Companion | Blender を起動せず registry と設定を確認する。 | registry path、parts count、settings path |
 
 ## Interaction Rules
 
@@ -39,3 +40,4 @@
 - Link なし: Integration File と Part File の違いを短く表示し、Link 追加手順へ誘導する。
 - 外部 sync 未設定: local-only registry として動かし、source adapter 追加を後回しにできる。
 - Git 未検出: Git adapter を無効化し、local adapter と manual copy 手順を表示する。
+- Windows launcher の Node.js 未検出: installer で Node.js 20 以降が必要であることを表示し、Blender アドオン ZIP の手動導入手順へ誘導する。

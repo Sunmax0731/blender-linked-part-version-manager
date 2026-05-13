@@ -18,12 +18,30 @@ npm test
 期待結果:
 
 - `Docs completeness check passed.` が表示される。
-- `samples/representative-suite.json` が JSON として読める。
-- 文字化け断片や制御文字の検出で失敗しない。
+- Python unit test が通る。
+- `Platform runtime gate passed.` が表示される。
+- `dist/runtime-gate.json`、`dist/test-summary.json`、`dist/blender-linked-part-version-manager.zip`、`dist/blender-linked-part-version-manager-docs.zip` が生成される。
+
+## Windows companion 確認
+
+```powershell
+windows\blpvm-companion.cmd --version
+windows\blpvm-companion.cmd validate-registry --registry samples\representative-suite.json
+windows\blpvm-companion.cmd status --registry samples\representative-suite.json
+windows\blpvm-companion.cmd init-settings --registry samples\representative-suite.json
+windows\install-alpha.cmd --dry-run
+```
+
+期待結果:
+
+- version が `0.1.0` として表示される。
+- registry validation が `ok: true` を返す。
+- `%APPDATA%\BlenderLinkedPartVersionManager\settings.json` が作成され、registry path が保存される。
+- installer dry-run が `ok: true` を返し、実ファイルコピーは行わない。
 
 ## Blender 実機確認手順
 
-実装後に実施する。
+alpha release 後に手作業で実施する。
 
 1. `integration/character_integration.blend` を開く。
 2. `parts/hair/main_hair.blend`、`parts/body/base_body.blend`、`parts/face/main_face.blend`、`parts/accessories/glasses.blend` を Link する。
@@ -36,4 +54,4 @@ npm test
 
 ## 未実施項目
 
-現時点では実装前のため、Blender 上での Link reload と Git adapter の実機確認は未実施。
+Codex 実行環境では Blender CLI が PATH 上にないため、Blender 上での Link reload 実機確認は未実施。alpha release 後、ユーザー手元の Blender 4.2 以降で本手順を実施し、結果を次リリースの `docs/release-evidence.json` に反映する。

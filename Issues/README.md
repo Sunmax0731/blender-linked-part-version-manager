@@ -15,3 +15,10 @@ This folder stores local Markdown issues linked from `TODO.md`.
 - `04-implementation`
 - `05-test`
 - `06-release`
+
+## Current Issues
+
+- [x] [0001](0001-link-part-workspace-requirements.md) 部位別 Link 共同制作の要件を確定する
+- [x] [0002](0002-registry-sync-specification.md) レジストリ、同期計画、衝突状態の仕様を確定する
+- [x] [0003](0003-blender-link-refresh-design.md) Blender UI と更新前プレビューの導線を固める
+- [x] [0004](0004-alpha-mvp-release.md) Alpha MVP 実装と release evidence を完了する

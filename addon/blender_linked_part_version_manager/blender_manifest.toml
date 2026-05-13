@@ -1,0 +1,11 @@
+schema_version = "1.0.0"
+id = "blender_linked_part_version_manager"
+version = "0.1.0"
+name = "Blender Linked Part Version Manager"
+tagline = "Preview linked part updates before refreshing Blender Link libraries"
+maintainer = "Sunmax0731"
+type = "add-on"
+tags = ["Pipeline", "Import-Export", "Scene"]
+blender_version_min = "4.2.0"
+license = ["SPDX:MIT"]
+website = "https://github.com/Sunmax0731/blender-linked-part-version-manager"

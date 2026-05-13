@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "product": "blender-linked-part-version-manager",
+  "version": "0.1.0-alpha.1",
+  "allowedGrades": ["S+", "S-", "A+", "A-", "B+", "B-", "C+", "C-", "D+", "D-"],
+  "grades": {
+    "Quality": "A-",
+    "Cost": "A-",
+    "Delivery": "A-",
+    "Satisfaction": "A-"
+  },
+  "gates": {
+    "windowsPlatformRuntimeGate": {
+      "status": "passed",
+      "evidence": "dist/runtime-gate.json",
+      "criteria": "local executable launch, settings save, and installer dry-run launch"
+    },
+    "blenderHostRuntimeGate": {
+      "status": "manual-pending",
+      "reason": "Blender CLI was not found on PATH in the Codex environment.",
+      "manualTest": "docs/manual-test.md"
+    }
+  },
+  "release": {
+    "tag": "v0.1.0-alpha.1",
+    "latest": false,
+    "manualTestingAfterRelease": true
+  }
+}

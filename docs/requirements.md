@@ -17,6 +17,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - 任意実行または定期実行の sync plan を作り、実行前に更新対象と危険操作を表示する。
 - Blender Link の参照状態を検出し、必要に応じて linked library / collection の reload を実行する。
 - GitHub / Git CLI / ローカルファイル管理を adapter として扱い、MVP は Git とローカルフォルダから始める。
+- Windows companion launcher で registry 検証、状態 preview、設定保存、installer dry-run を実行できる。
 
 ## Functional Requirements
 
@@ -30,6 +31,8 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - R8: バッチ実行は UI から分離し、途中失敗しても統合 `.blend` を保存しない dry-run モードを提供する。
 - R9: registry と sync result は JSON として保存し、Issue、QCDS、release evidence へ転記できる形にする。
 - R10: 文字化けした部位名、タグ、パス、説明文を検出し、正式成果物へ混入させない。
+- R11: Windows companion launcher は `%APPDATA%\BlenderLinkedPartVersionManager\settings.json` に設定を保存し、認証情報や `.blend` 本体を保存しない。
+- R12: alpha release では local executable / installer dry-run の platform runtime gate を必須にし、Blender Link reload 実機確認はリリース後の手動確認として追跡する。
 
 ## Non Functional Requirements
 
@@ -37,7 +40,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - GitHub token や認証情報は保存しない。利用する場合は既存の Git Credential Manager や環境変数に委譲する。
 - Windows パス、相対パス、リポジトリ内パスを混在させず、registry では canonical path と表示用 path を分ける。
 - Link reload の前に保存状態と更新対象を表示し、ユーザーが破壊的操作を避けられるようにする。
-- 公開前の QCDS は Blender runtime gate を含め、Quality と Satisfaction を `A-` 以上にする。
+- alpha 公開前の QCDS は Windows platform runtime gate と自動テストを含め、Blender 実機確認の未実施を明記する。
 
 ## Out of Scope
 

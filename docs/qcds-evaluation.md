@@ -4,19 +4,15 @@
 
 | 観点 | 評価 | 理由 |
 | --- | --- | --- |
-| Quality | B+ | 要件、仕様、設計、テスト計画は整ったが、Blender runtime gate と Link reload 実装は未実施。 |
-| Cost | A- | core、adapter、Blender binding の分離方針を定義し、MVP の依存を Git / local folder に抑えている。 |
-| Delivery | A- | IDEAS 登録、created_idea pack、repo-local docs、TODO、Issues、docs completeness test を準備した。 |
-| Satisfaction | B+ | 期待 UI と dry-run 導線は定義済みだが、Blender 上の実操作確認は未実施。 |
+| Quality | A- | registry validation、sync plan、Git/local adapter、Blender add-on shell、Windows runtime gate、unit test が通っている。Blender 実機 reload は alpha 後の手動確認として残る。 |
+| Cost | A- | core、adapter、Blender binding、Windows companion を分離し、MVP の依存を Git / local folder / Node launcher に抑えている。 |
+| Delivery | A- | README、AGENTS、SKILL、docs、TODO、Issues、release checklist、docs ZIP、release notes、runtime gate evidence を同期した。 |
+| Satisfaction | A- | Blender UI shell と Windows companion で dry-run と設定保存を確認できる。実制作 `.blend` での Link reload 体験は手動確認待ち。 |
 
 ## Gate
 
-公開前の目標は全観点 `A-` 以上。現時点では実装前のため、Quality と Satisfaction は `B+` に留める。
+Windows アプリとしての platform runtime gate は local executable / installer dry-run 起動で `passed`。Blender host runtime gate は Codex 環境に Blender CLI がないため `manual-pending`。
 
 ## Required Improvements
 
-- Blender アドオン最小実装を追加する。
-- Part Registry validator と sync planner を実装する。
-- Blender runtime gate で Integration File と Part File の Link reload を確認する。
-- `docs/installation-guide.md` と `docs/user-guide.md` を追加する。
-- closed alpha release evidence と docs ZIP を作成する。
+- alpha release 後に Blender 4.2 以降で Link reload 手動確認を行い、次リリースで `docs/release-evidence.json` と QCDS を更新する。

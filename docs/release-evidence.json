@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "product": "blender-linked-part-version-manager",
+  "version": "0.1.0-alpha.1",
+  "gitHubRelease": {
+    "tag": "v0.1.0-alpha.1",
+    "url": null,
+    "prerelease": true,
+    "latest": false,
+    "assets": [
+      "blender-linked-part-version-manager.zip",
+      "blender-linked-part-version-manager-docs.zip",
+      "manual-test.md"
+    ]
+  },
+  "localEvidence": {
+    "automatedTest": "npm test",
+    "runtimeGate": "dist/runtime-gate.json",
+    "testSummary": "dist/test-summary.json",
+    "qcdsMetrics": "docs/qcds-strict-metrics.json"
+  },
+  "manualEvidence": {
+    "status": "pending-after-alpha-release",
+    "manualTest": "docs/manual-test.md",
+    "strictManualTestAddendum": "docs/strict-manual-test-addendum.md"
+  }
+}
