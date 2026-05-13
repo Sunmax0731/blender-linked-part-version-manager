@@ -6,6 +6,7 @@ Blender Linked Part Version Manager は、統合用 `.blend` と部位別作業 
 
 - Domain / Idea No: BlenderAddon / 7
 - Repository: blender-linked-part-version-manager
+- Public repo: `https://github.com/Sunmax0731/blender-linked-part-version-manager`
 - created_idea: `D:/AI/BlenderAddon/created_idea_007_blender-linked-part-version-manager`
 - 同梱 ZIP: `D:/AI/BlenderAddon/created_idea_007_blender-linked-part-version-manager/idea_007_blender-linked-part-version-manager.zip`
 - 主な公開先: GitHub Release / Blender Extensions

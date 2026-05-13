@@ -9,17 +9,18 @@ No current TODO. New uncategorized work should be moved into one of the phase se
 ## 01-requirements TODO
 
 - [x] Create repo at `D:\AI\BlenderAddon\blender-linked-part-version-manager`. [phase=01-requirements]
+- [x] Create public GitHub remote and set local `origin`. [phase=01-requirements]
 - [x] Add repo-local `README.md`, `AGENTS.md`, and `SKILL.md`. [phase=01-requirements]
 - [x] Register idea No.7 in `D:\AI\IDEAS\BlenderAddon\ideas.md` and `D:\AI\BlenderAddon\ideas.md`. [phase=01-requirements]
-- [ ] [P1] 部位別 Link 共同制作の要件を確定する [Issue](Issues/0001-link-part-workspace-requirements.md) [phase=01-requirements] [QCDS:Quality,Satisfaction]
+- [ ] [P1] 部位別 Link 共同制作の要件を確定する [Issue](Issues/0001-link-part-workspace-requirements.md) / [GitHub #1](https://github.com/Sunmax0731/blender-linked-part-version-manager/issues/1) [phase=01-requirements] [QCDS:Quality,Satisfaction]
 
 ## 02-specification TODO
 
-- [ ] [P1] レジストリ、同期計画、衝突状態の仕様を確定する [Issue](Issues/0002-registry-sync-specification.md) [phase=02-specification] [QCDS:Quality,Cost]
+- [ ] [P1] レジストリ、同期計画、衝突状態の仕様を確定する [Issue](Issues/0002-registry-sync-specification.md) / [GitHub #2](https://github.com/Sunmax0731/blender-linked-part-version-manager/issues/2) [phase=02-specification] [QCDS:Quality,Cost]
 
 ## 03-design TODO
 
-- [ ] [P2] Blender UI と更新前プレビューの導線を固める [Issue](Issues/0003-blender-link-refresh-design.md) [phase=03-design] [QCDS:Satisfaction]
+- [ ] [P2] Blender UI と更新前プレビューの導線を固める [Issue](Issues/0003-blender-link-refresh-design.md) / [GitHub #3](https://github.com/Sunmax0731/blender-linked-part-version-manager/issues/3) [phase=03-design] [QCDS:Satisfaction]
 
 ## 04-implementation TODO
 

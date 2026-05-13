@@ -3,6 +3,7 @@
 ## 開発準備
 
 - [x] IDEAS と正式ドメインの `ideas.md` に No.7 を登録した。
+- [x] public GitHub remote を作成し、local `origin` を設定した。
 - [x] `README.md`、`AGENTS.md`、`SKILL.md`、`TODO.md` を作成した。
 - [x] `docs/requirements.md`、`docs/specification.md`、`docs/design.md`、`docs/architecture.md` を作成した。
 - [x] `docs/implementation-plan.md`、`docs/test-plan.md`、`docs/manual-test.md` を作成した。

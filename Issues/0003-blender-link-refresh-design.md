@@ -4,6 +4,7 @@
 - Priority: P2
 - Phase: 03-design
 - Linked TODO: [TODO.md](../TODO.md)
+- GitHub Issue: https://github.com/Sunmax0731/blender-linked-part-version-manager/issues/3
 
 ## 背景
 

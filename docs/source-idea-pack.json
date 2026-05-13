@@ -4,6 +4,7 @@
   "idea_no": 7,
   "idea_name": "Link部位バージョン管理",
   "repository": "blender-linked-part-version-manager",
+  "public_repo": "https://github.com/Sunmax0731/blender-linked-part-version-manager",
   "created_idea": "D:/AI/BlenderAddon/created_idea_007_blender-linked-part-version-manager",
   "zip": "D:/AI/BlenderAddon/created_idea_007_blender-linked-part-version-manager/idea_007_blender-linked-part-version-manager.zip",
   "dedupe_result": "既存の取り込み・バッチ処理、差分レビュー、素材カタログとは周辺領域が近いが、Blender Link と部位別 .blend 同期を主契約にする案は未登録のため新規作成。",
