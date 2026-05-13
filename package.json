@@ -1,0 +1,12 @@
+{
+  "name": "blender-linked-part-version-manager",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/check-docs.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

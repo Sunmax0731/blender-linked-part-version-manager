@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "product": "blender-linked-part-version-manager",
+  "integration_file": "integration/character_integration.blend",
+  "parts": [
+    {
+      "partId": "hair-main",
+      "partTag": "Hair",
+      "displayName": "Main Hair",
+      "blendPath": "parts/hair/main_hair.blend",
+      "linkedCollection": "CHR_Hair_Main",
+      "owner": "artist-a",
+      "source": {
+        "type": "git",
+        "remote": "origin",
+        "branch": "main",
+        "path": "parts/hair/main_hair.blend"
+      },
+      "versionRef": "main",
+      "updatePolicy": "manual",
+      "expectedStatus": "remote-newer"
+    },
+    {
+      "partId": "body-base",
+      "partTag": "Body",
+      "displayName": "Base Body",
+      "blendPath": "parts/body/base_body.blend",
+      "linkedCollection": "CHR_Body_Base",
+      "owner": "artist-b",
+      "source": {
+        "type": "local",
+        "root": "D:/Shared/CharacterParts",
+        "path": "body/base_body.blend"
+      },
+      "versionRef": "2026-05-14",
+      "updatePolicy": "scheduled",
+      "expectedStatus": "current"
+    },
+    {
+      "partId": "face-main",
+      "partTag": "Face",
+      "displayName": "Main Face",
+      "blendPath": "parts/face/main_face.blend",
+      "linkedCollection": "CHR_Face_Main",
+      "owner": "artist-c",
+      "source": {
+        "type": "git",
+        "remote": "origin",
+        "branch": "face",
+        "path": "parts/face/main_face.blend"
+      },
+      "versionRef": "face",
+      "updatePolicy": "manual",
+      "expectedStatus": "local-dirty"
+    },
+    {
+      "partId": "accessories-glasses",
+      "partTag": "Accessories",
+      "displayName": "Glasses",
+      "blendPath": "parts/accessories/glasses.blend",
+      "linkedCollection": "CHR_ACC_Glasses",
+      "owner": "artist-d",
+      "source": {
+        "type": "git",
+        "remote": "origin",
+        "branch": "main",
+        "path": "parts/accessories/glasses.blend"
+      },
+      "versionRef": "main",
+      "updatePolicy": "manual",
+      "expectedStatus": "broken-link"
+    }
+  ]
+}
