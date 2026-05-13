@@ -4,7 +4,7 @@
   "version": "0.1.0-alpha.1",
   "gitHubRelease": {
     "tag": "v0.1.0-alpha.1",
-    "url": null,
+    "url": "https://github.com/Sunmax0731/blender-linked-part-version-manager/releases/tag/v0.1.0-alpha.1",
     "prerelease": true,
     "latest": false,
     "assets": [
