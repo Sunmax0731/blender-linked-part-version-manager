@@ -64,6 +64,20 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 - Auto Reload: 未保存変更は対象外とし、保存済み `.blend` の mtime が増えた場合だけ reload する。外部 pull / push は実行しない。
 - 保存: MVP では自動保存しない。ユーザー確認後の保存を手動手順に残す。
 
+## GUI Registry Editing
+
+`Linked Parts` パネルは Part Registry を直接 JSON 編集しなくても扱えるようにする。
+
+| 操作 | 内容 | 破壊的変更 |
+| --- | --- | --- |
+| `Scan Current Links` | `bpy.data.libraries` と linked collection から registry 候補を作成する。 | なし |
+| `Add File Candidate` | Explorer / Blender file selector で選んだ `.blend` を local source の registry 候補として追加する。 | なし |
+| `Save Registry` | GUI 上の候補を `Registry Path` の JSON に保存し、既存 validator で検証する。 | registry JSON のみ |
+| `Preview Link` | 選択候補を現在の Blender tree へ Link する前の dry-run を表示する。 | なし |
+| `Link Candidate` | 選択候補の collection を現在の Blender tree へ明示的に Link する。 | 現在の Blender session のみ。自動保存しない。 |
+
+GUI 生成候補の初期値は `owner=unassigned`、`source.type=local`、`source.root=.`、`versionRef=local`、`updatePolicy=manual` とする。
+
 ## Adapter Contract
 
 各 sync adapter は次の contract を返す。

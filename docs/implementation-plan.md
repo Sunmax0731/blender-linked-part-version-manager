@@ -25,6 +25,8 @@
 - [x] `adapters.git` と `adapters.local` の MVP を実装する。
 - [x] Blender アドオン shell、panel、operator、Link inspector、reload operator を実装する。
 - [x] 保存済み linked `.blend` の Auto Reload を実装する。
+- [x] Blender GUI で Part Registry 候補を scan / edit / save できる導線を実装する。
+- [x] Explorer / Blender file selector から `.blend` を候補追加し、明示操作で Blender tree へ Link できる導線を実装する。
 - [x] Windows companion launcher、settings 保存、installer dry-run を実装する。
 
 ## Phase 05 Test
@@ -41,3 +43,4 @@
 - [x] インストール手順、ユーザーガイド、manual test、QCDS、competitive benchmark を更新する。
 - [x] alpha prerelease 用の add-on ZIP、docs ZIP、release notes を作成する。
 - [x] GitHub Release は prerelease とし、Blender 手動テスト未実施項目を明記する。
+- [x] MVP 後 P2 backlog の GUI registry / release prep 項目を TODO、Issues、docs、tests、QCDS evidence と同期して完了する。

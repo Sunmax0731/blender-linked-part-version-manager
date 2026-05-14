@@ -22,6 +22,9 @@
 - Auto Reload は保存済み linked `.blend` の mtime 監視に限定し、外部 sync / pull / push は実行しない。
 - scheduled pull は状態表示と通知に留め、外部取得はユーザー確認を必要にする。
 - Link 追加やパス修正は preview 画面で対象 library / collection を明示する。
+- `Scan Current Links` は現在の linked library / collection から候補だけを作り、JSON 保存は `Save Registry` の明示操作に分ける。
+- `Add File Candidate` は Explorer / Blender file selector から `.blend` を選んで候補化する。実 Link は `Preview Link` と `Link Candidate` に分け、自動保存しない。
+- Part Registry の編集欄は `partId`、`partTag`、`displayName`、`blendPath`、`linkedCollection`、`owner`、`source`、`versionRef`、`updatePolicy` を 1 件ずつ確認できる密度にする。
 
 ## Default Tags
 

@@ -14,6 +14,8 @@
 | Blender CLI smoke | Blender host | `BLENDER_EXE`、`D:\SteamLibrary\steamapps\common\Blender\blender.exe`、PATH のいずれかで Blender を検出し、`--version` と add-on import smoke が成功する。 |
 | Blend fixture packaging | manual-test assets | integration `.blend`、部位別 `.blend`、registry が release fixture ZIP に同梱される。 |
 | Auto Reload target selection | Blender add-on | `current` / `remote-newer` の saved linked files だけが監視対象になり、blocked part は対象外になる。 |
+| GUI registry candidate defaults | Blender add-on / core.registry | scan / file selector 由来の候補が安全な local source 初期値を持ち、保存後に registry validator を通過する。 |
+| GUI linked library scan | Blender add-on / blender.link | `bpy.data.libraries` と linked collection から `blendPath` と `linkedCollection` を持つ editable part 候補を生成できる。 |
 | Release artifact check | dist / docs | add-on ZIP、docs ZIP、test summary、runtime gate、QCDS metrics が存在する。 |
 
 ## Blender Runtime Gate
@@ -23,11 +25,14 @@
 1. `blender-linked-part-version-manager-fixtures.zip` を展開する。
 2. Integration File `integration/character_integration.blend` を開く。
 3. Part Registry を生成する。
-4. Part File を更新した fixture を用意する。
-5. `Pull & Reload` の dry-run を実行する。
-6. 確認後に reload し、Viewport で更新が反映されることを確認する。
-7. `Start Auto Reload` 後に Hair source `.blend` を保存し、interval 内に Viewport へ反映されることを確認する。
-8. `dist/runtime-gate.json` に Blender version、対象ファイル、結果を保存する。
+4. `Scan Current Links` で linked library / collection から editable 候補が生成されることを確認する。
+5. `Add File Candidate` で Explorer / Blender file selector から `.blend` を候補追加し、`Preview Link` が dry-run 結果を出すことを確認する。
+6. `Save Registry` 後に `Validate Registry` と `Build Sync Preview` が通ることを確認する。
+7. Part File を更新した fixture を用意する。
+8. `Pull & Reload` の dry-run を実行する。
+9. 確認後に reload し、Viewport で更新が反映されることを確認する。
+10. `Start Auto Reload` 後に Hair source `.blend` を保存し、interval 内に Viewport へ反映されることを確認する。
+11. `dist/runtime-gate.json` に Blender version、対象ファイル、結果を保存する。
 
 ## Manual Tests
 
@@ -39,4 +44,6 @@
 
 ## Current Status
 
-`npm test` は docs / JSON / 文字化け検査、Python unit test、Windows runtime gate、Blender CLI smoke、release package、release artifact check を行う。2026-05-15 時点で `D:\SteamLibrary\steamapps\common\Blender\blender.exe` から Blender 5.1.1 を検出し、add-on import smoke は通過済み。統合 `.blend` と部位別 `.blend` の Link reload / Viewport 反映はリリース後の手動確認として残す。
+`npm test` は docs / JSON / 文字化け検査、Python unit test、Windows runtime gate、Blender CLI smoke、release package、release artifact check を行う。2026-05-15 時点で `D:\SteamLibrary\steamapps\common\Blender\blender.exe` から Blender 5.1.1 を検出し、add-on import smoke は通過済み。追加で `register()` / `unregister()` smoke も通過済み。統合 `.blend` と部位別 `.blend` の Link reload / Viewport 反映はユーザー手元の Blender 5.1.1 で手動確認済み。
+
+2026-05-15 時点で GUI registry candidate defaults と linked library scan は Python unit test に追加済み。Blender UI 上の `Scan Current Links`、`Save Registry`、`Add File Candidate`、`Preview Link`、`Link Candidate` は次回 manual test で実機確認する。

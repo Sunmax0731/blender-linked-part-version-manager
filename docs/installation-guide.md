@@ -24,6 +24,8 @@ GitHub Release `v0.1.0-alpha.1` から次を取得する。
 4. `Blender Linked Part Version Manager` を有効化する。
 5. View3D Sidebar の `Linked Parts` タブを開く。
 6. `Registry Path` に registry JSON を指定し、`Validate Registry` と `Build Sync Preview` を実行する。
+7. 既存の Link から registry を作る場合は `Scan Current Links`、内容確認後に `Save Registry` を実行する。
+8. 新しい部位 `.blend` を追加する場合は `Add File Candidate` で選び、`Preview Link` 後に `Link Candidate` を実行する。現在の `.blend` は自動保存されないため、結果を確認してから手動で保存する。
 
 ## Manual test fixtures
 

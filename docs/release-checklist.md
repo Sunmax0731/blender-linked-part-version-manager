@@ -19,6 +19,8 @@
 - [x] alpha 手動テスト用 `.blend` fixture と fixture ZIP が生成されている。
 - [x] Blender runtime gate が手動確認で `passed` になっている。
 - [x] Auto Reload が保存済み linked `.blend` 監視として実装されている。
+- [x] Blender GUI で Part Registry 候補を scan / edit / save できる。
+- [x] Explorer / Blender file selector から `.blend` を Link 候補へ追加し、明示操作で Blender tree に反映できる。
 - [x] `docs/qcds-evaluation.md` の全観点が `A-` 以上になっている。
 - [x] `docs/installation-guide.md` と `docs/user-guide.md` を追加した。
 - [x] GitHub prerelease と docs ZIP を作成した。

@@ -33,6 +33,8 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - R10: 文字化けした部位名、タグ、パス、説明文を検出し、正式成果物へ混入させない。
 - R11: Windows companion launcher は `%APPDATA%\BlenderLinkedPartVersionManager\settings.json` に設定を保存し、認証情報や `.blend` 本体を保存しない。
 - R12: alpha release では local executable / installer dry-run の platform runtime gate を必須にし、Blender Link reload 実機確認はリリース後の手動確認として追跡する。
+- R13: Blender GUI から現在の linked library / collection を scan し、Part Registry 候補を編集して保存できる。
+- R14: Blender GUI から Explorer / Blender file selector で部位 `.blend` を選び、dry-run 確認後の明示操作で現在の Blender tree へ Link できる。
 
 ## Non Functional Requirements
 
@@ -40,6 +42,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - GitHub token や認証情報は保存しない。利用する場合は既存の Git Credential Manager や環境変数に委譲する。
 - Windows パス、相対パス、リポジトリ内パスを混在させず、registry では canonical path と表示用 path を分ける。
 - Link reload の前に保存状態と更新対象を表示し、ユーザーが破壊的操作を避けられるようにする。
+- GUI からの Link 追加は現在の Blender session に限定し、`.blend` 本体を自動保存しない。
 - alpha 公開前の QCDS は Windows platform runtime gate と自動テストを含め、Blender 実機確認の未実施を明記する。
 
 ## Out of Scope

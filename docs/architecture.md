@@ -19,7 +19,7 @@ MVP は Option A を採用する。処理が重くなる場合は adapter 実行
 | Layer | Responsibility |
 | --- | --- |
 | `ui` | パネル、operator、ユーザー確認、結果表示 |
-| `core.registry` | part registry の読み書き、schema validation、tag 正規化 |
+| `core.registry` | part registry の読み書き、schema validation、tag 正規化、GUI 候補生成の安全な初期値 |
 | `core.plan` | status classification、sync plan 作成、risk 判定 |
 | `adapters.git` | Git status / fetch / pull / push preview |
 | `adapters.local` | 共有フォルダやローカル mirror の存在確認とコピー計画 |
@@ -52,3 +52,4 @@ flowchart LR
 - adapter 実行失敗時は `.blend` を保存せず、result JSON に終了コード、標準エラー要約、対象部位を残す。
 - scheduled pull は MVP 後とし、まず manual / batch 操作を安定させる。
 - Windows companion は `.blend` を開かず、設定保存と registry preview に限定する。
+- GUI registry editing は `core.registry` の候補生成を使い、Blender session への Link は `blender.link` の明示操作に閉じ込める。外部 sync と registry 編集を同じ operator に混ぜない。

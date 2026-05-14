@@ -24,8 +24,12 @@ This folder stores local Markdown issues linked from `TODO.md`.
 - [x] [0003](0003-blender-link-refresh-design.md) Blender UI と更新前プレビューの導線を固める
 - [x] [0004](0004-alpha-mvp-release.md) Alpha MVP 実装と release evidence を完了する
 - [x] [0005](0005-blender.md) Blender実体パスを使った検証対応
-- [ ] [0006](0006-blender-runtime-link-reload-manual.md) Blender runtime gate で Link reload を手動確認する
-- [ ] [0007](0007-alpha-manual-test-evidence.md) Alpha manual test 結果を次リリース evidence に反映する
+- [x] [0006](0006-blender-runtime-link-reload-manual.md) Blender runtime gate で Link reload を手動確認する
+- [x] [0007](0007-alpha-manual-test-evidence.md) Alpha manual test 結果を次リリース evidence に反映する
 - [x] [0008](0008-manual-test-fixtures.md) 手動テスト用 `.blend` fixture を alpha release に同梱する
 - [x] [0009](0009-reload-target-path-fix.md) Manual test で検出した reload 対象 path 不一致を修正する
 - [x] [0010](0010-auto-reload-saved-links.md) 保存済み linked `.blend` の Auto Reload を追加する
+- [x] [0011](0011-blender-gui-part-registry.md) Blender GUI で Part Registry を生成・編集できるようにする
+- [x] [0012](0012-blender-gui-part-registry.md) Blender GUI で Part Registry を生成・編集できるようにする
+- [x] [0013](0013-mvp.md) MVP後の実装とリリース準備
+- [x] [0014](0014-mvp.md) MVP後の実装とリリース準備

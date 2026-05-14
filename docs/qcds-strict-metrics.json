@@ -28,6 +28,11 @@
       "status": "packaged",
       "evidence": "dist/blender-linked-part-version-manager-fixtures.zip",
       "criteria": "integration .blend, part .blend files, registry, and manual test docs are packaged for testers"
+    },
+    "guiRegistryEditing": {
+      "status": "implemented-unit-tested",
+      "evidence": "tests/test_registry_plan.py",
+      "criteria": "scan and file-selector registry candidates default to safe local values, save through registry validation, and explicit Link operation does not auto-save .blend"
     }
   },
   "release": {

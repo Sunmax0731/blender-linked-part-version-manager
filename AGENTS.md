@@ -15,6 +15,7 @@
 - README、AGENTS、SKILL、docs、TODO、Issues を同じ変更単位で更新する。
 - Blender Link と外部同期を同じ責務に混ぜず、Link 管理、部位レジストリ、同期アダプタ、検証レポートを分ける。
 - Windows companion は起動、設定保存、registry preview に限定し、`.blend` 本体の更新は Blender アドオン側の確認操作に残す。
+- Blender GUI で生成した Part Registry は `owner=unassigned`、`source.type=local`、`versionRef=local`、`updatePolicy=manual` を安全な初期値とし、Link 操作は明示ボタンで実行して自動保存しない。
 - GitHub 操作はまず dry-run / status 確認を前面に出し、push / pull / reset 相当の危険操作は影響範囲を明示する。
 - `.blend` 本体の自動生成や破壊的更新を実装する前に、サンプル registry と dry-run レポートで検証する。
 - 作業ブランチは `codex/<task-summary>` 形式を1本だけ使い、工程完了後に main へ merge して push する。

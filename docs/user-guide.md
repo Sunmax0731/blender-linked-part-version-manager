@@ -3,14 +3,18 @@
 ## 基本フロー
 
 1. 統合 `.blend` と部位別 `.blend` の対応を registry JSON に記録する。
-2. Blender の `Linked Parts` パネルで `Validate Registry` を実行する。
-3. `Build Sync Preview` で更新候補、危険状態、reload 候補を確認する。
-4. `local-dirty`、`conflict-risk`、`broken-link` がある場合は自動更新せず、担当者に確認する。
-5. 問題がない部位だけ `Reload Safe Links` の dry-run を確認し、手動判断で reload する。
+2. JSON がまだない場合は Blender の `Linked Parts` パネルで `Scan Current Links` を実行し、GUI 上の候補を編集して `Save Registry` で保存する。
+3. 追加の `.blend` は `Add File Candidate` で選び、`Preview Link` で確認してから `Link Candidate` で現在の Blender tree へ明示的に Link する。
+4. `Validate Registry` を実行する。
+5. `Build Sync Preview` で更新候補、危険状態、reload 候補を確認する。
+6. `local-dirty`、`conflict-risk`、`broken-link` がある場合は自動更新せず、担当者に確認する。
+7. 問題がない部位だけ `Reload Safe Links` の dry-run を確認し、手動判断で reload する。
 
 ## Registry
 
 必須項目は `partId`、`partTag`、`blendPath`、`linkedCollection`、`owner`、`source`、`versionRef`、`updatePolicy`。`partTag` は `Hair`、`Body`、`Face`、`Accessories`、`Clothes`、`Rig`、`Props` を使う。
+
+GUI で生成した候補は `owner=unassigned`、`source.type=local`、`source.root=.`、`versionRef=local`、`updatePolicy=manual` で始まる。チーム運用に合わせて owner、Git source、branch、versionRef を編集してから保存する。
 
 ## Status
 

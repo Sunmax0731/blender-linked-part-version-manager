@@ -21,8 +21,10 @@ Blender Linked Part Version Manager は、統合用 `.blend` と部位別作業 
 ## MVP スコープ
 
 - 部位レジストリ JSON の定義と検証
+- Blender GUI からの Part Registry 生成、編集、保存
 - Git / ローカルファイル管理を抽象化する同期アダプタ MVP
 - Blender Link 対象の検出、再読み込み、更新前 dry-run のアドオン shell
+- Explorer / Blender file selector からの `.blend` Link 候補追加と明示 Link 操作
 - 保存済み linked `.blend` の Auto Reload
 - Windows companion launcher による registry 検証、状態 preview、設定保存
 - 代表シナリオと手動検証手順
@@ -45,6 +47,12 @@ npm test
 ```
 
 `npm test` は docs/JSON/文字化け検査、Python unit test、Windows runtime gate、release package 生成、release artifact 検査を実行します。
+
+## Blender GUI Workflow
+
+`Linked Parts` パネルでは、`Scan Current Links` で現在の linked library / collection から editable な Part Registry 候補を作成できます。候補は `partId`、`partTag`、`displayName`、`blendPath`、`linkedCollection`、`owner`、`source`、`versionRef`、`updatePolicy` を GUI 上で編集し、`Save Registry` で `Registry Path` に保存できます。
+
+`Add File Candidate` は Explorer / Blender file selector から `.blend` を選び、`owner=unassigned`、`source.type=local`、`versionRef=local`、`updatePolicy=manual` の安全な初期値で候補へ追加します。`Preview Link` は Link 操作の dry-run、`Link Candidate` は選択候補の collection を現在の Blender tree へ明示的に Link します。どちらも `.blend` 本体を自動保存しません。
 
 ## Windows Alpha Launcher
 

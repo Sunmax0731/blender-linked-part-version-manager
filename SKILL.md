@@ -17,6 +17,7 @@ Use this repository for Blender Link based part-version management work.
 - Treat GitHub, Git CLI, local folder sync, and future asset systems as adapters behind the same plan/result contract.
 - Never auto-overwrite a linked `.blend` path without a preview report and a rollback note.
 - Store part metadata in a small registry first: `partId`, `partTag`, `blendPath`, `linkedCollection`, `owner`, `source`, `versionRef`, `updatePolicy`, and `lastSync`.
+- GUI-created registry candidates must default to `owner=unassigned`, `source.type=local`, `versionRef=local`, and `updatePolicy=manual`; file-selector candidates may be linked only through an explicit Blender add-on operation and must not auto-save the current `.blend`.
 - Windows companion must stay outside `.blend` mutation. It may validate registry data, show status, launch installer dry-run, and save settings under `%APPDATA%`.
 - Alpha release validation must include the Windows local executable / installer launch gate and, when available, a non-mutating Blender CLI smoke from `BLENDER_EXE` or `D:\SteamLibrary\steamapps\common\Blender\blender.exe`. Blender Link reload remains a required manual test until an integration `.blend` and part `.blend` are confirmed by the user.
 

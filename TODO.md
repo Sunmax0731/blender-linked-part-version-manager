@@ -47,3 +47,7 @@ No current TODO. New uncategorized work should be moved into one of the phase se
 - [x] [P2] [Phase:05-test] 手動テスト用 `.blend` fixture を alpha release に同梱する [Issue](Issues/0008-manual-test-fixtures.md) [QCDS:Quality,Delivery,Satisfaction]
 - [x] [P2] [Phase:05-test] Manual test で検出した reload 対象 path 不一致を修正する [Issue](Issues/0009-reload-target-path-fix.md) [QCDS:Quality,Satisfaction]
 - [x] [P2] [Phase:04-implementation] 保存済み linked `.blend` の Auto Reload を追加する [Issue](Issues/0010-auto-reload-saved-links.md) [QCDS:Quality,Satisfaction]
+- [x] [P2] [Phase:04-implementation] Blender GUI で Part Registry を生成・編集できるようにする [Issue](Issues/0011-blender-gui-part-registry.md) [QCDS:Quality,Delivery,Satisfaction]
+- [x] [P2] [Phase:06-release] Blender GUI で Part Registry を生成・編集できるようにする [Issue](Issues/0012-blender-gui-part-registry.md) [QCDS:Quality,Delivery,Satisfaction]
+- [x] [P2] [Phase:06-release] MVP後の実装とリリース準備 [Issue](Issues/0013-mvp.md) [QCDS:Quality,Cost,Delivery,Satisfaction]
+- [x] [P2] [Phase:06-release] MVP後の実装とリリース準備 [Issue](Issues/0014-mvp.md) [QCDS:Quality,Cost,Delivery,Satisfaction]

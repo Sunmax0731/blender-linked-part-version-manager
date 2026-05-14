@@ -49,13 +49,17 @@ alpha release 後に手作業で実施する。
 3. `Linked Parts` パネルが表示されることを確認する。
 4. add-on preferences の `Registry Path` に `<fixture-root>\samples\representative-suite.json` を指定する。
 5. `Validate Registry` を実行し、registry が OK になることを確認する。
-6. `Build Sync Preview` を実行し、summary が表示され、`remote-newer`、`local-dirty`、`broken-link` の代表状態が dry-run report に記録されることを確認する。
-7. `Preview Reload` を実行し、Hair の library だけが dry-run `reloaded`、他の library が `skipped` として表示されることを確認する。
-8. 実 reload を確認する場合は、`parts/hair/main_hair.blend` を別ウィンドウで開き、Hair marker を少し移動して保存する。その後 `character_integration.blend` に戻り、`Reload Safe Links` を実行して Viewport の Hair が更新されることを確認する。
-9. Auto Reload を確認する場合は、`Start Auto Reload` を実行してから `parts/hair/main_hair.blend` を別ウィンドウで変更して保存する。`Auto Reload Interval` の秒数以内に integration 側の Hair が更新されることを確認する。
-10. `Stop Auto Reload` で監視を停止する。
-11. Link 先ファイルを一時的に移動する場合は、コピーで退避してから `broken-link` 表示を確認し、必ず元の場所へ戻す。
-12. local-dirty / conflict-risk 相当は `representative-suite.json` の `expectedStatus` で dry-run 表示され、自動更新対象から外れることを確認する。
+6. `Scan Current Links` を実行し、現在の linked library / collection から editable な registry 候補が表示されることを確認する。
+7. 候補の `owner`、`source.type`、`versionRef`、`updatePolicy` が安全な初期値であることを確認し、必要に応じて GUI 上で編集する。
+8. `Save Registry` を実行し、`Registry Path` の JSON が保存されることを確認する。その後 `Validate Registry` を再実行し、保存済み registry が OK になることを確認する。
+9. `Add File Candidate` で Explorer / Blender file selector から `.blend` を選び、候補として追加できることを確認する。`Preview Link` は dry-run のみで、`Link Candidate` は明示操作として現在の Blender tree へ Link する。どちらも自動保存しない。
+10. `Build Sync Preview` を実行し、summary が表示され、`remote-newer`、`local-dirty`、`broken-link` の代表状態が dry-run report に記録されることを確認する。
+11. `Preview Reload` を実行し、Hair の library だけが dry-run `reloaded`、他の library が `skipped` として表示されることを確認する。
+12. 実 reload を確認する場合は、`parts/hair/main_hair.blend` を別ウィンドウで開き、Hair marker を少し移動して保存する。その後 `character_integration.blend` に戻り、`Reload Safe Links` を実行して Viewport の Hair が更新されることを確認する。
+13. Auto Reload を確認する場合は、`Start Auto Reload` を実行してから `parts/hair/main_hair.blend` を別ウィンドウで変更して保存する。`Auto Reload Interval` の秒数以内に integration 側の Hair が更新されることを確認する。
+14. `Stop Auto Reload` で監視を停止する。
+15. Link 先ファイルを一時的に移動する場合は、コピーで退避してから `broken-link` 表示を確認し、必ず元の場所へ戻す。
+16. local-dirty / conflict-risk 相当は `representative-suite.json` の `expectedStatus` で dry-run 表示され、自動更新対象から外れることを確認する。
 
 期待される fixture path:
 
@@ -81,4 +85,4 @@ samples/representative-suite.json
 
 ## 未実施項目
 
-Blender 上での Link reload 実機確認は未実施。alpha release 後、ユーザーまたはテスト協力者の Blender 4.2 以降で本手順を実施し、結果を次リリースの `docs/release-evidence.json` に反映する。
+Blender 上での Link reload 実機確認はユーザー手元の Blender 5.1.1 で通過済み。今回追加した GUI registry editing と Explorer / Blender file selector からの Link 候補追加は、次回手動確認で `Scan Current Links`、`Save Registry`、`Add File Candidate`、`Preview Link`、`Link Candidate` の順に確認する。

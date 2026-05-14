@@ -21,6 +21,7 @@
     "qcdsMetrics": "docs/qcds-strict-metrics.json",
     "blenderExecutablePath": "D:\\SteamLibrary\\steamapps\\common\\Blender\\blender.exe",
     "blenderCliSmoke": "cli-smoke-passed",
+    "blenderRegisterSmoke": "BLPVM_REGISTER_SMOKE_OK",
     "manualFixturePackage": "dist/blender-linked-part-version-manager-fixtures.zip",
     "manualFixtureRootFiles": [
       "integration/character_integration.blend",
@@ -56,5 +57,33 @@
     "mode": "saved-linked-blend-mtime-polling",
     "unsavedSourceEdits": "not-supported-by-blender-link-reload",
     "trackingIssue": "Issues/0010-auto-reload-saved-links.md"
+  },
+  "guiRegistryEditing": {
+    "status": "implemented-unit-tested",
+    "trackingIssues": [
+      "Issues/0011-blender-gui-part-registry.md",
+      "Issues/0012-blender-gui-part-registry.md",
+      "Issues/0013-mvp.md",
+      "Issues/0014-mvp.md"
+    ],
+    "implementedOperations": [
+      "Scan Current Links",
+      "Save Registry",
+      "Add File Candidate",
+      "Preview Link",
+      "Link Candidate"
+    ],
+    "safeDefaults": {
+      "owner": "unassigned",
+      "source.type": "local",
+      "source.root": ".",
+      "versionRef": "local",
+      "updatePolicy": "manual"
+    },
+    "automatedEvidence": [
+      "python -m unittest discover -s tests",
+      "tests/test_registry_plan.py"
+    ],
+    "manualStatus": "pending-next-manual-pass"
   }
 }

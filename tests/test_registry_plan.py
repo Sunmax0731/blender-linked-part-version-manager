@@ -9,9 +9,13 @@ from pathlib import Path
 from addon.blender_linked_part_version_manager.adapters.git import preview_git_part
 from addon.blender_linked_part_version_manager.adapters.local import preview_local_part
 from addon.blender_linked_part_version_manager import _auto_reload_target_paths
-from addon.blender_linked_part_version_manager.blender.link import reload_linked_libraries
+from addon.blender_linked_part_version_manager.blender.link import reload_linked_libraries, scan_linked_registry_parts
 from addon.blender_linked_part_version_manager.core.plan import build_sync_plan, summarize_plan
-from addon.blender_linked_part_version_manager.core.registry import validate_registry
+from addon.blender_linked_part_version_manager.core.registry import (
+    build_registry_part_candidate,
+    registry_from_parts,
+    validate_registry,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -93,6 +97,33 @@ class RegistryPlanTests(unittest.TestCase):
             ["parts/hair/main_hair.blend", "parts/body/base_body.blend"],
         )
 
+    def test_gui_registry_candidate_defaults_are_valid(self) -> None:
+        part = build_registry_part_candidate(
+            "parts/hair/main_hair.blend",
+            linked_collection="CHR_Hair_Main",
+        )
+        self.assertEqual(part["owner"], "unassigned")
+        self.assertEqual(part["source"]["type"], "local")
+        self.assertEqual(part["source"]["root"], ".")
+        self.assertEqual(part["versionRef"], "local")
+        self.assertEqual(part["updatePolicy"], "manual")
+        self.assertEqual(validate_registry(registry_from_parts([part])), [])
+
+    def test_scan_linked_libraries_creates_editable_registry_parts(self) -> None:
+        root = ROOT
+        bpy_module = _FakeBpy(
+            root / "integration",
+            ["//../parts/hair/main_hair.blend"],
+            collections=[("CHR_Hair_Main", 0)],
+        )
+        parts = scan_linked_registry_parts(bpy_module, base_dir=root)
+
+        self.assertEqual(len(parts), 1)
+        self.assertEqual(parts[0]["blendPath"], "parts/hair/main_hair.blend")
+        self.assertEqual(parts[0]["linkedCollection"], "CHR_Hair_Main")
+        self.assertEqual(parts[0]["partTag"], "Hair")
+        self.assertEqual(validate_registry(registry_from_parts(parts)), [])
+
 class _FakeLibrary:
     def __init__(self, filepath: str) -> None:
         self.filepath = filepath
@@ -103,8 +134,18 @@ class _FakeLibrary:
 
 
 class _FakeData:
-    def __init__(self, filepaths: list[str]) -> None:
+    def __init__(self, filepaths: list[str], collections: list[tuple[str, int]] | None = None) -> None:
         self.libraries = [_FakeLibrary(filepath) for filepath in filepaths]
+        self.collections = [
+            _FakeCollection(name, self.libraries[library_index])
+            for name, library_index in collections or []
+        ]
+
+
+class _FakeCollection:
+    def __init__(self, name: str, library: _FakeLibrary) -> None:
+        self.name = name
+        self.library = library
 
 
 class _FakePath:
@@ -120,8 +161,8 @@ class _FakePath:
 
 
 class _FakeBpy:
-    def __init__(self, blend_dir: Path, filepaths: list[str]) -> None:
-        self.data = _FakeData(filepaths)
+    def __init__(self, blend_dir: Path, filepaths: list[str], collections: list[tuple[str, int]] | None = None) -> None:
+        self.data = _FakeData(filepaths, collections=collections)
         self.path = _FakePath(blend_dir)
 
 
