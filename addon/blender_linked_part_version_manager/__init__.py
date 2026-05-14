@@ -19,6 +19,7 @@ except ImportError:  # pragma: no cover - normal unit-test path outside Blender
     bpy = None
 
 from .blender.link import (
+    integrate_linked_libraries,
     inspect_linked_libraries,
     link_collection_from_file,
     reload_linked_libraries,
@@ -99,6 +100,17 @@ BLPVM_JA_MESSAGES = {
     "Explicitly link the selected .blend collection into the current Blender tree without saving the file": "選択中の.blend collectionを現在のBlenderツリーへ明示的にリンクします。ファイルは保存しません",
     "Preview Link": "リンクをプレビュー",
     "Link Candidate": "候補をリンク",
+    "Preview Integrate": "統合をプレビュー",
+    "Integrate Link": "リンクを統合",
+    "Integrate Selected Link": "選択リンクを統合",
+    "Preview or integrate the selected linked .blend into the current Blender file without auto-saving": "選択中のリンク.blendを現在のBlenderファイルへ統合します。自動保存はしません",
+    "Irreversible link integration": "不可逆のリンク統合",
+    "This will make linked datablocks local in the current Blender file. The file is not saved automatically.": "リンクされたデータブロックを現在のBlenderファイル内のローカルデータにします。ファイルは自動保存されません。",
+    "Target linked file": "対象リンクファイル",
+    "Output file": "出力ファイル",
+    "Current unsaved Blender session": "現在の未保存Blenderセッション",
+    "Part": "部位",
+    "Confirm integration from the dialog before executing.": "実行前に確認ダイアログでリンク統合を確認してください。",
     "Validate Registry": "レジストリを検証",
     "Validate the linked part registry without modifying .blend files": ".blendファイルを変更せずにリンク部位レジストリを検証します",
     "Build Sync Preview": "同期プレビュー作成",
@@ -130,6 +142,9 @@ BLPVM_JA_MESSAGES = {
     "Reload failed for {count} library path(s).": "{count}件のライブラリパスでリロードに失敗しました。",
     "Reload previewed for {count} path(s).": "{count}件のパスをリロードプレビューしました。",
     "Reload completed for {count} path(s).": "{count}件のパスをリロードしました。",
+    "Link integration failed: {error}": "リンク統合に失敗しました: {error}",
+    "Integration preview ready for {count} linked file(s).": "{count}件のリンクファイルの統合プレビューを作成しました。",
+    "Integrated {count} linked file(s). Review report before saving.": "{count}件のリンクファイルを統合しました。保存前にレポートを確認してください。",
     "Auto Reload reloaded {count} file(s).": "自動リロードで{count}件のファイルをリロードしました。",
     "Auto Reload watching saved linked .blend files.": "自動リロードは保存済みリンク.blendファイルを監視しています。",
     "Auto Reload error: {error}": "自動リロードエラー: {error}",
@@ -497,6 +512,121 @@ class BLPVM_OT_reload_links(bpy.types.Operator if bpy else object):
         return {"FINISHED"}
 
 
+class BLPVM_OT_integrate_selected_link(bpy.types.Operator if bpy else object):
+    bl_idname = "blpvm.integrate_selected_link"
+    bl_label = "Integrate Selected Link"
+    bl_description = "Preview or integrate the selected linked .blend into the current Blender file without auto-saving"
+    bl_options = {"REGISTER", "UNDO"} if bpy else set()
+
+    dry_run: bpy.props.BoolProperty(  # type: ignore[union-attr]
+        name="Dry Run",
+        default=True,
+    ) if bpy else True
+    target_path: bpy.props.StringProperty(name="Target linked file", default="") if bpy else ""  # type: ignore[union-attr]
+    output_path: bpy.props.StringProperty(name="Output file", default="") if bpy else ""  # type: ignore[union-attr]
+    part_label: bpy.props.StringProperty(name="Part", default="") if bpy else ""  # type: ignore[union-attr]
+    confirmed: bpy.props.BoolProperty(default=False, options={"HIDDEN"}) if bpy else False  # type: ignore[union-attr]
+
+    def invoke(self, context, event):
+        if self.dry_run:
+            return self.execute(context)
+        if not self._prepare_dialog_context(context):
+            return {"CANCELLED"}
+        self.confirmed = True
+        return context.window_manager.invoke_props_dialog(self, width=560)
+
+    def draw(self, context):
+        layout = self.layout
+        layout.label(text=_iface("Irreversible link integration"), icon="ERROR")
+        layout.label(
+            text=_iface(
+                "This will make linked datablocks local in the current Blender file. The file is not saved automatically."
+            )
+        )
+        layout.separator()
+        layout.label(text=f"{_iface('Part')}: {self.part_label or '-'}", icon="LINKED")
+        layout.label(text=f"{_iface('Target linked file')}: {self.target_path or '-'}", icon="FILE_BLEND")
+        layout.label(text=f"{_iface('Output file')}: {self.output_path or '-'}", icon="FILE_BLEND")
+
+    def execute(self, context):
+        item = _selected_registry_item(context)
+        if item is None:
+            self.report({"ERROR"}, _iface("No registry candidate is selected."))
+            return {"CANCELLED"}
+        if not self.dry_run and not self.confirmed:
+            self.report({"ERROR"}, _iface("Confirm integration from the dialog before executing."))
+            return {"CANCELLED"}
+        prefs = context.preferences.addons[__name__].preferences
+        registry_path = Path(bpy.path.abspath(prefs.registry_path))
+        report_path = Path(bpy.path.abspath(prefs.report_path))
+        result = integrate_linked_libraries(
+            bpy,
+            [item.blend_path],
+            dry_run=self.dry_run,
+            base_dirs=_registry_base_dirs(registry_path),
+        )
+        report = {
+            "operation": "integrate-linked-library",
+            "irreversible": True,
+            "autoSave": False,
+            "partId": item.part_id,
+            "linkedCollection": item.linked_collection,
+            "targetBlendPath": item.blend_path,
+            "outputFile": _current_blend_output_path(),
+            "result": result,
+        }
+        write_json_report(report_path, report)
+        context.scene.blpvm_preview_json = json.dumps(
+            {
+                "integrationReport": str(report_path),
+                "partId": item.part_id,
+                "dryRun": self.dry_run,
+                "integrated": result["integrated"],
+                "warnings": result["warnings"],
+                "failed": result["failed"],
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        if result["failed"]:
+            self.report(
+                {"ERROR"},
+                _format_iface("Link integration failed: {error}", error=result["failed"][0]["error"]),
+            )
+            return {"CANCELLED"}
+        if self.dry_run:
+            self.report(
+                {"INFO"},
+                _format_iface(
+                    "Integration preview ready for {count} linked file(s).",
+                    count=len(result["integrated"]),
+                ),
+            )
+        else:
+            _redraw_viewports()
+            self.report(
+                {"WARNING"},
+                _format_iface(
+                    "Integrated {count} linked file(s). Review report before saving.",
+                    count=len(result["integrated"]),
+                ),
+            )
+        return {"FINISHED"}
+
+    def _prepare_dialog_context(self, context) -> bool:
+        item = _selected_registry_item(context)
+        if item is None:
+            self.report({"ERROR"}, _iface("No registry candidate is selected."))
+            return False
+        prefs = context.preferences.addons[__name__].preferences
+        registry_path = Path(bpy.path.abspath(prefs.registry_path))
+        resolved = resolve_target_paths(bpy, [item.blend_path], base_dirs=_registry_base_dirs(registry_path))
+        self.target_path = next(iter(resolved.values()), item.blend_path)
+        self.output_path = _current_blend_output_path()
+        self.part_label = item.part_id or item.display_name or item.linked_collection
+        return True
+
+
 class BLPVM_PT_registry_panel(bpy.types.Panel if bpy else object):
     bl_label = "Part Registry"
     bl_idname = "BLPVM_PT_registry_panel"
@@ -554,6 +684,9 @@ class BLPVM_PT_registry_panel(bpy.types.Panel if bpy else object):
         row.operator("blpvm.reload_links", text=_iface("Preview Reload"), icon="FILE_REFRESH").dry_run = True
         row.operator("blpvm.reload_links", text=_iface("Reload Safe Links"), icon="CHECKMARK").dry_run = False
         row = layout.row(align=True)
+        row.operator("blpvm.integrate_selected_link", text=_iface("Preview Integrate"), icon="VIEWZOOM").dry_run = True
+        row.operator("blpvm.integrate_selected_link", text=_iface("Integrate Link"), icon="CHECKMARK").dry_run = False
+        row = layout.row(align=True)
         row.operator("blpvm.start_auto_reload", icon="PLAY")
         row.operator("blpvm.stop_auto_reload", icon="PAUSE")
         layout.prop(prefs, "auto_reload_interval")
@@ -582,6 +715,7 @@ classes = (
     BLPVM_OT_start_auto_reload,
     BLPVM_OT_stop_auto_reload,
     BLPVM_OT_reload_links,
+    BLPVM_OT_integrate_selected_link,
     BLPVM_PT_registry_panel,
 )
 
@@ -695,6 +829,13 @@ def _current_blend_display_path(registry_path: Path) -> str | None:
     if not filepath:
         return None
     return _display_path_for_registry(Path(bpy.path.abspath(filepath)), _registry_relative_root(registry_path))
+
+
+def _current_blend_output_path() -> str:
+    filepath = getattr(getattr(bpy, "data", None), "filepath", "")
+    if not filepath:
+        return _iface("Current unsaved Blender session")
+    return bpy.path.abspath(filepath)
 
 
 def _auto_reload_target_paths(plan):

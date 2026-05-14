@@ -17,6 +17,7 @@ Use this repository for Blender Link based part-version management work.
 - Keep Blender UI operators thin. Put registry validation, sync planning, and conflict classification in testable modules.
 - Treat GitHub, Git CLI, local folder sync, and future asset systems as adapters behind the same plan/result contract.
 - Never auto-overwrite a linked `.blend` path without a preview report and a rollback note.
+- Treat linked file integration as a destructive Blender-session operation: preview first, require a confirmation dialog that names target files and output file, write a report, and never auto-save the current `.blend`.
 - Store part metadata in a small registry first: `partId`, `partTag`, `blendPath`, `linkedCollection`, `owner`, `source`, `versionRef`, `updatePolicy`, and `lastSync`.
 - GUI-created registry candidates must default to `owner=unassigned`, `source.type=local`, `versionRef=local`, and `updatePolicy=manual`; file-selector candidates may be linked only through an explicit Blender add-on operation and must not auto-save the current `.blend`.
 - Blender UI strings must keep the English default labels stable and add `ja_JP` entries in `BLPVM_TRANSLATIONS`; dynamic reports should go through the local `pgettext_iface` helper.

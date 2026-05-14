@@ -23,7 +23,7 @@ MVP は Option A を採用する。処理が重くなる場合は adapter 実行
 | `core.plan` | status classification、sync plan 作成、risk 判定 |
 | `adapters.git` | Git status / fetch / pull / push preview |
 | `adapters.local` | 共有フォルダやローカル mirror の存在確認とコピー計画 |
-| `blender.link` | linked library 検出、Link 追加、reload、broken link レポート |
+| `blender.link` | linked library 検出、Link 追加、reload、linked datablock local 化、broken link レポート |
 | `report` | JSON / Markdown レポート、QCDS / release evidence 連携 |
 | `windows` | Blender 外の registry 検証、設定保存、installer dry-run |
 | `scripts` | docs、unit test、runtime gate、release package 検証 |
@@ -53,3 +53,4 @@ flowchart LR
 - scheduled pull は MVP 後とし、まず manual / batch 操作を安定させる。
 - Windows companion は `.blend` を開かず、設定保存と registry preview に限定する。
 - GUI registry editing は `core.registry` の候補生成を使い、Blender session への Link は `blender.link` の明示操作に閉じ込める。外部 sync と registry 編集を同じ operator に混ぜない。
+- linked file 統合は `blender.link.integrate_linked_libraries` に閉じ込め、UI は選択 part、確認ダイアログ、report 保存だけを担当する。

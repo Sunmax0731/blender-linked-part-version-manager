@@ -38,6 +38,11 @@
       "status": "implemented-unit-tested-cli-smoked",
       "evidence": "tests/test_registry_plan.py",
       "criteria": "ja_JP translation table covers core panel, operator, button, property, and report strings; Blender 5.1.1 pgettext_iface resolves core labels in Japanese"
+    },
+    "linkIntegration": {
+      "status": "implemented-unit-tested-manual-pending",
+      "evidence": "tests/test_registry_plan.py",
+      "criteria": "Preview Integrate reports target linked datablocks without mutation; Integrate Link requires confirmation, makes selected linked datablocks local, writes a report, and does not auto-save .blend"
     }
   },
   "release": {

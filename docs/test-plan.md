@@ -17,6 +17,7 @@
 | GUI registry candidate defaults | Blender add-on / core.registry | scan / file selector 由来の候補が安全な local source 初期値を持ち、保存後に registry validator を通過する。 |
 | GUI linked library scan | Blender add-on / blender.link | `bpy.data.libraries` と linked collection から `blendPath` と `linkedCollection` を持つ editable part 候補を生成できる。 |
 | Japanese UI localization | Blender add-on / UI translations | `ja_JP` 翻訳テーブルが主要 panel、operator、button、property、message を持ち、Blender の `pgettext_iface` で日本語へ解決できる。 |
+| Link integration helper | Blender add-on / blender.link | dry-run は対象 datablock を報告するだけで local 化せず、実行時は選択 target の linked datablock だけを local 化する。 |
 | Release artifact check | dist / docs | add-on ZIP、docs ZIP、test summary、runtime gate、QCDS metrics が存在する。 |
 
 ## Blender Runtime Gate
@@ -33,8 +34,11 @@
 8. `Pull & Reload` の dry-run を実行する。
 9. 確認後に reload し、Viewport で更新が反映されることを確認する。
 10. `Start Auto Reload` 後に Hair source `.blend` を保存し、interval 内に Viewport へ反映されることを確認する。
-11. Blender の表示言語を日本語に変更し、`Linked Parts` タブ、`Part Registry` パネル、主要ボタン、Auto Reload status、operator report が日本語表示になることを確認する。
-12. `dist/runtime-gate.json` に Blender version、対象ファイル、結果を保存する。
+11. `Preview Integrate` で対象 linked file と report が表示されることを確認する。
+12. `Integrate Link` の確認ダイアログを cancel し、`.blend`、Link 状態、Part Registry が変わらないことを確認する。
+13. コピーした fixture で `Integrate Link` を確認あり実行し、linked datablock が local data になり、report に warning / result が残ることを確認する。
+14. Blender の表示言語を日本語に変更し、`Linked Parts` タブ、`Part Registry` パネル、主要ボタン、Auto Reload status、operator report が日本語表示になることを確認する。
+15. `dist/runtime-gate.json` に Blender version、対象ファイル、結果を保存する。
 
 ## Manual Tests
 
@@ -48,4 +52,4 @@
 
 `npm test` は docs / JSON / 文字化け検査、Python unit test、Windows runtime gate、Blender CLI smoke、release package、release artifact check を行う。2026-05-15 時点で `D:\SteamLibrary\steamapps\common\Blender\blender.exe` から Blender 5.1.1 を検出し、add-on import smoke は通過済み。追加で `register()` / `unregister()` smoke も通過済み。統合 `.blend` と部位別 `.blend` の Link reload / Viewport 反映はユーザー手元の Blender 5.1.1 で手動確認済み。
 
-2026-05-15 時点で GUI registry candidate defaults、linked library scan、Japanese UI localization table coverage は Python unit test に追加済み。Blender 5.1.1 CLI で `preferences.view.language='ja_JP'`、`use_translate_interface=True` を設定し、`Scan Current Links` と `Part Registry` が日本語へ解決されることを確認済み。Blender UI 上の `Scan Current Links`、`Save Registry`、`Add File Candidate`、`Preview Link`、`Link Candidate`、日本語 UI 表示は次回 manual test で実機確認する。
+2026-05-15 時点で GUI registry candidate defaults、linked library scan、Japanese UI localization table coverage、link integration dry-run / localize helper は Python unit test に追加済み。Blender 5.1.1 CLI で `preferences.view.language='ja_JP'`、`use_translate_interface=True` を設定し、`Scan Current Links` と `Part Registry` が日本語へ解決されることを確認済み。Blender UI 上の `Scan Current Links`、`Save Registry`、`Add File Candidate`、`Preview Link`、`Link Candidate`、`Preview Integrate`、`Integrate Link`、日本語 UI 表示は次回 manual test で実機確認する。

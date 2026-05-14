@@ -103,6 +103,18 @@ Part Registry は、統合 `.blend` が参照する部位別 `.blend` の一覧�
 - broken-link や conflict-risk を避ける
 - 統合 `.blend` の表示を最新化する
 
+## Preview Integrate / Integrate Link
+
+`Preview Integrate` は、選択中の registry 候補に対応する linked `.blend` を current file に統合した場合の対象 datablock と warning を dry-run 表示します。`Integrate Link` は確認ダイアログで不可逆操作、対象 linked file、出力先 current file を表示した後、linked datablock を local data にします。
+
+何のために使うか:
+
+- Link 参照を外し、1 つの `.blend` として受け渡せる状態にする
+- 実行前に対象ファイルと出力先を確認する
+- cancel 時に `.blend`、Link 状態、Part Registry を変更しない
+- 実行後に `Report Path` の JSON とパネル preview で warning を確認する
+- current file を自動保存せず、結果を見てからユーザーが保存判断する
+
 ## Auto Reload
 
 `Start Auto Reload` は、保存済み linked `.blend` の更新時刻を監視し、安全な対象だけ reload します。`Stop Auto Reload` で監視を停止します。

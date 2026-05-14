@@ -19,6 +19,7 @@
 - Blender GUI で生成した Part Registry は `owner=unassigned`、`source.type=local`、`versionRef=local`、`updatePolicy=manual` を安全な初期値とし、Link 操作は明示ボタンで実行して自動保存しない。
 - GitHub 操作はまず dry-run / status 確認を前面に出し、push / pull / reset 相当の危険操作は影響範囲を明示する。
 - `.blend` 本体の自動生成や破壊的更新を実装する前に、サンプル registry と dry-run レポートで検証する。
+- linked file 統合は linked datablock を local 化する破壊的操作として扱い、対象ファイル、出力先、不可逆性を確認ダイアログで表示し、`.blend` は自動保存しない。
 - Blender UI 文言を追加または変更する場合は、英語の既定表示と `ja_JP` 翻訳テーブルを同じ変更で更新する。
 - 作業ブランチは `codex/<task-summary>` 形式を1本だけ使い、工程完了後に main へ merge して push する。
 - Markdown / JSON / JavaScript / Python は UTF-8 と LF を維持する。

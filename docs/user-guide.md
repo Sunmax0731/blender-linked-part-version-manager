@@ -11,6 +11,7 @@
 5. `Build Sync Preview` で更新候補、危険状態、reload 候補を確認する。
 6. `local-dirty`、`conflict-risk`、`broken-link` がある場合は自動更新せず、担当者に確認する。
 7. 問題がない部位だけ `Reload Safe Links` の dry-run を確認し、手動判断で reload する。
+8. Link 参照を 1 つの `.blend` にまとめる必要がある場合だけ、対象候補を選び `Preview Integrate` と `Integrate Link` の確認ダイアログを通す。
 
 ## Registry
 
@@ -39,6 +40,10 @@ windows\blpvm-companion.cmd status --registry samples\representative-suite.json
 ```
 
 Windows companion は `.blend` を変更しない。Blender Link の reload は Blender add-on 側の確認操作で行う。
+
+## Link 統合
+
+`Integrate Link` は選択中の linked `.blend` の datablock を current file の local data に変える。実行前に対象ファイル、出力先、不可逆操作であることを確認し、cancel した場合は何も変更しない。実行後も current file は自動保存されないため、`Report Path` の JSON と Viewport を確認してから手動で保存する。
 
 ## 表示言語
 

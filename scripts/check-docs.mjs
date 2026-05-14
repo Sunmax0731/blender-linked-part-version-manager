@@ -45,6 +45,7 @@ const requiredFiles = [
   "Issues/0014-mvp.md",
   "Issues/0015-user-facing-readme-features.md",
   "Issues/0016-blender-ui.md",
+  "Issues/0017-issue.md",
   "windows/blpvm-companion.mjs",
   "windows/blpvm-companion.cmd",
   "windows/install-alpha.cmd",

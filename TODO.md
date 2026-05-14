@@ -53,3 +53,4 @@ No current TODO. New uncategorized work should be moved into one of the phase se
 - [x] [P2] [Phase:06-release] MVP後の実装とリリース準備 [Issue](Issues/0014-mvp.md) [QCDS:Quality,Cost,Delivery,Satisfaction]
 - [x] [P2] [Phase:06-release] GitHub トップ README を利用者向けに整理し、機能一覧ドキュメントを追加する [Issue](Issues/0015-user-facing-readme-features.md) [QCDS:Quality,Satisfaction]
 - [x] [P2] [Phase:04-implementation] Blender表示言語に連動した日本語UI対応 [Issue](Issues/0016-blender-ui.md) [QCDS:Quality,Satisfaction]
+- [x] [P2] [Phase:05-test] リンクファイル統合機能を追加する [Issue](Issues/0017-issue.md) [QCDS:Quality,Cost,Satisfaction]

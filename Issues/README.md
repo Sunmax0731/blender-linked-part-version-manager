@@ -35,3 +35,4 @@ This folder stores local Markdown issues linked from `TODO.md`.
 - [x] [0014](0014-mvp.md) MVP後の実装とリリース準備
 - [x] [0015](0015-user-facing-readme-features.md) GitHub トップ README を利用者向けに整理し、機能一覧ドキュメントを追加する
 - [x] [0016](0016-blender-ui.md) Blender表示言語に連動した日本語UI対応
+- [x] [0017](0017-issue.md) リンクファイル統合機能を追加する

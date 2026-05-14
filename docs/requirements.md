@@ -36,6 +36,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - R13: Blender GUI から現在の linked library / collection を scan し、Part Registry 候補を編集して保存できる。
 - R14: Blender GUI から Explorer / Blender file selector で部位 `.blend` を選び、dry-run 確認後の明示操作で現在の Blender tree へ Link できる。
 - R15: Blender の表示言語が日本語の場合、アドオンのパネル、ボタン、operator 名、主要メッセージを日本語で表示し、日本語以外の環境では既存の英語表示を維持する。
+- R16: Blender GUI から選択中の linked `.blend` を現在の Blender file へ統合する前に、対象ファイル、出力先、不可逆性を確認し、結果と warning を report として確認できる。
 
 ## Non Functional Requirements
 
@@ -44,6 +45,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - Windows パス、相対パス、リポジトリ内パスを混在させず、registry では canonical path と表示用 path を分ける。
 - Link reload の前に保存状態と更新対象を表示し、ユーザーが破壊的操作を避けられるようにする。
 - GUI からの Link 追加は現在の Blender session に限定し、`.blend` 本体を自動保存しない。
+- linked file 統合は linked datablock を local data に変える操作であるため、confirmation cancel 時は `.blend` 本体、Link 状態、Part Registry を変更しない。
 - alpha 公開前の QCDS は Windows platform runtime gate と自動テストを含め、Blender 実機確認の未実施を明記する。
 
 ## Out of Scope

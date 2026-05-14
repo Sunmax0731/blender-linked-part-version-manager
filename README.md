@@ -12,6 +12,7 @@ Blender Linked Part Version Manager は、キャラクターや複合モデル�
 - registry の不備、missing-link、broken-link、local-dirty、conflict-risk を確認する
 - 更新前に sync preview を作り、安全な linked library だけ reload する
 - 保存済み linked `.blend` の変更を監視し、安全な対象だけ Auto Reload する
+- 選択した linked `.blend` を確認ダイアログ後に現在の Blender ファイルへ統合する
 - Blender の表示言語が日本語の場合、パネル、ボタン、主要メッセージを日本語で表示する
 - Windows companion で registry validation、status preview、settings 保存、installer dry-run を実行する
 
@@ -78,7 +79,11 @@ Blender Linked Part Version Manager は、キャラクターや複合モデル�
 
 既存の linked library を更新する場合は、先に `Preview Reload` を確認し、問題がなければ `Reload Safe Links` を実行します。現在の `.blend` は自動保存されないため、結果を確認してから手動で保存してください。
 
-### 6. Auto Reload を使う
+### 6. linked file を統合する
+
+Link 参照を 1 つの `.blend` にまとめたい場合は、registry 候補を選択して `Preview Integrate` を確認し、対象ファイルと出力先を確認してから `Integrate Link` を実行します。統合は linked datablock を current file の local data にする操作で、現在の `.blend` は自動保存されません。結果と warning は `Report Path` に JSON として保存されます。
+
+### 7. Auto Reload を使う
 
 `Start Auto Reload` を実行すると、保存済み linked `.blend` の更新時刻を監視し、安全な対象だけ reload します。別 Blender ウィンドウで未保存のまま編集している内容は `.blend` に書き込まれていないため、Auto Reload では反映されません。
 
@@ -99,6 +104,7 @@ windows\install-alpha.cmd --dry-run
 ## 安全設計
 
 - reload / Link は preview と明示実行を分ける
+- linked file 統合は確認ダイアログを挟み、`.blend` を自動保存しない
 - `.blend` は自動保存しない
 - `local-dirty`、`conflict-risk`、`broken-link` は自動更新しない
 - Windows companion は `.blend` を変更しない

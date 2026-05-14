@@ -9,7 +9,11 @@ from pathlib import Path
 from addon.blender_linked_part_version_manager.adapters.git import preview_git_part
 from addon.blender_linked_part_version_manager.adapters.local import preview_local_part
 from addon.blender_linked_part_version_manager import BLPVM_TRANSLATIONS, _auto_reload_target_paths
-from addon.blender_linked_part_version_manager.blender.link import reload_linked_libraries, scan_linked_registry_parts
+from addon.blender_linked_part_version_manager.blender.link import (
+    integrate_linked_libraries,
+    reload_linked_libraries,
+    scan_linked_registry_parts,
+)
 from addon.blender_linked_part_version_manager.core.plan import build_sync_plan, summarize_plan
 from addon.blender_linked_part_version_manager.core.registry import (
     build_registry_part_candidate,
@@ -184,6 +188,8 @@ class RegistryPlanTests(unittest.TestCase):
             "Report Path": "レポートパス",
             "Auto Reload Interval": "自動リロード間隔",
             "Preview Link": "リンクをプレビュー",
+            "Preview Integrate": "統合をプレビュー",
+            "Integrate Link": "リンクを統合",
             "Reload Safe Links": "安全なリンクをリロード",
             "Scanned {count} linked part candidate(s).": "リンク済み部位候補を{count}件スキャンしました。",
         }
@@ -198,6 +204,7 @@ class RegistryPlanTests(unittest.TestCase):
             "Build Sync Preview",
             "Start Auto Reload",
             "Stop Auto Reload",
+            "Integrate Selected Link",
         ):
             self.assertIn(("Operator", operator_label), ja)
 
@@ -228,6 +235,48 @@ class RegistryPlanTests(unittest.TestCase):
         self.assertEqual(parts[0]["partTag"], "Hair")
         self.assertEqual(validate_registry(registry_from_parts(parts)), [])
 
+    def test_integrate_linked_libraries_dry_run_reports_target_without_localizing(self) -> None:
+        root = ROOT
+        bpy_module = _FakeBpy(
+            root / "integration",
+            ["//../parts/hair/main_hair.blend"],
+            collections=[("CHR_Hair_Main", 0)],
+        )
+
+        result = integrate_linked_libraries(
+            bpy_module,
+            ["parts/hair/main_hair.blend"],
+            dry_run=True,
+            base_dirs=[root / "samples", root],
+        )
+
+        self.assertEqual(result["failed"], [])
+        self.assertEqual(len(result["integrated"]), 1)
+        self.assertEqual(result["integrated"][0]["datablockCount"], 1)
+        self.assertIsNotNone(bpy_module.data.collections[0].library)
+        self.assertEqual(bpy_module.data.collections[0].make_local_count, 0)
+
+    def test_integrate_linked_libraries_makes_matching_datablocks_local(self) -> None:
+        root = ROOT
+        bpy_module = _FakeBpy(
+            root / "integration",
+            ["//../parts/hair/main_hair.blend", "//../parts/body/base_body.blend"],
+            collections=[("CHR_Hair_Main", 0), ("CHR_Body_Base", 1)],
+        )
+
+        result = integrate_linked_libraries(
+            bpy_module,
+            ["parts/hair/main_hair.blend"],
+            dry_run=False,
+            base_dirs=[root / "samples", root],
+        )
+
+        self.assertEqual(result["failed"], [])
+        self.assertEqual(result["integrated"][0]["localizedCount"], 1)
+        self.assertIsNone(bpy_module.data.collections[0].library)
+        self.assertIsNotNone(bpy_module.data.collections[1].library)
+        self.assertEqual(bpy_module.data.collections[1].make_local_count, 0)
+
 class _FakeLibrary:
     def __init__(self, filepath: str) -> None:
         self.filepath = filepath
@@ -239,6 +288,7 @@ class _FakeLibrary:
 
 class _FakeData:
     def __init__(self, filepaths: list[str], collections: list[tuple[str, int]] | None = None) -> None:
+        self.filepath = ""
         self.libraries = [_FakeLibrary(filepath) for filepath in filepaths]
         self.collections = [
             _FakeCollection(name, self.libraries[library_index])
@@ -250,6 +300,11 @@ class _FakeCollection:
     def __init__(self, name: str, library: _FakeLibrary) -> None:
         self.name = name
         self.library = library
+        self.make_local_count = 0
+
+    def make_local(self) -> None:
+        self.make_local_count += 1
+        self.library = None
 
 
 class _FakePath:

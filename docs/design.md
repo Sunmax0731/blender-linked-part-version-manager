@@ -24,6 +24,7 @@
 - Link 追加やパス修正は preview 画面で対象 library / collection を明示する。
 - `Scan Current Links` は現在の linked library / collection から候補だけを作り、JSON 保存は `Save Registry` の明示操作に分ける。
 - `Add File Candidate` は Explorer / Blender file selector から `.blend` を選んで候補化する。実 Link は `Preview Link` と `Link Candidate` に分け、自動保存しない。
+- linked file 統合は `Preview Integrate` と `Integrate Link` に分ける。実行時は確認ダイアログで不可逆操作、対象 linked file、出力先 current file を表示し、cancel 時は何も変更しない。
 - Part Registry の編集欄は `partId`、`partTag`、`displayName`、`blendPath`、`linkedCollection`、`owner`、`source`、`versionRef`、`updatePolicy` を 1 件ずつ確認できる密度にする。
 - UI 文言は Blender の表示言語に従う。日本語環境では操作名と主要メッセージを日本語にし、schema field 名や JSON evidence のキーは英語のまま維持する。
 

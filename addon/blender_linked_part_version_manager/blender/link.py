@@ -138,6 +138,83 @@ def reload_linked_libraries(
     return result
 
 
+def integrate_linked_libraries(
+    bpy_module: Any,
+    target_paths: list[str],
+    *,
+    dry_run: bool = True,
+    base_dirs: Iterable[str | Path] | None = None,
+) -> dict[str, Any]:
+    targets = {_normalize(_resolve_target_path(bpy_module, path, base_dirs=base_dirs)) for path in target_paths}
+    data = getattr(bpy_module, "data", None)
+    result: dict[str, Any] = {
+        "dryRun": dry_run,
+        "outputFile": _current_output_file(bpy_module),
+        "targets": sorted(targets),
+        "integrated": [],
+        "skipped": [],
+        "warnings": [],
+        "failed": [],
+    }
+    linked_ids = _ids_by_library(bpy_module)
+    matched_targets: set[str] = set()
+    for library in getattr(data, "libraries", []):
+        resolved = _normalize(_abspath(bpy_module, getattr(library, "filepath", "")))
+        if resolved not in targets:
+            result["skipped"].append(resolved)
+            continue
+        matched_targets.add(resolved)
+        datablocks = linked_ids.get(resolved, [])
+        entry: dict[str, Any] = {
+            "path": resolved,
+            "datablockCount": len(datablocks),
+            "datablocks": [
+                {"type": block_type, "name": getattr(block, "name", "")}
+                for block_type, block in datablocks
+            ],
+        }
+        if dry_run:
+            result["integrated"].append(entry)
+            continue
+
+        localized = 0
+        for block_type, block in datablocks:
+            make_local = getattr(block, "make_local", None)
+            if not callable(make_local):
+                result["warnings"].append(
+                    {
+                        "path": resolved,
+                        "type": block_type,
+                        "name": getattr(block, "name", ""),
+                        "warning": "Datablock does not expose make_local().",
+                    }
+                )
+                continue
+            try:
+                make_local()
+                localized += 1
+            except Exception as exc:  # pragma: no cover - depends on Blender runtime
+                result["failed"].append(
+                    {
+                        "path": resolved,
+                        "type": block_type,
+                        "name": getattr(block, "name", ""),
+                        "error": str(exc),
+                    }
+                )
+        entry["localizedCount"] = localized
+        result["integrated"].append(entry)
+
+    for target in sorted(targets - matched_targets):
+        result["failed"].append(
+            {
+                "path": target,
+                "error": "Linked library is not present in the current Blender file.",
+            }
+        )
+    return result
+
+
 def resolve_target_paths(
     bpy_module: Any,
     target_paths: list[str],
@@ -181,6 +258,46 @@ def _collections_by_library(bpy_module: Any) -> dict[str, list[str]]:
         resolved = _normalize(_abspath(bpy_module, getattr(library, "filepath", "")))
         collections.setdefault(resolved, []).append(getattr(collection, "name", ""))
     return collections
+
+
+def _ids_by_library(bpy_module: Any) -> dict[str, list[tuple[str, Any]]]:
+    data = getattr(bpy_module, "data", None)
+    ids: dict[str, list[tuple[str, Any]]] = {}
+    container_names = (
+        "collections",
+        "objects",
+        "meshes",
+        "materials",
+        "armatures",
+        "actions",
+        "curves",
+        "cameras",
+        "lights",
+        "images",
+        "node_groups",
+        "textures",
+        "fonts",
+        "worlds",
+        "lattices",
+        "metaballs",
+        "speakers",
+        "volumes",
+    )
+    for container_name in container_names:
+        for block in getattr(data, container_name, []):
+            library = getattr(block, "library", None)
+            if library is None:
+                continue
+            resolved = _normalize(_abspath(bpy_module, getattr(library, "filepath", "")))
+            ids.setdefault(resolved, []).append((container_name, block))
+    return ids
+
+
+def _current_output_file(bpy_module: Any) -> str:
+    filepath = getattr(getattr(bpy_module, "data", None), "filepath", "")
+    if not filepath:
+        return "current-unsaved-blender-session"
+    return _abspath(bpy_module, filepath)
 
 
 def _display_path(path: str, base_dir: str | Path | None = None) -> str:

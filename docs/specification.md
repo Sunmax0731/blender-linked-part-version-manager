@@ -9,6 +9,7 @@
 | Part Registry | 部位と Link、外部取得元、担当者、バージョン参照を保持する JSON。 |
 | Sync Plan | 取得、reload、検証、push 前確認の予定をまとめた dry-run 結果。 |
 | Sync Adapter | GitHub、Git CLI、ローカル共有フォルダなど外部取得元を抽象化する実装境界。 |
+| Link Integration | linked library の datablock を現在の Blender file 内の local data に変え、1 つの `.blend` として保存できる状態にする操作。 |
 | Windows Companion | Blender 外で registry 検証、status preview、設定保存を行う alpha 用 launcher。 |
 
 ## Registry Schema
@@ -62,6 +63,7 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 - Link 状態検出: `bpy.data.libraries` と linked collection / object の library 情報を照合する。
 - Reload: linked library の reload API を使用し、失敗時は registry と result に原因を残す。
 - Auto Reload: 未保存変更は対象外とし、保存済み `.blend` の mtime が増えた場合だけ reload する。外部 pull / push は実行しない。
+- Link Integration: 選択中の registry part に対応する linked library の datablock を `make_local()` で local 化する。実行前に確認ダイアログを表示し、対象ファイル、出力先、不可逆性を示す。
 - 保存: MVP では自動保存しない。ユーザー確認後の保存を手動手順に残す。
 
 ## GUI Registry Editing
@@ -75,8 +77,12 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 | `Save Registry` | GUI 上の候補を `Registry Path` の JSON に保存し、既存 validator で検証する。 | registry JSON のみ |
 | `Preview Link` | 選択候補を現在の Blender tree へ Link する前の dry-run を表示する。 | なし |
 | `Link Candidate` | 選択候補の collection を現在の Blender tree へ明示的に Link する。 | 現在の Blender session のみ。自動保存しない。 |
+| `Preview Integrate` | 選択候補の linked datablock を local 化した場合の対象と warning を dry-run 表示する。 | なし |
+| `Integrate Link` | 選択候補の linked datablock を current file の local data に変える。 | 現在の Blender session のみ。確認ダイアログ必須。自動保存しない。 |
 
 GUI 生成候補の初期値は `owner=unassigned`、`source.type=local`、`source.root=.`、`versionRef=local`、`updatePolicy=manual` とする。
+
+`Integrate Link` の confirmation が cancel された場合、operator の `execute` は走らず、`.blend` 本体、Link 状態、Part Registry は変更されない。実行後は `Report Path` に `operation=integrate-linked-library` の JSON report を保存し、ユーザーが保存前に結果と warning を確認できるようにする。
 
 ## UI Localization
 
