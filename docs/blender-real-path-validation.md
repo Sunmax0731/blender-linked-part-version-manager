@@ -25,7 +25,7 @@ Blender CLI smoke は `--background --factory-startup --python-expr` で Blender
 - 検出: `D:\SteamLibrary\steamapps\common\Blender\blender.exe`
 - 検出元: `default-steam-directory`
 - Version: Blender 5.1.1
-- CLI smoke: `BLPVM_BLENDER_SMOKE_OK 5.1.1 (0, 1, 0)`
+- CLI smoke: `BLPVM_BLENDER_SMOKE_OK 5.1.1 (0, 1, 1)`
 - Gate: `dist/runtime-gate.json` の `blenderHostGate.status` は `cli-smoke-passed`
 
 ## 手動確認に残す項目

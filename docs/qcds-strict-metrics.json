@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "product": "blender-linked-part-version-manager",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "allowedGrades": ["S+", "S-", "A+", "A-", "B+", "B-", "C+", "C-", "D+", "D-"],
   "grades": {
     "Quality": "A-",
@@ -36,7 +36,7 @@
     }
   },
   "release": {
-    "tag": "v0.1.0-alpha.1",
+    "tag": "v0.1.0-alpha.2",
     "latest": false,
     "manualTestingAfterRelease": true
   }

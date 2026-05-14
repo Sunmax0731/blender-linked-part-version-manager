@@ -3,7 +3,7 @@ from __future__ import annotations
 bl_info = {
     "name": "Blender Linked Part Version Manager",
     "author": "Sunmax0731",
-    "version": (0, 1, 0),
+    "version": (0, 1, 1),
     "blender": (4, 2, 0),
     "location": "View3D > Sidebar > Linked Parts",
     "description": "Preview and validate linked part registries before refreshing Blender Link libraries.",

@@ -67,6 +67,6 @@ windows\install-alpha.cmd --dry-run
 
 ## Alpha Release Notes
 
-`v0.1.0-alpha.1` は prerelease として公開し、リリース後に Blender 実機で Link reload の手動確認を行います。Codex 環境では `D:\SteamLibrary\steamapps\common\Blender\blender.exe` を検出し、Blender 5.1.1 の CLI smoke とアドオン import は通過済みです。統合 `.blend` と部位別 `.blend` の Link reload は手動確認として残します。
+`v0.1.0-alpha.2` は prerelease として公開し、Blender GUI での Part Registry 生成・編集・保存と Explorer / Blender file selector からの Link 候補追加を含みます。Codex 環境では `D:\SteamLibrary\steamapps\common\Blender\blender.exe` を検出し、Blender 5.1.1 の CLI smoke、アドオン import、`register()` / `unregister()` smoke は通過済みです。
 
 テスト協力者は release asset `blender-linked-part-version-manager-fixtures.zip` を展開し、同梱の `integration/character_integration.blend` と `samples/representative-suite.json` で manual test を開始できます。

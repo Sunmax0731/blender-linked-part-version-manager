@@ -47,7 +47,7 @@ function writeTestSummary() {
   const summary = {
     schemaVersion: 1,
     product: "blender-linked-part-version-manager",
-    version: "0.1.0-alpha.1",
+    version: "0.1.0-alpha.2",
     automatedChecks: [
       "node scripts/check-docs.mjs",
       "python -m compileall -q addon tests",

@@ -1,6 +1,6 @@
 schema_version = "1.0.0"
 id = "blender_linked_part_version_manager"
-version = "0.1.0"
+version = "0.1.1"
 name = "Blender Linked Part Version Manager"
 tagline = "Preview linked part updates before refreshing Blender Link libraries"
 maintainer = "Sunmax0731"
