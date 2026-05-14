@@ -8,6 +8,7 @@ from pathlib import Path
 
 from addon.blender_linked_part_version_manager.adapters.git import preview_git_part
 from addon.blender_linked_part_version_manager.adapters.local import preview_local_part
+from addon.blender_linked_part_version_manager import _auto_reload_target_paths
 from addon.blender_linked_part_version_manager.blender.link import reload_linked_libraries
 from addon.blender_linked_part_version_manager.core.plan import build_sync_plan, summarize_plan
 from addon.blender_linked_part_version_manager.core.registry import validate_registry
@@ -84,6 +85,13 @@ class RegistryPlanTests(unittest.TestCase):
             self.assertEqual(result["failed"], [])
             self.assertEqual(len(result["reloaded"]), 1)
             self.assertEqual(result["skipped"], [])
+
+    def test_auto_reload_targets_only_safe_current_or_remote_newer_parts(self) -> None:
+        plan = build_sync_plan(self.registry)
+        self.assertEqual(
+            _auto_reload_target_paths(plan),
+            ["parts/hair/main_hair.blend", "parts/body/base_body.blend"],
+        )
 
 class _FakeLibrary:
     def __init__(self, filepath: str) -> None:

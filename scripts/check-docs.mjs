@@ -36,6 +36,7 @@ const requiredFiles = [
   "Issues/0007-alpha-manual-test-evidence.md",
   "Issues/0008-manual-test-fixtures.md",
   "Issues/0009-reload-target-path-fix.md",
+  "Issues/0010-auto-reload-saved-links.md",
   "windows/blpvm-companion.mjs",
   "windows/blpvm-companion.cmd",
   "windows/install-alpha.cmd",

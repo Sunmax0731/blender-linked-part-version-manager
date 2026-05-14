@@ -24,6 +24,7 @@
 - [x] `core.plan` で status classification と dry-run report を生成する。
 - [x] `adapters.git` と `adapters.local` の MVP を実装する。
 - [x] Blender アドオン shell、panel、operator、Link inspector、reload operator を実装する。
+- [x] 保存済み linked `.blend` の Auto Reload を実装する。
 - [x] Windows companion launcher、settings 保存、installer dry-run を実装する。
 
 ## Phase 05 Test
@@ -32,7 +33,7 @@
 - [x] Git runner fixture で remote-newer、local-dirty、conflict-risk を再現する。
 - [x] Windows runtime gate で local executable、installer dry-run、settings 保存を確認する。
 - [x] 指定 Blender 実体パスで Blender CLI smoke と add-on import を確認する。
-- [ ] Blender runtime gate で Integration File が Part File を Link し、reload できることを確認する。alpha release 後に手動で実施する。
+- [x] Blender runtime gate で Integration File が Part File を Link し、reload できることを確認する。
 - [x] 文字化け、JSON schema、docs completeness を `npm test` に含める。
 
 ## Phase 06 Release

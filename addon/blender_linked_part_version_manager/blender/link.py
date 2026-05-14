@@ -60,6 +60,19 @@ def reload_linked_libraries(
     return result
 
 
+def resolve_target_paths(
+    bpy_module: Any,
+    target_paths: list[str],
+    *,
+    base_dirs: Iterable[str | Path] | None = None,
+) -> dict[str, str]:
+    resolved_paths = {}
+    for target_path in target_paths:
+        resolved = _resolve_target_path(bpy_module, target_path, base_dirs=base_dirs)
+        resolved_paths[_normalize(resolved)] = resolved
+    return resolved_paths
+
+
 def _abspath(bpy_module: Any, path: str) -> str:
     if not path:
         return ""

@@ -32,7 +32,7 @@
     ]
   },
   "manualEvidence": {
-    "status": "reload-operator-passed-viewport-delta-pending",
+    "status": "manual-reload-passed-auto-reload-implemented",
     "manualTest": "docs/manual-test.md",
     "strictManualTestAddendum": "docs/strict-manual-test-addendum.md",
     "trackingIssue": "Issues/0006-blender-runtime-link-reload-manual.md",
@@ -44,10 +44,17 @@
       "Validate Registry returns issues: []",
       "Build Sync Preview returns totalParts: 4, currentParts: 1, updateCandidates: 1, blockedParts: 2",
       "Preview Reload targets and reloads parts/hair/main_hair.blend",
-      "Reload Safe Links targets and reloads parts/hair/main_hair.blend"
+      "Reload Safe Links targets and reloads parts/hair/main_hair.blend",
+      "Saved Hair source edit is reflected in integration Viewport after Reload Safe Links"
     ],
     "pending": [
-      "Hair source .blend visual edit followed by Viewport delta confirmation"
+      "Auto Reload user-side interval test after reinstalling the updated add-on"
     ]
+  },
+  "autoReload": {
+    "status": "implemented",
+    "mode": "saved-linked-blend-mtime-polling",
+    "unsavedSourceEdits": "not-supported-by-blender-link-reload",
+    "trackingIssue": "Issues/0010-auto-reload-saved-links.md"
   }
 }

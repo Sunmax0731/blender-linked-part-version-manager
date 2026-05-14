@@ -52,8 +52,10 @@ alpha release 後に手作業で実施する。
 6. `Build Sync Preview` を実行し、summary が表示され、`remote-newer`、`local-dirty`、`broken-link` の代表状態が dry-run report に記録されることを確認する。
 7. `Preview Reload` を実行し、Hair の library だけが dry-run `reloaded`、他の library が `skipped` として表示されることを確認する。
 8. 実 reload を確認する場合は、`parts/hair/main_hair.blend` を別ウィンドウで開き、Hair marker を少し移動して保存する。その後 `character_integration.blend` に戻り、`Reload Safe Links` を実行して Viewport の Hair が更新されることを確認する。
-9. Link 先ファイルを一時的に移動する場合は、コピーで退避してから `broken-link` 表示を確認し、必ず元の場所へ戻す。
-10. local-dirty / conflict-risk 相当は `representative-suite.json` の `expectedStatus` で dry-run 表示され、自動更新対象から外れることを確認する。
+9. Auto Reload を確認する場合は、`Start Auto Reload` を実行してから `parts/hair/main_hair.blend` を別ウィンドウで変更して保存する。`Auto Reload Interval` の秒数以内に integration 側の Hair が更新されることを確認する。
+10. `Stop Auto Reload` で監視を停止する。
+11. Link 先ファイルを一時的に移動する場合は、コピーで退避してから `broken-link` 表示を確認し、必ず元の場所へ戻す。
+12. local-dirty / conflict-risk 相当は `representative-suite.json` の `expectedStatus` で dry-run 表示され、自動更新対象から外れることを確認する。
 
 期待される fixture path:
 
@@ -74,6 +76,7 @@ samples/representative-suite.json
 
 - `Preview Reload` / `Reload Safe Links` が `failed: []` でも `reloaded: []` かつ全件 `skipped` になる場合は、古い add-on ZIP が入っている可能性がある。GitHub Release から更新後の `blender-linked-part-version-manager.zip` を再取得し、Blender の Add-ons で一度 remove してから install し直す。
 - `Reload Safe Links` で `dryRun: false`、Hair が `reloaded`、Body / Accessories / Face が `skipped` なら reload 対象解決は成功。Viewport の見た目の変化まで確認するには、先に `parts/hair/main_hair.blend` を変更して保存する。
+- Auto Reload も保存済みファイルだけを監視する。別 Blender ウィンドウの未保存編集は `.blend` に書き出されていないため、Blender Link reload では反映できない。
 - `Report Path` は fixture root 直下の `blender-dry-run-report.json` など、書き込み可能で見つけやすい場所にする。
 
 ## 未実施項目

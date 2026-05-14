@@ -16,12 +16,14 @@ Blender Linked Part Version Manager は、統合用 `.blend` と部位別作業 
 - 統合用 Blender ファイルが、部位別 `.blend` を Link で参照する構成を安全に維持する。
 - 各作業者が担当部位を push し、他の作業者が任意または定期タイミングで pull して最新表示できる流れを定義する。
 - 部位タグ、担当者、リンク元、取得状態、検証結果を一覧化し、更新時の見落としを減らす。
+- 保存済み linked `.blend` の変更を一定間隔で検出し、安全な対象だけ Auto Reload する。
 
 ## MVP スコープ
 
 - 部位レジストリ JSON の定義と検証
 - Git / ローカルファイル管理を抽象化する同期アダプタ MVP
 - Blender Link 対象の検出、再読み込み、更新前 dry-run のアドオン shell
+- 保存済み linked `.blend` の Auto Reload
 - Windows companion launcher による registry 検証、状態 preview、設定保存
 - 代表シナリオと手動検証手順
 - QCDS、release checklist、docs ZIP、closed alpha release evidence

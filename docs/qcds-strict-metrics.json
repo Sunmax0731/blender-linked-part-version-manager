@@ -16,11 +16,12 @@
       "criteria": "local executable launch, settings save, and installer dry-run launch"
     },
     "blenderHostRuntimeGate": {
-      "status": "cli-smoke-passed",
+      "status": "manual-reload-passed",
       "evidence": "dist/runtime-gate.json",
       "executablePath": "D:\\SteamLibrary\\steamapps\\common\\Blender\\blender.exe",
-      "reason": "Blender 5.1.1 CLI smoke, add-on import, user manual install, registry validation, sync preview, Preview Reload, and Reload Safe Links passed; source edit plus viewport delta remains manual.",
-      "manualLinkReloadStatus": "reload-operator-passed-viewport-delta-pending",
+      "reason": "Blender 5.1.1 CLI smoke, add-on import, user manual install, registry validation, sync preview, Preview Reload, Reload Safe Links, and saved source viewport update passed.",
+      "manualLinkReloadStatus": "passed",
+      "autoReloadStatus": "implemented-saved-file-polling",
       "manualTest": "docs/manual-test.md"
     },
     "manualFixturePackage": {

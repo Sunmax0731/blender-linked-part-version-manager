@@ -42,6 +42,7 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 | Manual Pull | ユーザー操作で取得し、結果を確認して reload する。 | Yes |
 | Scheduled Pull | タイマーで status / fetch / pull 相当を実行し、reload は確認付きにする。 | MVP 後 |
 | Batch Refresh | 複数部位を一括取得して Link を再読み込みする。 | Yes |
+| Auto Reload | 保存済み linked `.blend` の更新時刻を一定間隔で監視し、安全な対象だけ reload する。 | Yes |
 | Push Part | 担当部位を commit / push する前の確認を行う。 | MVP 後 |
 
 ## Status Classification
@@ -60,6 +61,7 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 - Link 追加: `bpy.data.libraries.load(..., link=True)` を使う方針で設計する。
 - Link 状態検出: `bpy.data.libraries` と linked collection / object の library 情報を照合する。
 - Reload: linked library の reload API を使用し、失敗時は registry と result に原因を残す。
+- Auto Reload: 未保存変更は対象外とし、保存済み `.blend` の mtime が増えた場合だけ reload する。外部 pull / push は実行しない。
 - 保存: MVP では自動保存しない。ユーザー確認後の保存を手動手順に残す。
 
 ## Adapter Contract

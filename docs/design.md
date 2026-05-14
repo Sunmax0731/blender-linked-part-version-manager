@@ -19,7 +19,8 @@
 - 危険操作は text button だけにせず、dry-run の結果を先に表示する。
 - 部位タグは色付き chip として扱うが、色だけに依存せずタグ名も表示する。
 - `Pull & Reload` は `local-dirty` または `conflict-risk` がある部位では無効化する。
-- scheduled pull は状態表示と通知に留め、reload はユーザー確認を必要にする。
+- Auto Reload は保存済み linked `.blend` の mtime 監視に限定し、外部 sync / pull / push は実行しない。
+- scheduled pull は状態表示と通知に留め、外部取得はユーザー確認を必要にする。
 - Link 追加やパス修正は preview 画面で対象 library / collection を明示する。
 
 ## Default Tags

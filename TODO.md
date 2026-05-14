@@ -34,15 +34,16 @@ No current TODO. New uncategorized work should be moved into one of the phase se
 
 - [x] 代表シナリオ JSON の自動検証を追加する。 [phase=05-test]
 - [x] Windows local executable / installer dry-run の runtime gate を通す。 [phase=05-test]
-- [ ] [P3] Blender runtime gate で統合 `.blend` と部位別 `.blend` の Link 更新を確認する。Alpha release 後の手動確認として実施する。 [Issue](Issues/0006-blender-runtime-link-reload-manual.md) [phase=05-test] [blocked: ユーザーの Blender 実機で統合 .blend と部位別 .blend の Link reload / Viewport 反映を手動確認する必要がある]
+- [x] [P3] Blender runtime gate で統合 `.blend` と部位別 `.blend` の Link 更新を確認する。Alpha release 後の手動確認として実施する。 [Issue](Issues/0006-blender-runtime-link-reload-manual.md) [phase=05-test]
 
 ## 06-release TODO
 
 - [x] インストール手順、ユーザーガイド、QCDS、release checklist、docs ZIP を更新する。 [phase=06-release]
 - [x] alpha release の prerelease evidence を準備する。 [Issue](Issues/0004-alpha-mvp-release.md) / [GitHub #4](https://github.com/Sunmax0731/blender-linked-part-version-manager/issues/4) [phase=06-release]
-- [ ] [P3] ユーザー手元の Blender で alpha manual test を実行し、結果を次リリースの evidence に反映する。 [Issue](Issues/0007-alpha-manual-test-evidence.md) [phase=06-release] [blocked: ユーザー実施の manual test 結果が未提供]
+- [x] [P3] ユーザー手元の Blender で alpha manual test を実行し、結果を次リリースの evidence に反映する。 [Issue](Issues/0007-alpha-manual-test-evidence.md) [phase=06-release]
 
 ## Work Items
 - [x] [P2] [Phase:05-test] Blender実体パスを使った検証対応 [Issue](Issues/0005-blender.md) [QCDS:Quality,Delivery]
 - [x] [P2] [Phase:05-test] 手動テスト用 `.blend` fixture を alpha release に同梱する [Issue](Issues/0008-manual-test-fixtures.md) [QCDS:Quality,Delivery,Satisfaction]
 - [x] [P2] [Phase:05-test] Manual test で検出した reload 対象 path 不一致を修正する [Issue](Issues/0009-reload-target-path-fix.md) [QCDS:Quality,Satisfaction]
+- [x] [P2] [Phase:04-implementation] 保存済み linked `.blend` の Auto Reload を追加する [Issue](Issues/0010-auto-reload-saved-links.md) [QCDS:Quality,Satisfaction]

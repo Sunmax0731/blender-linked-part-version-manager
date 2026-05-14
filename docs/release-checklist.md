@@ -17,7 +17,8 @@
 - [x] Windows runtime gate が `passed` になっている。
 - [x] 指定 Blender 実体パスで CLI smoke と add-on import が `passed` になっている。
 - [x] alpha 手動テスト用 `.blend` fixture と fixture ZIP が生成されている。
-- [ ] Blender runtime gate が手動確認で `passed` になっている。
+- [x] Blender runtime gate が手動確認で `passed` になっている。
+- [x] Auto Reload が保存済み linked `.blend` 監視として実装されている。
 - [x] `docs/qcds-evaluation.md` の全観点が `A-` 以上になっている。
 - [x] `docs/installation-guide.md` と `docs/user-guide.md` を追加した。
 - [x] GitHub prerelease と docs ZIP を作成した。

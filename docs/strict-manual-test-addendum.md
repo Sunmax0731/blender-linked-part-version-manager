@@ -11,6 +11,8 @@
 - `local-dirty` と `conflict-risk` で自動更新が止まる。
 - safe な linked library の reload preview で Hair part が `reloaded` に出る。
 - 実 reload が成功し、Viewport で対象部位の更新を確認できる。
+- `Start Auto Reload` 後、保存済み Hair `.blend` の変更が interval 内に integration Viewport へ反映される。
+- 未保存の別 Blender 編集は Auto Reload では反映されないことを確認する。
 
 ## 判定
 

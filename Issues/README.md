@@ -28,3 +28,4 @@ This folder stores local Markdown issues linked from `TODO.md`.
 - [ ] [0007](0007-alpha-manual-test-evidence.md) Alpha manual test 結果を次リリース evidence に反映する
 - [x] [0008](0008-manual-test-fixtures.md) 手動テスト用 `.blend` fixture を alpha release に同梱する
 - [x] [0009](0009-reload-target-path-fix.md) Manual test で検出した reload 対象 path 不一致を修正する
+- [x] [0010](0010-auto-reload-saved-links.md) 保存済み linked `.blend` の Auto Reload を追加する

@@ -13,6 +13,7 @@
 | Windows runtime gate | companion launcher / installer | local executable 起動、settings 保存、installer dry-run が成功する。 |
 | Blender CLI smoke | Blender host | `BLENDER_EXE`、`D:\SteamLibrary\steamapps\common\Blender\blender.exe`、PATH のいずれかで Blender を検出し、`--version` と add-on import smoke が成功する。 |
 | Blend fixture packaging | manual-test assets | integration `.blend`、部位別 `.blend`、registry が release fixture ZIP に同梱される。 |
+| Auto Reload target selection | Blender add-on | `current` / `remote-newer` の saved linked files だけが監視対象になり、blocked part は対象外になる。 |
 | Release artifact check | dist / docs | add-on ZIP、docs ZIP、test summary、runtime gate、QCDS metrics が存在する。 |
 
 ## Blender Runtime Gate
@@ -25,7 +26,8 @@
 4. Part File を更新した fixture を用意する。
 5. `Pull & Reload` の dry-run を実行する。
 6. 確認後に reload し、Viewport で更新が反映されることを確認する。
-7. `dist/runtime-gate.json` に Blender version、対象ファイル、結果を保存する。
+7. `Start Auto Reload` 後に Hair source `.blend` を保存し、interval 内に Viewport へ反映されることを確認する。
+8. `dist/runtime-gate.json` に Blender version、対象ファイル、結果を保存する。
 
 ## Manual Tests
 
