@@ -35,6 +35,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - R12: alpha release では local executable / installer dry-run の platform runtime gate を必須にし、Blender Link reload 実機確認はリリース後の手動確認として追跡する。
 - R13: Blender GUI から現在の linked library / collection を scan し、Part Registry 候補を編集して保存できる。
 - R14: Blender GUI から Explorer / Blender file selector で部位 `.blend` を選び、dry-run 確認後の明示操作で現在の Blender tree へ Link できる。
+- R15: Blender の表示言語が日本語の場合、アドオンのパネル、ボタン、operator 名、主要メッセージを日本語で表示し、日本語以外の環境では既存の英語表示を維持する。
 
 ## Non Functional Requirements
 

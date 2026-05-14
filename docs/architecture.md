@@ -18,7 +18,7 @@ MVP は Option A を採用する。処理が重くなる場合は adapter 実行
 
 | Layer | Responsibility |
 | --- | --- |
-| `ui` | パネル、operator、ユーザー確認、結果表示 |
+| `ui` | パネル、operator、ユーザー確認、結果表示、Blender 表示言語に従う UI 翻訳 |
 | `core.registry` | part registry の読み書き、schema validation、tag 正規化、GUI 候補生成の安全な初期値 |
 | `core.plan` | status classification、sync plan 作成、risk 判定 |
 | `adapters.git` | Git status / fetch / pull / push preview |

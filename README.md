@@ -12,6 +12,7 @@ Blender Linked Part Version Manager は、キャラクターや複合モデル�
 - registry の不備、missing-link、broken-link、local-dirty、conflict-risk を確認する
 - 更新前に sync preview を作り、安全な linked library だけ reload する
 - 保存済み linked `.blend` の変更を監視し、安全な対象だけ Auto Reload する
+- Blender の表示言語が日本語の場合、パネル、ボタン、主要メッセージを日本語で表示する
 - Windows companion で registry validation、status preview、settings 保存、installer dry-run を実行する
 
 詳しい機能は [機能一覧](docs/features.md) を参照してください。

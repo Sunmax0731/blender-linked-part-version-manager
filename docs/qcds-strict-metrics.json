@@ -33,6 +33,11 @@
       "status": "implemented-unit-tested",
       "evidence": "tests/test_registry_plan.py",
       "criteria": "scan and file-selector registry candidates default to safe local values, save through registry validation, and explicit Link operation does not auto-save .blend"
+    },
+    "japaneseUiLocalization": {
+      "status": "implemented-unit-tested-cli-smoked",
+      "evidence": "tests/test_registry_plan.py",
+      "criteria": "ja_JP translation table covers core panel, operator, button, property, and report strings; Blender 5.1.1 pgettext_iface resolves core labels in Japanese"
     }
   },
   "release": {

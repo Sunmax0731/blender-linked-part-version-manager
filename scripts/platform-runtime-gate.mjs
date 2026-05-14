@@ -87,7 +87,10 @@ function runBlenderSmoke(file) {
     "import sys, bpy",
     `sys.path.insert(0, ${JSON.stringify(addonPath)})`,
     "import blender_linked_part_version_manager as blpvm",
+    "blpvm.register()",
     "print('BLPVM_BLENDER_SMOKE_OK', bpy.app.version_string, blpvm.bl_info['version'])",
+    "print('BLPVM_REGISTER_SMOKE_OK')",
+    "blpvm.unregister()",
   ].join("; ");
   return runDirect(file, ["--background", "--factory-startup", "--python-expr", expression]);
 }

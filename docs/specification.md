@@ -78,6 +78,20 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 
 GUI 生成候補の初期値は `owner=unassigned`、`source.type=local`、`source.root=.`、`versionRef=local`、`updatePolicy=manual` とする。
 
+## UI Localization
+
+Blender UI は英語を既定表示とし、Blender の表示言語が日本語の場合だけ `ja_JP` 翻訳を適用する。
+
+| 対象 | 仕様 |
+| --- | --- |
+| パネル / タブ | `Part Registry`、`Linked Parts` を日本語へ翻訳する。 |
+| Operator / ボタン | `Scan Current Links`、`Save Registry`、`Preview Link`、`Reload Safe Links` など主要操作を日本語へ翻訳する。 |
+| Properties | `Registry Path`、`Report Path`、`Auto Reload Interval`、registry 編集欄の表示名を日本語へ翻訳する。 |
+| Messages | `self.report` と Auto Reload status の主要メッセージを `pgettext_iface` helper 経由で翻訳する。 |
+| Fallback | Blender が日本語以外または UI 翻訳無効の場合は英語の msgid をそのまま表示する。 |
+
+翻訳登録は Blender 標準の `bpy.app.translations.register(__name__, BLPVM_TRANSLATIONS)` を使い、アドオンの `unregister()` で解除する。
+
 ## Adapter Contract
 
 各 sync adapter は次の contract を返す。

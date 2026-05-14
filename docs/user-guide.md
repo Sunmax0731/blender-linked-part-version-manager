@@ -39,3 +39,7 @@ windows\blpvm-companion.cmd status --registry samples\representative-suite.json
 ```
 
 Windows companion は `.blend` を変更しない。Blender Link の reload は Blender add-on 側の確認操作で行う。
+
+## 表示言語
+
+Blender の表示言語が日本語で Interface 翻訳が有効な場合、`Linked Parts` パネルの主要ボタン、設定名、操作メッセージは日本語で表示される。英語やその他の言語では既存の英語表示に戻る。

@@ -113,6 +113,16 @@ Part Registry は、統合 `.blend` が参照する部位別 `.blend` の一覧�
 - 手動 reload の回数を減らす
 - 保存済みファイルだけを対象にして、未保存編集や危険状態を自動反映しない
 
+## Japanese UI Localization
+
+Blender の表示言語が日本語の場合、`Linked Parts` タブ、`Part Registry` パネル、主要ボタン、operator 名、Auto Reload status、主要 report message を日本語で表示します。
+
+何のために使うか:
+
+- 日本語表示の Blender 環境でも操作意図を読み取りやすくする
+- Blender 標準の翻訳設定に追従し、英語環境では既存の英語表示を維持する
+- JSON registry や dry-run report のキーは英語のまま保ち、チーム共有 evidence の互換性を崩さない
+
 ## Status Classification
 
 registry と Link 状態は次の status に分類します。

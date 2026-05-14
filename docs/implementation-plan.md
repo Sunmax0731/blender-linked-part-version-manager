@@ -27,6 +27,7 @@
 - [x] 保存済み linked `.blend` の Auto Reload を実装する。
 - [x] Blender GUI で Part Registry 候補を scan / edit / save できる導線を実装する。
 - [x] Explorer / Blender file selector から `.blend` を候補追加し、明示操作で Blender tree へ Link できる導線を実装する。
+- [x] Blender 表示言語が日本語の場合にパネル、ボタン、主要メッセージが日本語で表示される `ja_JP` UI 翻訳を実装する。
 - [x] Windows companion launcher、settings 保存、installer dry-run を実装する。
 
 ## Phase 05 Test

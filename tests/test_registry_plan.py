@@ -8,7 +8,7 @@ from pathlib import Path
 
 from addon.blender_linked_part_version_manager.adapters.git import preview_git_part
 from addon.blender_linked_part_version_manager.adapters.local import preview_local_part
-from addon.blender_linked_part_version_manager import _auto_reload_target_paths
+from addon.blender_linked_part_version_manager import BLPVM_TRANSLATIONS, _auto_reload_target_paths
 from addon.blender_linked_part_version_manager.blender.link import reload_linked_libraries, scan_linked_registry_parts
 from addon.blender_linked_part_version_manager.core.plan import build_sync_plan, summarize_plan
 from addon.blender_linked_part_version_manager.core.registry import (
@@ -22,9 +22,87 @@ ROOT = Path(__file__).resolve().parents[1]
 SAMPLE = ROOT / "samples" / "representative-suite.json"
 
 
+def _status_fixture_registry() -> dict:
+    return {
+        "schema_version": 1,
+        "product": "blender-linked-part-version-manager",
+        "integration_file": "integration/character_integration.blend",
+        "parts": [
+            {
+                "partId": "hair-main",
+                "partTag": "Hair",
+                "displayName": "Main Hair",
+                "blendPath": "parts/hair/main_hair.blend",
+                "linkedCollection": "CHR_Hair_Main",
+                "owner": "artist-a",
+                "source": {
+                    "type": "git",
+                    "remote": "origin",
+                    "branch": "main",
+                    "path": "parts/hair/main_hair.blend",
+                },
+                "versionRef": "main",
+                "updatePolicy": "manual",
+                "expectedStatus": "remote-newer",
+            },
+            {
+                "partId": "body-base",
+                "partTag": "Body",
+                "displayName": "Base Body",
+                "blendPath": "parts/body/base_body.blend",
+                "linkedCollection": "CHR_Body_Base",
+                "owner": "artist-b",
+                "source": {
+                    "type": "local",
+                    "root": "D:/Shared/CharacterParts",
+                    "path": "body/base_body.blend",
+                },
+                "versionRef": "2026-05-14",
+                "updatePolicy": "scheduled",
+                "expectedStatus": "current",
+            },
+            {
+                "partId": "face-main",
+                "partTag": "Face",
+                "displayName": "Main Face",
+                "blendPath": "parts/face/main_face.blend",
+                "linkedCollection": "CHR_Face_Main",
+                "owner": "artist-c",
+                "source": {
+                    "type": "git",
+                    "remote": "origin",
+                    "branch": "face",
+                    "path": "parts/face/main_face.blend",
+                },
+                "versionRef": "face",
+                "updatePolicy": "manual",
+                "expectedStatus": "local-dirty",
+            },
+            {
+                "partId": "accessories-glasses",
+                "partTag": "Accessories",
+                "displayName": "Glasses",
+                "blendPath": "parts/accessories/glasses.blend",
+                "linkedCollection": "CHR_ACC_Glasses",
+                "owner": "artist-d",
+                "source": {
+                    "type": "git",
+                    "remote": "origin",
+                    "branch": "main",
+                    "path": "parts/accessories/glasses.blend",
+                },
+                "versionRef": "main",
+                "updatePolicy": "manual",
+                "expectedStatus": "broken-link",
+            },
+        ],
+    }
+
+
 class RegistryPlanTests(unittest.TestCase):
     def setUp(self) -> None:
         self.registry = json.loads(SAMPLE.read_text(encoding="utf-8"))
+        self.status_registry = _status_fixture_registry()
 
     def test_sample_registry_is_valid(self) -> None:
         self.assertEqual(validate_registry(self.registry), [])
@@ -36,7 +114,7 @@ class RegistryPlanTests(unittest.TestCase):
         self.assertTrue(any(issue["code"] == "duplicate-part-id" for issue in issues))
 
     def test_plan_blocks_dirty_and_broken_parts(self) -> None:
-        plan = build_sync_plan(self.registry)
+        plan = build_sync_plan(self.status_registry)
         summary = summarize_plan(plan)
         by_id = {item["partId"]: item for item in plan}
         self.assertEqual(summary["totalParts"], 4)
@@ -55,13 +133,13 @@ class RegistryPlanTests(unittest.TestCase):
             target = root / "parts" / "body" / "base_body.blend"
             target.parent.mkdir(parents=True)
             target.write_text("old", encoding="utf-8")
-            part = json.loads(json.dumps(self.registry["parts"][1]))
+            part = json.loads(json.dumps(self.status_registry["parts"][1]))
             part["source"]["root"] = str(source_root)
             result = preview_local_part(part, repo_root=root)
             self.assertIn(result["status"], {"current", "remote-newer"})
 
     def test_git_adapter_uses_runner_contract(self) -> None:
-        part = self.registry["parts"][0]
+        part = self.status_registry["parts"][0]
 
         def runner(args, cwd):
             if args[:3] == ["git", "status", "--porcelain"]:
@@ -91,11 +169,37 @@ class RegistryPlanTests(unittest.TestCase):
             self.assertEqual(result["skipped"], [])
 
     def test_auto_reload_targets_only_safe_current_or_remote_newer_parts(self) -> None:
-        plan = build_sync_plan(self.registry)
+        plan = build_sync_plan(self.status_registry)
         self.assertEqual(
             _auto_reload_target_paths(plan),
             ["parts/hair/main_hair.blend", "parts/body/base_body.blend"],
         )
+
+    def test_japanese_ui_translation_table_covers_core_controls(self) -> None:
+        ja = BLPVM_TRANSLATIONS["ja_JP"]
+        expected_default_strings = {
+            "Linked Parts": "リンク部位",
+            "Part Registry": "部位レジストリ",
+            "Registry Path": "レジストリパス",
+            "Report Path": "レポートパス",
+            "Auto Reload Interval": "自動リロード間隔",
+            "Preview Link": "リンクをプレビュー",
+            "Reload Safe Links": "安全なリンクをリロード",
+            "Scanned {count} linked part candidate(s).": "リンク済み部位候補を{count}件スキャンしました。",
+        }
+        for message, translation in expected_default_strings.items():
+            self.assertEqual(ja[("*", message)], translation)
+
+        for operator_label in (
+            "Scan Current Links",
+            "Add File Candidate",
+            "Save Registry",
+            "Validate Registry",
+            "Build Sync Preview",
+            "Start Auto Reload",
+            "Stop Auto Reload",
+        ):
+            self.assertIn(("Operator", operator_label), ja)
 
     def test_gui_registry_candidate_defaults_are_valid(self) -> None:
         part = build_registry_part_candidate(

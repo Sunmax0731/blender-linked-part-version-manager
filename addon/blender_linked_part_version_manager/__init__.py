@@ -44,6 +44,138 @@ _AUTO_RELOAD_MTIMES: dict[str, int] = {}
 TAG_ITEMS = tuple((tag, tag, "") for tag in DEFAULT_TAG_ORDER)
 SOURCE_TYPE_ITEMS = (("local", "local", ""), ("git", "git", ""))
 UPDATE_POLICY_ITEMS = tuple((policy, policy, "") for policy in sorted(ALLOWED_UPDATE_POLICIES))
+TRANSLATION_CONTEXTS = ("*", "Operator")
+
+BLPVM_JA_MESSAGES = {
+    "Blender Linked Part Version Manager": "Blender Linked Part Version Manager",
+    "Preview and validate linked part registries before refreshing Blender Link libraries.": "Blender Linkライブラリを更新する前に、部位レジストリをプレビューして検証します。",
+    "View3D > Sidebar > Linked Parts": "3Dビュー > サイドバー > リンク部位",
+    "Linked Parts": "リンク部位",
+    "Part Registry": "部位レジストリ",
+    "Registry Path": "レジストリパス",
+    "Report Path": "レポートパス",
+    "Auto Reload Interval": "自動リロード間隔",
+    "Seconds between saved linked .blend file checks": "保存済みリンク.blendファイルを確認する間隔（秒）",
+    "partId": "部位ID",
+    "partTag": "部位タグ",
+    "displayName": "表示名",
+    "blendPath": "Blenderファイルパス",
+    "linkedCollection": "リンクCollection",
+    "owner": "担当者",
+    "source.type": "source種別",
+    "source.root": "sourceルート",
+    "source.path": "sourceパス",
+    "source.remote": "sourceリモート",
+    "source.branch": "sourceブランチ",
+    "versionRef": "バージョン参照",
+    "updatePolicy": "更新ポリシー",
+    "Blend File": "Blenderファイル",
+    "Linked Collection": "リンクCollection",
+    "Dry Run": "ドライラン",
+    "BLPVM Preview JSON": "BLPVMプレビューJSON",
+    "BLPVM Auto Reload Status": "BLPVM自動リロード状態",
+    "BLPVM Registry Index": "BLPVMレジストリ選択位置",
+    "Hair": "髪",
+    "Body": "素体",
+    "Face": "顔",
+    "Accessories": "アクセサリ",
+    "Clothes": "衣装",
+    "Rig": "リグ",
+    "Props": "小物",
+    "local": "ローカル",
+    "git": "Git",
+    "manual": "手動",
+    "scheduled": "定期",
+    "disabled": "無効",
+    "Scan Current Links": "現在のリンクをスキャン",
+    "Scan current linked .blend libraries and create editable registry candidates": "現在のリンク済み.blendライブラリを読み取り、編集可能なレジストリ候補を作成します",
+    "Add File Candidate": "ファイル候補を追加",
+    "Choose a .blend file and add it as an editable local registry candidate": ".blendファイルを選び、編集可能なローカルレジストリ候補として追加します",
+    "Remove Candidate": "候補を削除",
+    "Remove the selected registry candidate from the editable list only": "選択中のレジストリ候補を編集リストからだけ削除します",
+    "Save Registry": "レジストリを保存",
+    "Save editable registry candidates to the configured Registry Path": "編集したレジストリ候補を設定済みのレジストリパスへ保存します",
+    "Link Selected Candidate": "選択候補をリンク",
+    "Explicitly link the selected .blend collection into the current Blender tree without saving the file": "選択中の.blend collectionを現在のBlenderツリーへ明示的にリンクします。ファイルは保存しません",
+    "Preview Link": "リンクをプレビュー",
+    "Link Candidate": "候補をリンク",
+    "Validate Registry": "レジストリを検証",
+    "Validate the linked part registry without modifying .blend files": ".blendファイルを変更せずにリンク部位レジストリを検証します",
+    "Build Sync Preview": "同期プレビュー作成",
+    "Create a dry-run sync plan from the registry and current Blender Link state": "レジストリと現在のBlender Link状態からdry-run同期計画を作成します",
+    "Start Auto Reload": "自動リロード開始",
+    "Poll saved linked .blend files and reload changed safe links automatically": "保存済みリンク.blendファイルを監視し、安全な変更だけを自動リロードします",
+    "Stop Auto Reload": "自動リロード停止",
+    "Stop automatic saved linked .blend reload polling": "保存済みリンク.blendの自動リロード監視を停止します",
+    "Reload Safe Links": "安全なリンクをリロード",
+    "Reload linked libraries only for non-blocked parts after preview": "プレビュー後、ブロックされていない部位のリンクライブラリだけをリロードします",
+    "Preview Reload": "リロードをプレビュー",
+    "Scanned {count} linked part candidate(s).": "リンク済み部位候補を{count}件スキャンしました。",
+    "Choose a .blend file first.": "先に.blendファイルを選択してください。",
+    "Added registry candidate: {part_id}.": "レジストリ候補を追加しました: {part_id}",
+    "No registry candidate is selected.": "レジストリ候補が選択されていません。",
+    "Removed registry candidate.": "レジストリ候補を削除しました。",
+    "Registry has {count} issue(s); fix editable fields before saving.": "レジストリに{count}件の問題があります。保存前に編集項目を修正してください。",
+    "Saved registry with {count} part(s).": "{count}件の部位を含むレジストリを保存しました。",
+    "Link candidate failed: {error}": "リンク候補の処理に失敗しました: {error}",
+    "Link preview ready.": "リンクプレビューを作成しました。",
+    "Linked selected collection into the scene tree.": "選択したcollectionをシーンツリーへリンクしました。",
+    "Registry has {count} issue(s).": "レジストリに{count}件の問題があります。",
+    "Registry OK: {count} part(s).": "レジストリOK: {count}件の部位。",
+    "Preview written with {count} blocked part(s).": "{count}件のブロック部位を含むプレビューを書き出しました。",
+    "Preview written. No blocked parts.": "プレビューを書き出しました。ブロック部位はありません。",
+    "Auto Reload running. Unsaved source edits are not visible until saved.": "自動リロード実行中。未保存のsource編集は保存されるまで反映されません。",
+    "Auto Reload started.": "自動リロードを開始しました。",
+    "Auto Reload stopped.": "自動リロードを停止しました。",
+    "Reload failed for {count} library path(s).": "{count}件のライブラリパスでリロードに失敗しました。",
+    "Reload previewed for {count} path(s).": "{count}件のパスをリロードプレビューしました。",
+    "Reload completed for {count} path(s).": "{count}件のパスをリロードしました。",
+    "Auto Reload reloaded {count} file(s).": "自動リロードで{count}件のファイルをリロードしました。",
+    "Auto Reload watching saved linked .blend files.": "自動リロードは保存済みリンク.blendファイルを監視しています。",
+    "Auto Reload error: {error}": "自動リロードエラー: {error}",
+}
+
+
+def _expand_translations(messages: dict[str, str]) -> dict[tuple[str, str], str]:
+    return {
+        (context, message): translation
+        for message, translation in messages.items()
+        for context in TRANSLATION_CONTEXTS
+    }
+
+
+BLPVM_TRANSLATIONS = {
+    "ja_JP": _expand_translations(BLPVM_JA_MESSAGES),
+}
+
+
+def _iface(message: str) -> str:
+    if bpy is None:
+        return message
+    return bpy.app.translations.pgettext_iface(message)
+
+
+def _format_iface(message: str, **values) -> str:
+    return _iface(message).format(**values)
+
+
+def _register_translations() -> None:
+    if bpy is None:
+        return
+    try:
+        bpy.app.translations.unregister(__name__)
+    except Exception:
+        pass
+    bpy.app.translations.register(__name__, BLPVM_TRANSLATIONS)
+
+
+def _unregister_translations() -> None:
+    if bpy is None:
+        return
+    try:
+        bpy.app.translations.unregister(__name__)
+    except Exception:
+        pass
 
 
 class BLPVM_Preferences(bpy.types.AddonPreferences if bpy else object):
@@ -96,11 +228,11 @@ class BLPVM_UL_registry_parts(bpy.types.UIList if bpy else object):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         if self.layout_type in {"DEFAULT", "COMPACT"}:
             row = layout.row(align=True)
-            row.label(text=item.part_tag, icon="LINKED")
+            row.label(text=_iface(item.part_tag), icon="LINKED")
             row.label(text=item.display_name or item.part_id or item.blend_path)
         elif self.layout_type == "GRID":
             layout.alignment = "CENTER"
-            layout.label(text=item.part_tag)
+            layout.label(text=_iface(item.part_tag))
 
 
 class BLPVM_OT_scan_current_links(bpy.types.Operator if bpy else object):
@@ -118,7 +250,7 @@ class BLPVM_OT_scan_current_links(bpy.types.Operator if bpy else object):
             _fill_registry_item(context.scene.blpvm_registry_parts.add(), part)
         context.scene.blpvm_registry_index = 0 if parts else -1
         context.scene.blpvm_preview_json = json.dumps({"scannedParts": len(parts)}, ensure_ascii=False, indent=2)
-        self.report({"INFO"}, f"Scanned {len(parts)} linked part candidate(s).")
+        self.report({"INFO"}, _format_iface("Scanned {count} linked part candidate(s).", count=len(parts)))
         return {"FINISHED"}
 
 
@@ -137,7 +269,7 @@ class BLPVM_OT_add_link_candidate(bpy.types.Operator if bpy else object):
 
     def execute(self, context):
         if not self.filepath:
-            self.report({"ERROR"}, "Choose a .blend file first.")
+            self.report({"ERROR"}, _iface("Choose a .blend file first."))
             return {"CANCELLED"}
         prefs = context.preferences.addons[__name__].preferences
         registry_path = Path(bpy.path.abspath(prefs.registry_path))
@@ -154,7 +286,7 @@ class BLPVM_OT_add_link_candidate(bpy.types.Operator if bpy else object):
         _fill_registry_item(item, part)
         context.scene.blpvm_registry_index = len(context.scene.blpvm_registry_parts) - 1
         context.scene.blpvm_preview_json = json.dumps({"addedCandidate": part}, ensure_ascii=False, indent=2)
-        self.report({"INFO"}, f"Added registry candidate: {part['partId']}.")
+        self.report({"INFO"}, _format_iface("Added registry candidate: {part_id}.", part_id=part["partId"]))
         return {"FINISHED"}
 
 
@@ -167,11 +299,11 @@ class BLPVM_OT_remove_registry_part(bpy.types.Operator if bpy else object):
         index = context.scene.blpvm_registry_index
         parts = context.scene.blpvm_registry_parts
         if index < 0 or index >= len(parts):
-            self.report({"ERROR"}, "No registry candidate is selected.")
+            self.report({"ERROR"}, _iface("No registry candidate is selected."))
             return {"CANCELLED"}
         parts.remove(index)
         context.scene.blpvm_registry_index = min(index, len(parts) - 1)
-        self.report({"INFO"}, "Removed registry candidate.")
+        self.report({"INFO"}, _iface("Removed registry candidate."))
         return {"FINISHED"}
 
 
@@ -188,7 +320,13 @@ class BLPVM_OT_save_registry(bpy.types.Operator if bpy else object):
         issues = validate_registry(registry)
         if issues:
             context.scene.blpvm_preview_json = json.dumps({"issues": issues}, ensure_ascii=False, indent=2)
-            self.report({"ERROR"}, f"Registry has {len(issues)} issue(s); fix editable fields before saving.")
+            self.report(
+                {"ERROR"},
+                _format_iface(
+                    "Registry has {count} issue(s); fix editable fields before saving.",
+                    count=len(issues),
+                ),
+            )
             return {"CANCELLED"}
         write_registry_file(registry_path, registry)
         context.scene.blpvm_preview_json = json.dumps(
@@ -196,7 +334,7 @@ class BLPVM_OT_save_registry(bpy.types.Operator if bpy else object):
             ensure_ascii=False,
             indent=2,
         )
-        self.report({"INFO"}, f"Saved registry with {len(parts)} part(s).")
+        self.report({"INFO"}, _format_iface("Saved registry with {count} part(s).", count=len(parts)))
         return {"FINISHED"}
 
 
@@ -211,7 +349,7 @@ class BLPVM_OT_link_selected_candidate(bpy.types.Operator if bpy else object):
         index = context.scene.blpvm_registry_index
         parts = context.scene.blpvm_registry_parts
         if index < 0 or index >= len(parts):
-            self.report({"ERROR"}, "No registry candidate is selected.")
+            self.report({"ERROR"}, _iface("No registry candidate is selected."))
             return {"CANCELLED"}
         item = parts[index]
         prefs = context.preferences.addons[__name__].preferences
@@ -226,9 +364,14 @@ class BLPVM_OT_link_selected_candidate(bpy.types.Operator if bpy else object):
         )
         context.scene.blpvm_preview_json = json.dumps(result, ensure_ascii=False, indent=2)
         if result["failed"]:
-            self.report({"ERROR"}, f"Link candidate failed: {result['failed'][0]['error']}")
+            self.report({"ERROR"}, _format_iface("Link candidate failed: {error}", error=result["failed"][0]["error"]))
             return {"CANCELLED"}
-        self.report({"INFO"}, "Link preview ready." if self.dry_run else "Linked selected collection into the scene tree.")
+        self.report(
+            {"INFO"},
+            _iface("Link preview ready.")
+            if self.dry_run
+            else _iface("Linked selected collection into the scene tree."),
+        )
         return {"FINISHED"}
 
 
@@ -243,10 +386,10 @@ class BLPVM_OT_validate_registry(bpy.types.Operator if bpy else object):
         registry = load_registry_file(registry_path)
         issues = validate_registry(registry)
         if issues:
-            self.report({"ERROR"}, f"Registry has {len(issues)} issue(s).")
+            self.report({"ERROR"}, _format_iface("Registry has {count} issue(s).", count=len(issues)))
             context.scene.blpvm_preview_json = json.dumps({"issues": issues}, ensure_ascii=False, indent=2)
             return {"CANCELLED"}
-        self.report({"INFO"}, f"Registry OK: {len(registry.get('parts', []))} part(s).")
+        self.report({"INFO"}, _format_iface("Registry OK: {count} part(s).", count=len(registry.get("parts", []))))
         context.scene.blpvm_preview_json = json.dumps({"issues": []}, ensure_ascii=False, indent=2)
         return {"FINISHED"}
 
@@ -279,9 +422,12 @@ class BLPVM_OT_build_sync_preview(bpy.types.Operator if bpy else object):
             indent=2,
         )
         if summary["blockedParts"]:
-            self.report({"WARNING"}, f"Preview written with {summary['blockedParts']} blocked part(s).")
+            self.report(
+                {"WARNING"},
+                _format_iface("Preview written with {count} blocked part(s).", count=summary["blockedParts"]),
+            )
         else:
-            self.report({"INFO"}, "Preview written. No blocked parts.")
+            self.report({"INFO"}, _iface("Preview written. No blocked parts."))
         return {"FINISHED"}
 
 
@@ -297,8 +443,8 @@ class BLPVM_OT_start_auto_reload(bpy.types.Operator if bpy else object):
         if not bpy.app.timers.is_registered(_auto_reload_timer):
             prefs = context.preferences.addons[__name__].preferences
             bpy.app.timers.register(_auto_reload_timer, first_interval=float(prefs.auto_reload_interval))
-        context.scene.blpvm_auto_reload_status = "Auto Reload running. Unsaved source edits are not visible until saved."
-        self.report({"INFO"}, "Auto Reload started.")
+        context.scene.blpvm_auto_reload_status = _iface("Auto Reload running. Unsaved source edits are not visible until saved.")
+        self.report({"INFO"}, _iface("Auto Reload started."))
         return {"FINISHED"}
 
 
@@ -312,8 +458,8 @@ class BLPVM_OT_stop_auto_reload(bpy.types.Operator if bpy else object):
         _AUTO_RELOAD_RUNNING = False
         if bpy.app.timers.is_registered(_auto_reload_timer):
             bpy.app.timers.unregister(_auto_reload_timer)
-        context.scene.blpvm_auto_reload_status = "Auto Reload stopped."
-        self.report({"INFO"}, "Auto Reload stopped.")
+        context.scene.blpvm_auto_reload_status = _iface("Auto Reload stopped.")
+        self.report({"INFO"}, _iface("Auto Reload stopped."))
         return {"FINISHED"}
 
 
@@ -342,9 +488,12 @@ class BLPVM_OT_reload_links(bpy.types.Operator if bpy else object):
         result = reload_linked_libraries(bpy, target_paths, dry_run=self.dry_run, base_dirs=base_dirs)
         context.scene.blpvm_preview_json = json.dumps(result, ensure_ascii=False, indent=2)
         if result["failed"]:
-            self.report({"ERROR"}, f"Reload failed for {len(result['failed'])} library path(s).")
+            self.report({"ERROR"}, _format_iface("Reload failed for {count} library path(s).", count=len(result["failed"])))
             return {"CANCELLED"}
-        self.report({"INFO"}, f"Reload {'previewed' if self.dry_run else 'completed'} for {len(result['reloaded'])} path(s).")
+        if self.dry_run:
+            self.report({"INFO"}, _format_iface("Reload previewed for {count} path(s).", count=len(result["reloaded"])))
+        else:
+            self.report({"INFO"}, _format_iface("Reload completed for {count} path(s).", count=len(result["reloaded"])))
         return {"FINISHED"}
 
 
@@ -377,8 +526,8 @@ class BLPVM_PT_registry_panel(bpy.types.Panel if bpy else object):
             row.operator("blpvm.add_link_candidate", icon="FILE_FOLDER")
             row.operator("blpvm.remove_registry_part", icon="REMOVE")
             row = layout.row(align=True)
-            row.operator("blpvm.link_selected_candidate", text="Preview Link", icon="LINKED").dry_run = True
-            row.operator("blpvm.link_selected_candidate", text="Link Candidate", icon="LINKED").dry_run = False
+            row.operator("blpvm.link_selected_candidate", text=_iface("Preview Link"), icon="LINKED").dry_run = True
+            row.operator("blpvm.link_selected_candidate", text=_iface("Link Candidate"), icon="LINKED").dry_run = False
             if selected:
                 box = layout.box()
                 box.prop(selected, "part_id")
@@ -402,8 +551,8 @@ class BLPVM_PT_registry_panel(bpy.types.Panel if bpy else object):
         row.operator("blpvm.validate_registry", icon="CHECKMARK")
         row.operator("blpvm.build_sync_preview", icon="VIEWZOOM")
         row = layout.row(align=True)
-        row.operator("blpvm.reload_links", text="Preview Reload", icon="FILE_REFRESH").dry_run = True
-        row.operator("blpvm.reload_links", text="Reload Safe Links", icon="CHECKMARK").dry_run = False
+        row.operator("blpvm.reload_links", text=_iface("Preview Reload"), icon="FILE_REFRESH").dry_run = True
+        row.operator("blpvm.reload_links", text=_iface("Reload Safe Links"), icon="CHECKMARK").dry_run = False
         row = layout.row(align=True)
         row.operator("blpvm.start_auto_reload", icon="PLAY")
         row.operator("blpvm.stop_auto_reload", icon="PAUSE")
@@ -440,6 +589,7 @@ classes = (
 def register():
     if bpy is None:
         return
+    _register_translations()
     for cls in classes:
         bpy.utils.register_class(cls)
     bpy.types.Scene.blpvm_preview_json = bpy.props.StringProperty(name="BLPVM Preview JSON", default="")
@@ -465,6 +615,7 @@ def unregister():
         del bpy.types.Scene.blpvm_registry_index
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
+    _unregister_translations()
 
 
 def _fill_registry_item(item, part: dict) -> None:
@@ -595,13 +746,16 @@ def _auto_reload_timer():
         if changed_paths:
             result = reload_linked_libraries(bpy, changed_paths, dry_run=False)
             bpy.context.scene.blpvm_preview_json = json.dumps({"autoReload": result}, ensure_ascii=False, indent=2)
-            bpy.context.scene.blpvm_auto_reload_status = f"Auto Reload reloaded {len(result['reloaded'])} file(s)."
+            bpy.context.scene.blpvm_auto_reload_status = _format_iface(
+                "Auto Reload reloaded {count} file(s).",
+                count=len(result["reloaded"]),
+            )
             _redraw_viewports()
         else:
-            bpy.context.scene.blpvm_auto_reload_status = "Auto Reload watching saved linked .blend files."
+            bpy.context.scene.blpvm_auto_reload_status = _iface("Auto Reload watching saved linked .blend files.")
         return float(prefs.auto_reload_interval)
     except Exception as exc:  # pragma: no cover - depends on Blender runtime context
-        bpy.context.scene.blpvm_auto_reload_status = f"Auto Reload error: {exc}"
+        bpy.context.scene.blpvm_auto_reload_status = _format_iface("Auto Reload error: {error}", error=exc)
         return 5.0
 
 

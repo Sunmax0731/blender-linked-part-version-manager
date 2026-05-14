@@ -14,7 +14,8 @@
 - `Start Auto Reload` 後、保存済み Hair `.blend` の変更が interval 内に integration Viewport へ反映される。
 - 未保存の別 Blender 編集は Auto Reload では反映されないことを確認する。
 - `Scan Current Links`、`Save Registry`、`Add File Candidate`、`Preview Link`、`Link Candidate` が GUI registry editing の想定通りに動く。
+- Blender の表示言語を日本語にしたとき、`Linked Parts` タブ、`Part Registry` パネル、主要ボタン、Auto Reload status、operator report が日本語表示になる。
 
 ## 判定
 
-Link reload と Viewport 反映は通過済み。GUI registry editing の実機確認で失敗した場合は `Issues/` に再現手順、Blender version、registry、`dist/blender-dry-run-report.json` を記録する。
+Link reload と Viewport 反映は通過済み。GUI registry editing または日本語 UI 表示の実機確認で失敗した場合は `Issues/` に再現手順、Blender version、registry、`dist/blender-dry-run-report.json` を記録する。
