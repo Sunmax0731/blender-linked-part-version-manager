@@ -13,6 +13,7 @@
 ## Working Rules
 
 - README、AGENTS、SKILL、docs、TODO、Issues を同じ変更単位で更新する。
+- GitHub repository top の `README.md` は利用者向けに保ち、詳細な機能説明は `docs/features.md` へ分離してリンクする。
 - Blender Link と外部同期を同じ責務に混ぜず、Link 管理、部位レジストリ、同期アダプタ、検証レポートを分ける。
 - Windows companion は起動、設定保存、registry preview に限定し、`.blend` 本体の更新は Blender アドオン側の確認操作に残す。
 - Blender GUI で生成した Part Registry は `owner=unassigned`、`source.type=local`、`versionRef=local`、`updatePolicy=manual` を安全な初期値とし、Link 操作は明示ボタンで実行して自動保存しない。

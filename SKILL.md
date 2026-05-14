@@ -8,8 +8,9 @@ Use this repository for Blender Link based part-version management work.
 2. Read `AGENTS.md`.
 3. Read this `SKILL.md`.
 4. Read `docs/requirements.md`, `docs/specification.md`, `docs/design.md`, and `docs/architecture.md`.
-5. Check `TODO.md` and the linked file under `Issues/`.
-6. Run `npm test` after documentation, scaffold, runtime-gate, or release changes.
+5. For public-facing documentation changes, keep `README.md`, `docs/features.md`, `docs/installation-guide.md`, and `docs/user-guide.md` consistent.
+6. Check `TODO.md` and the linked file under `Issues/`.
+7. Run `npm test` after documentation, scaffold, runtime-gate, or release changes.
 
 ## Implementation Guidance
 

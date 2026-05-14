@@ -1,72 +1,128 @@
 # Blender Linked Part Version Manager
 
-Blender Linked Part Version Manager は、統合用 `.blend` と部位別作業 `.blend` を分けて共同制作するチーム向けの Blender アドオンと Windows companion launcher です。Hair、Body、Face、Accessories などの部位タグ、外部リポジトリまたはファイル管理システムからの取得、Blender Link の再読み込み、更新前プレビューを同じ作業単位で扱います。
+Blender Linked Part Version Manager は、キャラクターや複合モデルを **Hair / Body / Face / Accessories** などの部位別 `.blend` に分けて制作し、統合用 `.blend` では Blender Link で安全に確認するための Blender アドオンです。
 
-## Source
+部位ごとの担当者、リンク元ファイル、更新状態、reload 対象を Part Registry として管理し、更新前に dry-run で影響範囲を確認できます。Windows では Blender を起動せず registry を検証する companion launcher も同梱しています。
 
-- Domain / Idea No: BlenderAddon / 7
-- Repository: blender-linked-part-version-manager
-- Public repo: `https://github.com/Sunmax0731/blender-linked-part-version-manager`
-- created_idea: `D:/AI/BlenderAddon/created_idea_007_blender-linked-part-version-manager`
-- 同梱 ZIP: `D:/AI/BlenderAddon/created_idea_007_blender-linked-part-version-manager/idea_007_blender-linked-part-version-manager.zip`
-- 主な公開先: GitHub Release / Blender Extensions / Windows alpha launcher
+## できること
 
-## 目標
+- 現在の Blender Link から Part Registry を生成する
+- GUI で partId、部位タグ、担当者、リンク先 collection、source、versionRef、updatePolicy を編集する
+- `.blend` ファイルを選んで Link 候補として追加し、dry-run 後に明示操作で Blender tree に Link する
+- registry の不備、missing-link、broken-link、local-dirty、conflict-risk を確認する
+- 更新前に sync preview を作り、安全な linked library だけ reload する
+- 保存済み linked `.blend` の変更を監視し、安全な対象だけ Auto Reload する
+- Windows companion で registry validation、status preview、settings 保存、installer dry-run を実行する
 
-- 統合用 Blender ファイルが、部位別 `.blend` を Link で参照する構成を安全に維持する。
-- 各作業者が担当部位を push し、他の作業者が任意または定期タイミングで pull して最新表示できる流れを定義する。
-- 部位タグ、担当者、リンク元、取得状態、検証結果を一覧化し、更新時の見落としを減らす。
-- 保存済み linked `.blend` の変更を一定間隔で検出し、安全な対象だけ Auto Reload する。
+詳しい機能は [機能一覧](docs/features.md) を参照してください。
 
-## MVP スコープ
+## 想定する利用者
 
-- 部位レジストリ JSON の定義と検証
-- Blender GUI からの Part Registry 生成、編集、保存
-- Git / ローカルファイル管理を抽象化する同期アダプタ MVP
-- Blender Link 対象の検出、再読み込み、更新前 dry-run のアドオン shell
-- Explorer / Blender file selector からの `.blend` Link 候補追加と明示 Link 操作
-- 保存済み linked `.blend` の Auto Reload
-- Windows companion launcher による registry 検証、状態 preview、設定保存
-- 代表シナリオと手動検証手順
-- QCDS、release checklist、docs ZIP、closed alpha release evidence
+- 複数人で 3D キャラクターや装備、衣装、表情、髪型を分担制作しているチーム
+- 統合用 Blender ファイルと部位別 Blender ファイルを分けて管理したいリードモデラー
+- Git、共有フォルダ、NAS などで `.blend` を受け渡しながら Link 切れや取得漏れを減らしたい制作チーム
+- 更新前に「どの部位が変わるか」「危険な状態があるか」を確認してから reload したいユーザー
 
-## 主要コンポーネント
+## インストール
 
-- `addon/blender_linked_part_version_manager/`: Blender 4.2 以降向けアドオン。
-- `addon/blender_linked_part_version_manager/core/`: Blender 非依存の registry validation と sync plan。
-- `addon/blender_linked_part_version_manager/adapters/`: Git / local folder の dry-run adapter。
-- `windows/`: Windows companion launcher と alpha installer dry-run。
-- `scripts/`: docs、unit test、runtime gate、release package の検証。
-- `integration/` と `parts/`: alpha 手動テスト用の最小 `.blend` fixture。
+1. GitHub Releases から `v0.1.0-alpha.2` の `blender-linked-part-version-manager.zip` を取得する。
+2. Blender を開き、`Edit > Preferences > Add-ons > Install...` を選ぶ。
+3. `blender-linked-part-version-manager.zip` を選択して install する。
+4. `Blender Linked Part Version Manager` を有効化する。
+5. View3D Sidebar の `Linked Parts` タブを開く。
 
-## 開発コマンド
+手順の詳細と fixture の展開方法は [インストールガイド](docs/installation-guide.md) を参照してください。
 
-```powershell
-cd D:\AI\BlenderAddon\blender-linked-part-version-manager
-npm test
-```
+## 基本的な使い方
 
-`npm test` は docs/JSON/文字化け検査、Python unit test、Windows runtime gate、release package 生成、release artifact 検査を実行します。
+### 1. Registry を用意する
 
-## Blender GUI Workflow
+既存の統合 `.blend` に Link が入っている場合は、`Linked Parts` パネルで `Scan Current Links` を実行します。現在の linked library / collection から Part Registry 候補が作られます。
 
-`Linked Parts` パネルでは、`Scan Current Links` で現在の linked library / collection から editable な Part Registry 候補を作成できます。候補は `partId`、`partTag`、`displayName`、`blendPath`、`linkedCollection`、`owner`、`source`、`versionRef`、`updatePolicy` を GUI 上で編集し、`Save Registry` で `Registry Path` に保存できます。
+新しい部位ファイルを追加したい場合は、`Add File Candidate` で `.blend` を選びます。候補は安全な初期値で追加されます。
 
-`Add File Candidate` は Explorer / Blender file selector から `.blend` を選び、`owner=unassigned`、`source.type=local`、`versionRef=local`、`updatePolicy=manual` の安全な初期値で候補へ追加します。`Preview Link` は Link 操作の dry-run、`Link Candidate` は選択候補の collection を現在の Blender tree へ明示的に Link します。どちらも `.blend` 本体を自動保存しません。
+- `owner=unassigned`
+- `source.type=local`
+- `source.root=.`
+- `versionRef=local`
+- `updatePolicy=manual`
 
-## Windows Alpha Launcher
+### 2. GUI で内容を確認して保存する
+
+候補リストから部位を選び、次の項目を編集します。
+
+- `partId`
+- `partTag`
+- `displayName`
+- `blendPath`
+- `linkedCollection`
+- `owner`
+- `source`
+- `versionRef`
+- `updatePolicy`
+
+内容を確認したら `Save Registry` で `Registry Path` に JSON として保存します。
+
+### 3. Registry を検証する
+
+`Validate Registry` を実行すると、必須項目、重複 partId、未知の部位タグ、source 設定などを検査できます。問題がある場合は、保存前または保存後に GUI で修正します。
+
+### 4. 更新前プレビューを作る
+
+`Build Sync Preview` を実行すると、registry と現在の Link 状態から dry-run report を作ります。`local-dirty`、`conflict-risk`、`broken-link` のような危険状態がある部位は自動更新対象から外します。
+
+### 5. Link / Reload を実行する
+
+新しい候補を Link する場合は、先に `Preview Link` で dry-run を確認し、問題がなければ `Link Candidate` を実行します。
+
+既存の linked library を更新する場合は、先に `Preview Reload` を確認し、問題がなければ `Reload Safe Links` を実行します。現在の `.blend` は自動保存されないため、結果を確認してから手動で保存してください。
+
+### 6. Auto Reload を使う
+
+`Start Auto Reload` を実行すると、保存済み linked `.blend` の更新時刻を監視し、安全な対象だけ reload します。別 Blender ウィンドウで未保存のまま編集している内容は `.blend` に書き込まれていないため、Auto Reload では反映されません。
+
+## Windows Companion
+
+Blender を起動せず registry や設定保存だけを確認したい場合に使います。
 
 ```powershell
 windows\blpvm-companion.cmd --version
 windows\blpvm-companion.cmd validate-registry --registry samples\representative-suite.json
+windows\blpvm-companion.cmd status --registry samples\representative-suite.json
 windows\blpvm-companion.cmd init-settings --registry samples\representative-suite.json
 windows\install-alpha.cmd --dry-run
 ```
 
 `init-settings` は `%APPDATA%\BlenderLinkedPartVersionManager\settings.json` に設定を保存します。credential、token、`.blend` 本体は保存しません。
 
-## Alpha Release Notes
+## 安全設計
 
-`v0.1.0-alpha.2` は prerelease として公開し、Blender GUI での Part Registry 生成・編集・保存と Explorer / Blender file selector からの Link 候補追加を含みます。Codex 環境では `D:\SteamLibrary\steamapps\common\Blender\blender.exe` を検出し、Blender 5.1.1 の CLI smoke、アドオン import、`register()` / `unregister()` smoke は通過済みです。
+- reload / Link は preview と明示実行を分ける
+- `.blend` は自動保存しない
+- `local-dirty`、`conflict-risk`、`broken-link` は自動更新しない
+- Windows companion は `.blend` を変更しない
+- registry と dry-run report を JSON として残せる
 
-テスト協力者は release asset `blender-linked-part-version-manager-fixtures.zip` を展開し、同梱の `integration/character_integration.blend` と `samples/representative-suite.json` で manual test を開始できます。
+## 追加ドキュメント
+
+- [機能一覧](docs/features.md)
+- [インストールガイド](docs/installation-guide.md)
+- [ユーザーガイド](docs/user-guide.md)
+- [手動テスト手順](docs/manual-test.md)
+- [仕様](docs/specification.md)
+- [アーキテクチャ](docs/architecture.md)
+
+## 開発者向け
+
+```powershell
+cd D:\AI\BlenderAddon\blender-linked-part-version-manager
+npm test
+```
+
+`npm test` は docs check、Python unit test、Windows runtime gate、Blender CLI smoke、release package 生成、release artifact check を実行します。
+
+## Release
+
+現在の prerelease は `v0.1.0-alpha.2` です。Blender add-on / Windows companion の実装バージョンは `0.1.1` です。
+
+Public repo: https://github.com/Sunmax0731/blender-linked-part-version-manager
