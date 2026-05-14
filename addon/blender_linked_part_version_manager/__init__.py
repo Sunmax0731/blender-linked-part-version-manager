@@ -110,7 +110,8 @@ class BLPVM_OT_reload_links(bpy.types.Operator if bpy else object):
 
     def execute(self, context):
         prefs = context.preferences.addons[__name__].preferences
-        registry = load_registry_file(Path(bpy.path.abspath(prefs.registry_path)))
+        registry_path = Path(bpy.path.abspath(prefs.registry_path))
+        registry = load_registry_file(registry_path)
         link_state = inspect_linked_libraries(bpy)
         plan = build_sync_plan(registry, link_state=link_state)
         target_paths = [
@@ -118,7 +119,8 @@ class BLPVM_OT_reload_links(bpy.types.Operator if bpy else object):
             for item in plan
             if "reload-link" in item["plannedActions"] and item["risk"] != "blocked"
         ]
-        result = reload_linked_libraries(bpy, target_paths, dry_run=self.dry_run)
+        base_dirs = [registry_path.parent, registry_path.parent.parent]
+        result = reload_linked_libraries(bpy, target_paths, dry_run=self.dry_run, base_dirs=base_dirs)
         context.scene.blpvm_preview_json = json.dumps(result, ensure_ascii=False, indent=2)
         if result["failed"]:
             self.report({"ERROR"}, f"Reload failed for {len(result['failed'])} library path(s).")

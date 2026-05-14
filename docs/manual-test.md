@@ -50,7 +50,7 @@ alpha release 後に手作業で実施する。
 4. add-on preferences の `Registry Path` に `<fixture-root>\samples\representative-suite.json` を指定する。
 5. `Validate Registry` を実行し、registry が OK になることを確認する。
 6. `Build Sync Preview` を実行し、summary が表示され、`remote-newer`、`local-dirty`、`broken-link` の代表状態が dry-run report に記録されることを確認する。
-7. `Preview Reload` を実行し、対象 library が dry-run reloaded として表示されることを確認する。
+7. `Preview Reload` を実行し、Hair の library だけが dry-run `reloaded`、他の library が `skipped` として表示されることを確認する。
 8. 実 reload を確認する場合は、`parts/hair/main_hair.blend` を別ウィンドウで開き、Hair marker を少し移動して保存する。その後 `character_integration.blend` に戻り、`Reload Safe Links` を実行して Viewport の Hair が更新されることを確認する。
 9. Link 先ファイルを一時的に移動する場合は、コピーで退避してから `broken-link` 表示を確認し、必ず元の場所へ戻す。
 10. local-dirty / conflict-risk 相当は `representative-suite.json` の `expectedStatus` で dry-run 表示され、自動更新対象から外れることを確認する。
@@ -69,6 +69,11 @@ samples/representative-suite.json
 ## Blender 実体パス smoke
 
 2026-05-15 時点で `D:\SteamLibrary\steamapps\common\Blender\blender.exe` を検出し、Blender 5.1.1 の CLI smoke とアドオン import は通過済み。
+
+## Troubleshooting
+
+- `Preview Reload` / `Reload Safe Links` が `failed: []` でも `reloaded: []` かつ全件 `skipped` になる場合は、古い add-on ZIP が入っている可能性がある。GitHub Release から更新後の `blender-linked-part-version-manager.zip` を再取得し、Blender の Add-ons で一度 remove してから install し直す。
+- `Report Path` は fixture root 直下の `blender-dry-run-report.json` など、書き込み可能で見つけやすい場所にする。
 
 ## 未実施項目
 

@@ -45,3 +45,4 @@ No current TODO. New uncategorized work should be moved into one of the phase se
 ## Work Items
 - [x] [P2] [Phase:05-test] Blender実体パスを使った検証対応 [Issue](Issues/0005-blender.md) [QCDS:Quality,Delivery]
 - [x] [P2] [Phase:05-test] 手動テスト用 `.blend` fixture を alpha release に同梱する [Issue](Issues/0008-manual-test-fixtures.md) [QCDS:Quality,Delivery,Satisfaction]
+- [x] [P2] [Phase:05-test] Manual test で検出した reload 対象 path 不一致を修正する [Issue](Issues/0009-reload-target-path-fix.md) [QCDS:Quality,Satisfaction]

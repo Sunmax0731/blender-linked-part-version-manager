@@ -8,6 +8,7 @@ from pathlib import Path
 
 from addon.blender_linked_part_version_manager.adapters.git import preview_git_part
 from addon.blender_linked_part_version_manager.adapters.local import preview_local_part
+from addon.blender_linked_part_version_manager.blender.link import reload_linked_libraries
 from addon.blender_linked_part_version_manager.core.plan import build_sync_plan, summarize_plan
 from addon.blender_linked_part_version_manager.core.registry import validate_registry
 
@@ -64,6 +65,56 @@ class RegistryPlanTests(unittest.TestCase):
 
         result = preview_git_part(part, repo_root=ROOT, runner=runner)
         self.assertEqual(result["status"], "remote-newer")
+
+    def test_reload_matches_project_relative_registry_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            linked_file = root / "parts" / "hair" / "main_hair.blend"
+            linked_file.parent.mkdir(parents=True)
+            linked_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(root / "integration", ["//../parts/hair/main_hair.blend"])
+
+            result = reload_linked_libraries(
+                bpy_module,
+                ["parts/hair/main_hair.blend"],
+                dry_run=True,
+                base_dirs=[root / "samples", root],
+            )
+
+            self.assertEqual(result["failed"], [])
+            self.assertEqual(len(result["reloaded"]), 1)
+            self.assertEqual(result["skipped"], [])
+
+class _FakeLibrary:
+    def __init__(self, filepath: str) -> None:
+        self.filepath = filepath
+        self.reload_count = 0
+
+    def reload(self) -> None:
+        self.reload_count += 1
+
+
+class _FakeData:
+    def __init__(self, filepaths: list[str]) -> None:
+        self.libraries = [_FakeLibrary(filepath) for filepath in filepaths]
+
+
+class _FakePath:
+    def __init__(self, blend_dir: Path) -> None:
+        self.blend_dir = blend_dir
+
+    def abspath(self, path: str) -> str:
+        if path.startswith("//"):
+            return str((self.blend_dir / path[2:]).resolve())
+        if Path(path).is_absolute():
+            return str(Path(path).resolve())
+        return str((self.blend_dir / path).resolve())
+
+
+class _FakeBpy:
+    def __init__(self, blend_dir: Path, filepaths: list[str]) -> None:
+        self.data = _FakeData(filepaths)
+        self.path = _FakePath(blend_dir)
 
 
 if __name__ == "__main__":

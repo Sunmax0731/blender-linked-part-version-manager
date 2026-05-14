@@ -35,6 +35,7 @@ const requiredFiles = [
   "Issues/0006-blender-runtime-link-reload-manual.md",
   "Issues/0007-alpha-manual-test-evidence.md",
   "Issues/0008-manual-test-fixtures.md",
+  "Issues/0009-reload-target-path-fix.md",
   "windows/blpvm-companion.mjs",
   "windows/blpvm-companion.cmd",
   "windows/install-alpha.cmd",
