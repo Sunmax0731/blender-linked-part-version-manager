@@ -21,6 +21,7 @@ npm test
 - Python unit test が通る。
 - `Platform runtime gate passed.` が表示される。
 - `dist/runtime-gate.json`、`dist/test-summary.json`、`dist/blender-linked-part-version-manager.zip`、`dist/blender-linked-part-version-manager-docs.zip` が生成される。
+- `D:\SteamLibrary\steamapps\common\Blender\blender.exe` または `BLENDER_EXE` が存在する環境では、`dist/runtime-gate.json` の `blenderHostGate.status` が `cli-smoke-passed` になり、Blender version と `BLPVM_BLENDER_SMOKE_OK` が記録される。
 
 ## Windows companion 確認
 
@@ -52,6 +53,10 @@ alpha release 後に手作業で実施する。
 7. Link 先ファイルを一時的に移動し、`broken-link` と復旧候補が表示されることを確認する。
 8. local-dirty の部位を用意し、自動更新が停止することを確認する。
 
+## Blender 実体パス smoke
+
+2026-05-15 時点で `D:\SteamLibrary\steamapps\common\Blender\blender.exe` を検出し、Blender 5.1.1 の CLI smoke とアドオン import は通過済み。
+
 ## 未実施項目
 
-Codex 実行環境では Blender CLI が PATH 上にないため、Blender 上での Link reload 実機確認は未実施。alpha release 後、ユーザー手元の Blender 4.2 以降で本手順を実施し、結果を次リリースの `docs/release-evidence.json` に反映する。
+Blender 上での Link reload 実機確認は未実施。alpha release 後、ユーザー手元の Blender 4.2 以降で本手順を実施し、結果を次リリースの `docs/release-evidence.json` に反映する。

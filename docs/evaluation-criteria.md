@@ -7,7 +7,7 @@ QCDS は Quality、Cost、Delivery、Satisfaction を `S+ / S- / A+ / A- / B+ / 
 ## Quality
 
 - Part Registry が必要な Link 情報を漏れなく検査できる。
-- Blender runtime gate で Link reload が実行済みである。
+- Blender CLI smoke が実行済みで、Link reload の manual host test が結果付きで追跡されている。
 - local-dirty と conflict-risk の自動更新を止められる。
 
 ## Cost

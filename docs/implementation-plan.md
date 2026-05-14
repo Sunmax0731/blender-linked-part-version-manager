@@ -31,6 +31,7 @@
 - [x] Python unit test で registry / plan / adapter を検証する。
 - [x] Git runner fixture で remote-newer、local-dirty、conflict-risk を再現する。
 - [x] Windows runtime gate で local executable、installer dry-run、settings 保存を確認する。
+- [x] 指定 Blender 実体パスで Blender CLI smoke と add-on import を確認する。
 - [ ] Blender runtime gate で Integration File が Part File を Link し、reload できることを確認する。alpha release 後に手動で実施する。
 - [x] 文字化け、JSON schema、docs completeness を `npm test` に含める。
 

@@ -11,11 +11,12 @@
 | Git fixture | Git adapter | fetch / status / pull dry-run の結果を安定して返す。 |
 | Local fixture | local adapter | 共有フォルダ mirror の存在、更新日時、コピー候補を分類できる。 |
 | Windows runtime gate | companion launcher / installer | local executable 起動、settings 保存、installer dry-run が成功する。 |
+| Blender CLI smoke | Blender host | `BLENDER_EXE`、`D:\SteamLibrary\steamapps\common\Blender\blender.exe`、PATH のいずれかで Blender を検出し、`--version` と add-on import smoke が成功する。 |
 | Release artifact check | dist / docs | add-on ZIP、docs ZIP、test summary、runtime gate、QCDS metrics が存在する。 |
 
 ## Blender Runtime Gate
 
-公開前に次を確認する。
+手動 host test で次を確認する。
 
 1. Integration File を開く。
 2. Hair、Body、Face、Accessories の Part File を Link する。
@@ -35,4 +36,4 @@
 
 ## Current Status
 
-`npm test` は docs / JSON / 文字化け検査、Python unit test、Windows runtime gate、release package、release artifact check を行う。Codex 実行環境では Blender CLI が PATH 上にないため、Blender runtime gate はリリース後の手動確認として残す。
+`npm test` は docs / JSON / 文字化け検査、Python unit test、Windows runtime gate、Blender CLI smoke、release package、release artifact check を行う。2026-05-15 時点で `D:\SteamLibrary\steamapps\common\Blender\blender.exe` から Blender 5.1.1 を検出し、add-on import smoke は通過済み。統合 `.blend` と部位別 `.blend` の Link reload / Viewport 反映はリリース後の手動確認として残す。

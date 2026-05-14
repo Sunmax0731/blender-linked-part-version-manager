@@ -17,11 +17,14 @@
     "automatedTest": "npm test",
     "runtimeGate": "dist/runtime-gate.json",
     "testSummary": "dist/test-summary.json",
-    "qcdsMetrics": "docs/qcds-strict-metrics.json"
+    "qcdsMetrics": "docs/qcds-strict-metrics.json",
+    "blenderExecutablePath": "D:\\SteamLibrary\\steamapps\\common\\Blender\\blender.exe",
+    "blenderCliSmoke": "cli-smoke-passed"
   },
   "manualEvidence": {
-    "status": "pending-after-alpha-release",
+    "status": "blocked-user-manual-link-reload",
     "manualTest": "docs/manual-test.md",
-    "strictManualTestAddendum": "docs/strict-manual-test-addendum.md"
+    "strictManualTestAddendum": "docs/strict-manual-test-addendum.md",
+    "trackingIssue": "Issues/0006-blender-runtime-link-reload-manual.md"
   }
 }

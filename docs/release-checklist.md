@@ -15,6 +15,7 @@
 - [x] Part Registry validator と dry-run report が動く。
 - [x] Git / local adapter の MVP が動く。
 - [x] Windows runtime gate が `passed` になっている。
+- [x] 指定 Blender 実体パスで CLI smoke と add-on import が `passed` になっている。
 - [ ] Blender runtime gate が手動確認で `passed` になっている。
 - [x] `docs/qcds-evaluation.md` の全観点が `A-` 以上になっている。
 - [x] `docs/installation-guide.md` と `docs/user-guide.md` を追加した。

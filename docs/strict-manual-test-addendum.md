@@ -1,6 +1,6 @@
 # Strict Manual Test Addendum
 
-この alpha release は Codex 環境で Windows platform runtime gate を通しているが、Blender CLI が PATH 上にないため Blender 実機 Link reload は未実施である。
+この alpha release は Codex 環境で Windows platform runtime gate を通している。2026-05-15 時点で `D:\SteamLibrary\steamapps\common\Blender\blender.exe` から Blender 5.1.1 の CLI smoke とアドオン import も通過済みである。ただし Blender 実機 Link reload と Viewport 反映は未実施である。
 
 ## リリース後に必須の確認
 

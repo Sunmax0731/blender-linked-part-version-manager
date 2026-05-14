@@ -45,6 +45,8 @@ function writeTestSummary() {
       "node scripts/check-release-artifacts.mjs",
     ],
     runtimeGatePassed: Boolean(runtimeGate?.passed),
+    blenderHostGateStatus: runtimeGate?.blenderHostGate?.status ?? "unknown",
+    blenderHostExecutablePath: runtimeGate?.blenderHostGate?.executablePath ?? null,
     blenderManualTestPending: true,
   };
   fs.writeFileSync(path.join(dist, "test-summary.json"), JSON.stringify(summary, null, 2) + "\n", "utf8");

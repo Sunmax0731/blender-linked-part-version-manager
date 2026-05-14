@@ -56,4 +56,4 @@ windows\install-alpha.cmd --dry-run
 
 ## Alpha Release Notes
 
-`v0.1.0-alpha.1` は prerelease として公開し、リリース後に Blender 実機で Link reload の手動確認を行います。Codex 実行環境では Blender CLI が PATH 上になかったため、Blender host runtime gate は `manual-pending` として扱います。
+`v0.1.0-alpha.1` は prerelease として公開し、リリース後に Blender 実機で Link reload の手動確認を行います。Codex 環境では `D:\SteamLibrary\steamapps\common\Blender\blender.exe` を検出し、Blender 5.1.1 の CLI smoke とアドオン import は通過済みです。統合 `.blend` と部位別 `.blend` の Link reload は手動確認として残します。

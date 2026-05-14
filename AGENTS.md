@@ -22,4 +22,4 @@
 
 ## Current Phase
 
-`v0.1.0-alpha.1` の MVP 実装段階です。作業開始時に `README.md`、`AGENTS.md`、`SKILL.md` を読み、続けて `docs/requirements.md`、`docs/specification.md`、`docs/design.md`、`docs/architecture.md`、`docs/implementation-plan.md`、`docs/test-plan.md`、`docs/manual-test.md`、`TODO.md`、`Issues/` を確認します。Blender CLI がない環境では Windows runtime gate までを自動検証し、Blender Link reload はリリース後の手動確認として `docs/manual-test.md` と QCDS に明記します。
+`v0.1.0-alpha.1` の MVP 実装段階です。作業開始時に `README.md`、`AGENTS.md`、`SKILL.md` を読み、続けて `docs/requirements.md`、`docs/specification.md`、`docs/design.md`、`docs/architecture.md`、`docs/implementation-plan.md`、`docs/test-plan.md`、`docs/manual-test.md`、`TODO.md`、`Issues/` を確認します。Blender CLI が PATH 上にない場合でも、既定候補 `D:\SteamLibrary\steamapps\common\Blender\blender.exe` または `BLENDER_EXE` を検出して非破壊 smoke を自動検証します。統合 `.blend` と部位別 `.blend` の Link reload はリリース後の手動確認として `docs/manual-test.md` と QCDS に明記します。

@@ -18,7 +18,7 @@ Use this repository for Blender Link based part-version management work.
 - Never auto-overwrite a linked `.blend` path without a preview report and a rollback note.
 - Store part metadata in a small registry first: `partId`, `partTag`, `blendPath`, `linkedCollection`, `owner`, `source`, `versionRef`, `updatePolicy`, and `lastSync`.
 - Windows companion must stay outside `.blend` mutation. It may validate registry data, show status, launch installer dry-run, and save settings under `%APPDATA%`.
-- Alpha release validation must include the Windows local executable / installer launch gate. Blender Link reload remains a required manual test when Blender CLI is not available in the Codex environment.
+- Alpha release validation must include the Windows local executable / installer launch gate and, when available, a non-mutating Blender CLI smoke from `BLENDER_EXE` or `D:\SteamLibrary\steamapps\common\Blender\blender.exe`. Blender Link reload remains a required manual test until an integration `.blend` and part `.blend` are confirmed by the user.
 
 ## Validation
 
@@ -26,4 +26,4 @@ Use this repository for Blender Link based part-version management work.
 npm test
 ```
 
-`npm test` runs docs checks, Python unit tests, Windows runtime gate, release packaging, and release artifact checks. Blender runtime validation is tracked in `docs/manual-test.md` and should be executed manually after installing the alpha in Blender.
+`npm test` runs docs checks, Python unit tests, Windows runtime gate, Blender CLI smoke when a Blender executable is detected, release packaging, and release artifact checks. Blender Link reload validation is tracked in `docs/manual-test.md` and should be executed manually after installing the alpha in Blender.

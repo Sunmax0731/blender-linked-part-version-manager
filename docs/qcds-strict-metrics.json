@@ -16,8 +16,11 @@
       "criteria": "local executable launch, settings save, and installer dry-run launch"
     },
     "blenderHostRuntimeGate": {
-      "status": "manual-pending",
-      "reason": "Blender CLI was not found on PATH in the Codex environment.",
+      "status": "cli-smoke-passed",
+      "evidence": "dist/runtime-gate.json",
+      "executablePath": "D:\\SteamLibrary\\steamapps\\common\\Blender\\blender.exe",
+      "reason": "Blender 5.1.1 CLI smoke and add-on import passed from the real Blender path; Link reload and viewport confirmation remain manual.",
+      "manualLinkReloadStatus": "blocked-user-manual-test",
       "manualTest": "docs/manual-test.md"
     }
   },
