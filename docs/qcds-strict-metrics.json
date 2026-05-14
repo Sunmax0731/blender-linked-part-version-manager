@@ -19,8 +19,8 @@
       "status": "cli-smoke-passed",
       "evidence": "dist/runtime-gate.json",
       "executablePath": "D:\\SteamLibrary\\steamapps\\common\\Blender\\blender.exe",
-      "reason": "Blender 5.1.1 CLI smoke and add-on import passed from the real Blender path; Link reload and viewport confirmation remain manual.",
-      "manualLinkReloadStatus": "blocked-user-manual-test",
+      "reason": "Blender 5.1.1 CLI smoke, add-on import, user manual install, registry validation, sync preview, Preview Reload, and Reload Safe Links passed; source edit plus viewport delta remains manual.",
+      "manualLinkReloadStatus": "reload-operator-passed-viewport-delta-pending",
       "manualTest": "docs/manual-test.md"
     },
     "manualFixturePackage": {

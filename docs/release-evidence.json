@@ -32,9 +32,22 @@
     ]
   },
   "manualEvidence": {
-    "status": "blocked-user-manual-link-reload",
+    "status": "reload-operator-passed-viewport-delta-pending",
     "manualTest": "docs/manual-test.md",
     "strictManualTestAddendum": "docs/strict-manual-test-addendum.md",
-    "trackingIssue": "Issues/0006-blender-runtime-link-reload-manual.md"
+    "trackingIssue": "Issues/0006-blender-runtime-link-reload-manual.md",
+    "observedOn": "2026-05-15",
+    "blenderVersion": "5.1.1",
+    "passed": [
+      "add-on install and enable",
+      "fixture integration file opens and linked collections display",
+      "Validate Registry returns issues: []",
+      "Build Sync Preview returns totalParts: 4, currentParts: 1, updateCandidates: 1, blockedParts: 2",
+      "Preview Reload targets and reloads parts/hair/main_hair.blend",
+      "Reload Safe Links targets and reloads parts/hair/main_hair.blend"
+    ],
+    "pending": [
+      "Hair source .blend visual edit followed by Viewport delta confirmation"
+    ]
   }
 }

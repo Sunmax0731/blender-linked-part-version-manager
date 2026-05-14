@@ -73,6 +73,7 @@ samples/representative-suite.json
 ## Troubleshooting
 
 - `Preview Reload` / `Reload Safe Links` が `failed: []` でも `reloaded: []` かつ全件 `skipped` になる場合は、古い add-on ZIP が入っている可能性がある。GitHub Release から更新後の `blender-linked-part-version-manager.zip` を再取得し、Blender の Add-ons で一度 remove してから install し直す。
+- `Reload Safe Links` で `dryRun: false`、Hair が `reloaded`、Body / Accessories / Face が `skipped` なら reload 対象解決は成功。Viewport の見た目の変化まで確認するには、先に `parts/hair/main_hair.blend` を変更して保存する。
 - `Report Path` は fixture root 直下の `blender-dry-run-report.json` など、書き込み可能で見つけやすい場所にする。
 
 ## 未実施項目

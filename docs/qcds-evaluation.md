@@ -11,7 +11,7 @@
 
 ## Gate
 
-Windows アプリとしての platform runtime gate は local executable / installer dry-run 起動で `passed`。Blender host は `D:\SteamLibrary\steamapps\common\Blender\blender.exe` から Blender 5.1.1 を検出し、CLI smoke とアドオン import が `cli-smoke-passed`。統合 `.blend` と部位別 `.blend` fixture は release package に同梱済み。Viewport 上の Link reload 確認は `blocked` の manual host test として残る。
+Windows アプリとしての platform runtime gate は local executable / installer dry-run 起動で `passed`。Blender host は `D:\SteamLibrary\steamapps\common\Blender\blender.exe` から Blender 5.1.1 を検出し、CLI smoke とアドオン import が `cli-smoke-passed`。ユーザー手元の Blender 5.1.1 で add-on install、fixture 表示、registry validation、sync preview、Preview Reload、Reload Safe Links の Hair reload 対象処理まで確認済み。Hair source `.blend` を変更した後の Viewport 差分確認は manual host test として残る。
 
 ## Required Improvements
 
