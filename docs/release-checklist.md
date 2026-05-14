@@ -16,6 +16,7 @@
 - [x] Git / local adapter の MVP が動く。
 - [x] Windows runtime gate が `passed` になっている。
 - [x] 指定 Blender 実体パスで CLI smoke と add-on import が `passed` になっている。
+- [x] alpha 手動テスト用 `.blend` fixture と fixture ZIP が生成されている。
 - [ ] Blender runtime gate が手動確認で `passed` になっている。
 - [x] `docs/qcds-evaluation.md` の全観点が `A-` 以上になっている。
 - [x] `docs/installation-guide.md` と `docs/user-guide.md` を追加した。
@@ -27,6 +28,7 @@
 
 - `dist/blender-linked-part-version-manager.zip`
 - `dist/blender-linked-part-version-manager-docs.zip`
+- `dist/blender-linked-part-version-manager-fixtures.zip`
 - `dist/test-summary.json`
 - `dist/runtime-gate.json`
 - `docs/release-evidence.json`

@@ -6,7 +6,7 @@
 - Blender 4.2 以降
 - Git CLI
 - Node.js 20 以降
-- テスト用 Git repository またはローカル共有フォルダ
+- `blender-linked-part-version-manager-fixtures.zip` または repo 内の `integration/` と `parts/`
 
 ## Codex 側での確認
 
@@ -44,14 +44,27 @@ windows\install-alpha.cmd --dry-run
 
 alpha release 後に手作業で実施する。
 
-1. `integration/character_integration.blend` を開く。
-2. `parts/hair/main_hair.blend`、`parts/body/base_body.blend`、`parts/face/main_face.blend`、`parts/accessories/glasses.blend` を Link する。
-3. アドオンの `Part Registry` パネルで `Create Registry from Current Links` を実行する。
-4. Git またはローカル共有フォルダで部位ファイルを更新する。
-5. `Sync Preview` で `remote-newer` が表示されることを確認する。
-6. `Pull & Reload` を実行し、対象部位だけが更新されることを確認する。
-7. Link 先ファイルを一時的に移動し、`broken-link` と復旧候補が表示されることを確認する。
-8. local-dirty の部位を用意し、自動更新が停止することを確認する。
+1. release asset `blender-linked-part-version-manager-fixtures.zip` を展開する。repo から実施する場合は `D:\AI\BlenderAddon\blender-linked-part-version-manager` を fixture root として使う。
+2. `<fixture-root>\integration\character_integration.blend` を Blender で開く。
+3. `Linked Parts` パネルが表示されることを確認する。
+4. add-on preferences の `Registry Path` に `<fixture-root>\samples\representative-suite.json` を指定する。
+5. `Validate Registry` を実行し、registry が OK になることを確認する。
+6. `Build Sync Preview` を実行し、summary が表示され、`remote-newer`、`local-dirty`、`broken-link` の代表状態が dry-run report に記録されることを確認する。
+7. `Preview Reload` を実行し、対象 library が dry-run reloaded として表示されることを確認する。
+8. 実 reload を確認する場合は、`parts/hair/main_hair.blend` を別ウィンドウで開き、Hair marker を少し移動して保存する。その後 `character_integration.blend` に戻り、`Reload Safe Links` を実行して Viewport の Hair が更新されることを確認する。
+9. Link 先ファイルを一時的に移動する場合は、コピーで退避してから `broken-link` 表示を確認し、必ず元の場所へ戻す。
+10. local-dirty / conflict-risk 相当は `representative-suite.json` の `expectedStatus` で dry-run 表示され、自動更新対象から外れることを確認する。
+
+期待される fixture path:
+
+```text
+integration/character_integration.blend
+parts/hair/main_hair.blend
+parts/body/base_body.blend
+parts/face/main_face.blend
+parts/accessories/glasses.blend
+samples/representative-suite.json
+```
 
 ## Blender 実体パス smoke
 
@@ -59,4 +72,4 @@ alpha release 後に手作業で実施する。
 
 ## 未実施項目
 
-Blender 上での Link reload 実機確認は未実施。alpha release 後、ユーザー手元の Blender 4.2 以降で本手順を実施し、結果を次リリースの `docs/release-evidence.json` に反映する。
+Blender 上での Link reload 実機確認は未実施。alpha release 後、ユーザーまたはテスト協力者の Blender 4.2 以降で本手順を実施し、結果を次リリースの `docs/release-evidence.json` に反映する。

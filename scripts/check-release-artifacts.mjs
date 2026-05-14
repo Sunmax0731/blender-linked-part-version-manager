@@ -4,6 +4,7 @@ import path from "node:path";
 const required = [
   "dist/blender-linked-part-version-manager.zip",
   "dist/blender-linked-part-version-manager-docs.zip",
+  "dist/blender-linked-part-version-manager-fixtures.zip",
   "dist/test-summary.json",
   "dist/runtime-gate.json",
   "docs/qcds-strict-metrics.json",

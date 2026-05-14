@@ -10,6 +10,7 @@
     "assets": [
       "blender-linked-part-version-manager.zip",
       "blender-linked-part-version-manager-docs.zip",
+      "blender-linked-part-version-manager-fixtures.zip",
       "manual-test.md"
     ]
   },
@@ -19,7 +20,16 @@
     "testSummary": "dist/test-summary.json",
     "qcdsMetrics": "docs/qcds-strict-metrics.json",
     "blenderExecutablePath": "D:\\SteamLibrary\\steamapps\\common\\Blender\\blender.exe",
-    "blenderCliSmoke": "cli-smoke-passed"
+    "blenderCliSmoke": "cli-smoke-passed",
+    "manualFixturePackage": "dist/blender-linked-part-version-manager-fixtures.zip",
+    "manualFixtureRootFiles": [
+      "integration/character_integration.blend",
+      "parts/hair/main_hair.blend",
+      "parts/body/base_body.blend",
+      "parts/face/main_face.blend",
+      "parts/accessories/glasses.blend",
+      "samples/representative-suite.json"
+    ]
   },
   "manualEvidence": {
     "status": "blocked-user-manual-link-reload",

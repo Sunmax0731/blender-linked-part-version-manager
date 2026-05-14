@@ -12,14 +12,15 @@
 | Local fixture | local adapter | 共有フォルダ mirror の存在、更新日時、コピー候補を分類できる。 |
 | Windows runtime gate | companion launcher / installer | local executable 起動、settings 保存、installer dry-run が成功する。 |
 | Blender CLI smoke | Blender host | `BLENDER_EXE`、`D:\SteamLibrary\steamapps\common\Blender\blender.exe`、PATH のいずれかで Blender を検出し、`--version` と add-on import smoke が成功する。 |
+| Blend fixture packaging | manual-test assets | integration `.blend`、部位別 `.blend`、registry が release fixture ZIP に同梱される。 |
 | Release artifact check | dist / docs | add-on ZIP、docs ZIP、test summary、runtime gate、QCDS metrics が存在する。 |
 
 ## Blender Runtime Gate
 
 手動 host test で次を確認する。
 
-1. Integration File を開く。
-2. Hair、Body、Face、Accessories の Part File を Link する。
+1. `blender-linked-part-version-manager-fixtures.zip` を展開する。
+2. Integration File `integration/character_integration.blend` を開く。
 3. Part Registry を生成する。
 4. Part File を更新した fixture を用意する。
 5. `Pull & Reload` の dry-run を実行する。

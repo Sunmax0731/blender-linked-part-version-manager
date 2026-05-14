@@ -141,7 +141,9 @@ class BLPVM_PT_registry_panel(bpy.types.Panel if bpy else object):
         row = layout.row(align=True)
         row.operator("blpvm.validate_registry", icon="CHECKMARK")
         row.operator("blpvm.build_sync_preview", icon="VIEWZOOM")
-        layout.operator("blpvm.reload_links", icon="FILE_REFRESH").dry_run = True
+        row = layout.row(align=True)
+        row.operator("blpvm.reload_links", text="Preview Reload", icon="FILE_REFRESH").dry_run = True
+        row.operator("blpvm.reload_links", text="Reload Safe Links", icon="CHECKMARK").dry_run = False
         layout.prop(prefs, "report_path")
         preview = getattr(context.scene, "blpvm_preview_json", "")
         if preview:

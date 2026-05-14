@@ -6,8 +6,8 @@
 
 - Blender 4.2 以降で add-on ZIP を install できる。
 - `Linked Parts` パネルが表示される。
-- `samples/representative-suite.json` 相当の registry を読み込める。
-- integration `.blend` から部位別 `.blend` を Link し、`Build Sync Preview` が更新候補と blocked 状態を表示する。
+- `blender-linked-part-version-manager-fixtures.zip` を展開し、`samples/representative-suite.json` を読み込める。
+- `integration/character_integration.blend` が部位別 `.blend` を Link しており、`Build Sync Preview` が更新候補と blocked 状態を表示する。
 - `local-dirty` と `conflict-risk` で自動更新が止まる。
 - safe な linked library の reload が成功し、Viewport で対象部位の更新を確認できる。
 

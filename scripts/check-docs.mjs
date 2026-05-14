@@ -28,16 +28,26 @@ const requiredFiles = [
   "docs/release-evidence.json",
   "docs/releases/v0.1.0-alpha.1.md",
   "samples/representative-suite.json",
+  "scripts/create-blend-fixtures.py",
   "Issues/README.md",
   "Issues/0004-alpha-mvp-release.md",
   "Issues/0005-blender.md",
   "Issues/0006-blender-runtime-link-reload-manual.md",
   "Issues/0007-alpha-manual-test-evidence.md",
+  "Issues/0008-manual-test-fixtures.md",
   "windows/blpvm-companion.mjs",
   "windows/blpvm-companion.cmd",
   "windows/install-alpha.cmd",
   "windows/README.md",
   "addon/blender_linked_part_version_manager/blender_manifest.toml"
+];
+
+const requiredBinaryFiles = [
+  "integration/character_integration.blend",
+  "parts/hair/main_hair.blend",
+  "parts/body/base_body.blend",
+  "parts/face/main_face.blend",
+  "parts/accessories/glasses.blend",
 ];
 
 const suspiciousCodePoints = new Set([0x7e67, 0x90e2, 0x9aeb, 0xfffd]);
@@ -67,6 +77,16 @@ for (const file of requiredFiles) {
   checkText(file);
 }
 
+for (const file of requiredBinaryFiles) {
+  const absolutePath = path.join(root, file);
+  if (!fs.existsSync(absolutePath)) {
+    throw new Error(`Missing required binary fixture: ${file}`);
+  }
+  if (fs.statSync(absolutePath).size <= 0) {
+    throw new Error(`Empty binary fixture: ${file}`);
+  }
+}
+
 const packageJson = JSON.parse(readText("package.json"));
 if (packageJson.name !== "blender-linked-part-version-manager") {
   throw new Error("package.json name does not match repository name.");
@@ -81,6 +101,9 @@ const suite = JSON.parse(readText("samples/representative-suite.json"));
 if (!Array.isArray(suite.parts) || suite.parts.length < 4) {
   throw new Error("representative suite must include at least four parts.");
 }
+if (!fs.existsSync(path.join(root, suite.integration_file || ""))) {
+  throw new Error(`Representative integration file is missing: ${suite.integration_file}`);
+}
 
 const requiredPartFields = ["partId", "partTag", "blendPath", "linkedCollection", "owner", "source", "updatePolicy"];
 for (const part of suite.parts) {
@@ -88,6 +111,9 @@ for (const part of suite.parts) {
     if (!part[field]) {
       throw new Error(`Representative part is missing ${field}: ${JSON.stringify(part)}`);
     }
+  }
+  if (!fs.existsSync(path.join(root, part.blendPath))) {
+    throw new Error(`Representative part blend is missing: ${part.blendPath}`);
   }
 }
 

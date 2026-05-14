@@ -13,6 +13,7 @@ GitHub Release `v0.1.0-alpha.1` から次を取得する。
 
 - `blender-linked-part-version-manager.zip`
 - `blender-linked-part-version-manager-docs.zip`
+- `blender-linked-part-version-manager-fixtures.zip`
 - `manual-test.md`
 
 ## Blender add-on
@@ -23,6 +24,21 @@ GitHub Release `v0.1.0-alpha.1` から次を取得する。
 4. `Blender Linked Part Version Manager` を有効化する。
 5. View3D Sidebar の `Linked Parts` タブを開く。
 6. `Registry Path` に registry JSON を指定し、`Validate Registry` と `Build Sync Preview` を実行する。
+
+## Manual test fixtures
+
+`blender-linked-part-version-manager-fixtures.zip` を任意の作業フォルダに展開する。展開後の構成は次の通り。
+
+```text
+integration/character_integration.blend
+parts/hair/main_hair.blend
+parts/body/base_body.blend
+parts/face/main_face.blend
+parts/accessories/glasses.blend
+samples/representative-suite.json
+```
+
+Blender では `integration/character_integration.blend` を開き、add-on preferences の `Registry Path` に展開先の `samples/representative-suite.json` を指定する。
 
 ## Windows companion
 

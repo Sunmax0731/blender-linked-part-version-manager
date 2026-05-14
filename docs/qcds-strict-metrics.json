@@ -22,6 +22,11 @@
       "reason": "Blender 5.1.1 CLI smoke and add-on import passed from the real Blender path; Link reload and viewport confirmation remain manual.",
       "manualLinkReloadStatus": "blocked-user-manual-test",
       "manualTest": "docs/manual-test.md"
+    },
+    "manualFixturePackage": {
+      "status": "packaged",
+      "evidence": "dist/blender-linked-part-version-manager-fixtures.zip",
+      "criteria": "integration .blend, part .blend files, registry, and manual test docs are packaged for testers"
     }
   },
   "release": {

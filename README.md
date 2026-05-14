@@ -33,6 +33,7 @@ Blender Linked Part Version Manager は、統合用 `.blend` と部位別作業 
 - `addon/blender_linked_part_version_manager/adapters/`: Git / local folder の dry-run adapter。
 - `windows/`: Windows companion launcher と alpha installer dry-run。
 - `scripts/`: docs、unit test、runtime gate、release package の検証。
+- `integration/` と `parts/`: alpha 手動テスト用の最小 `.blend` fixture。
 
 ## 開発コマンド
 
@@ -57,3 +58,5 @@ windows\install-alpha.cmd --dry-run
 ## Alpha Release Notes
 
 `v0.1.0-alpha.1` は prerelease として公開し、リリース後に Blender 実機で Link reload の手動確認を行います。Codex 環境では `D:\SteamLibrary\steamapps\common\Blender\blender.exe` を検出し、Blender 5.1.1 の CLI smoke とアドオン import は通過済みです。統合 `.blend` と部位別 `.blend` の Link reload は手動確認として残します。
+
+テスト協力者は release asset `blender-linked-part-version-manager-fixtures.zip` を展開し、同梱の `integration/character_integration.blend` と `samples/representative-suite.json` で manual test を開始できます。

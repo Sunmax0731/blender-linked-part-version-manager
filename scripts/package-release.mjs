@@ -20,9 +20,21 @@ compressPaths(
     "docs",
     "Issues",
     "samples",
+    "integration",
+    "parts",
     "windows",
   ],
   "dist\\blender-linked-part-version-manager-docs.zip",
+);
+compressPaths(
+  [
+    "samples\\representative-suite.json",
+    "integration",
+    "parts",
+    "docs\\manual-test.md",
+    "docs\\strict-manual-test-addendum.md",
+  ],
+  "dist\\blender-linked-part-version-manager-fixtures.zip",
 );
 
 console.log("Release artifacts packaged.");
@@ -47,6 +59,7 @@ function writeTestSummary() {
     runtimeGatePassed: Boolean(runtimeGate?.passed),
     blenderHostGateStatus: runtimeGate?.blenderHostGate?.status ?? "unknown",
     blenderHostExecutablePath: runtimeGate?.blenderHostGate?.executablePath ?? null,
+    fixturePackage: "dist/blender-linked-part-version-manager-fixtures.zip",
     blenderManualTestPending: true,
   };
   fs.writeFileSync(path.join(dist, "test-summary.json"), JSON.stringify(summary, null, 2) + "\n", "utf8");
