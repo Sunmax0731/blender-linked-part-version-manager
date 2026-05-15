@@ -35,7 +35,7 @@ windows\install-alpha.cmd --dry-run
 
 期待結果:
 
-- version が `0.1.1` として表示される。
+- version が `0.1.2` として表示される。
 - registry validation が `ok: true` を返す。
 - `%APPDATA%\BlenderLinkedPartVersionManager\settings.json` が作成され、registry path が保存される。
 - installer dry-run が `ok: true` を返し、実ファイルコピーは行わない。

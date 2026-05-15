@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-const version = "0.1.1";
+const version = "0.1.2";
 const appName = "BlenderLinkedPartVersionManager";
 
 function main(argv) {

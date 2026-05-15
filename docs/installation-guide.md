@@ -9,7 +9,7 @@
 
 ## Alpha artifact
 
-GitHub Release `v0.1.0-alpha.2` から次を取得する。
+GitHub Release `v0.1.0-alpha.3` から次を取得する。
 
 - `blender-linked-part-version-manager.zip`
 - `blender-linked-part-version-manager-docs.zip`

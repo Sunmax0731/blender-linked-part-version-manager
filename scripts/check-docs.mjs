@@ -29,6 +29,7 @@ const requiredFiles = [
   "docs/release-evidence.json",
   "docs/releases/v0.1.0-alpha.1.md",
   "docs/releases/v0.1.0-alpha.2.md",
+  "docs/releases/v0.1.0-alpha.3.md",
   "samples/representative-suite.json",
   "scripts/create-blend-fixtures.py",
   "Issues/README.md",
@@ -137,7 +138,7 @@ for (const key of ["Quality", "Cost", "Delivery", "Satisfaction"]) {
 }
 
 const releaseEvidence = JSON.parse(readText("docs/release-evidence.json"));
-if (releaseEvidence.version !== "0.1.0-alpha.2") {
+if (releaseEvidence.version !== "0.1.0-alpha.3") {
   throw new Error("release-evidence.json version must match alpha release.");
 }
 

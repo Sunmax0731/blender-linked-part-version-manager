@@ -9,7 +9,7 @@ const required = [
   "dist/runtime-gate.json",
   "docs/qcds-strict-metrics.json",
   "docs/release-evidence.json",
-  "docs/releases/v0.1.0-alpha.2.md",
+  "docs/releases/v0.1.0-alpha.3.md",
 ];
 
 for (const file of required) {
