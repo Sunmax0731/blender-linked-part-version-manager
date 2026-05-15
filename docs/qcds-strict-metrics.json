@@ -48,6 +48,11 @@
       "status": "implemented-unit-tested-manual-pending",
       "evidence": "tests/test_registry_plan.py",
       "criteria": "Preview Integrate reports target linked datablocks without mutation; Integrate Link requires confirmation, makes selected linked datablocks local, writes a report, and does not auto-save .blend"
+    },
+    "releasePublication": {
+      "status": "verified",
+      "evidence": "Issues/0019-issue.md",
+      "criteria": "v0.1.0-alpha.3 prerelease, release assets, TODO/Issues closure, and post-release verification evidence are synchronized"
     }
   },
   "release": {

@@ -14,6 +14,27 @@
       "manual-test.md"
     ]
   },
+  "releasePublication": {
+    "status": "verified",
+    "trackingIssue": "Issues/0019-issue.md",
+    "verifiedAt": "2026-05-16",
+    "releaseTag": "v0.1.0-alpha.3",
+    "implementationVersion": "0.1.2",
+    "releaseUrl": "https://github.com/Sunmax0731/blender-linked-part-version-manager/releases/tag/v0.1.0-alpha.3",
+    "validationCommand": "npm test",
+    "requiredAssets": [
+      "blender-linked-part-version-manager.zip",
+      "blender-linked-part-version-manager-docs.zip",
+      "blender-linked-part-version-manager-fixtures.zip",
+      "manual-test.md"
+    ],
+    "postReleaseEvidence": [
+      "docs/release-evidence.json",
+      "docs/qcds-strict-metrics.json",
+      "dist/runtime-gate.json",
+      "dist/test-summary.json"
+    ]
+  },
   "localEvidence": {
     "automatedTest": "npm test",
     "runtimeGate": "dist/runtime-gate.json",

@@ -37,3 +37,4 @@ This folder stores local Markdown issues linked from `TODO.md`.
 - [x] [0016](0016-blender-ui.md) Blender表示言語に連動した日本語UI対応
 - [x] [0017](0017-issue.md) リンクファイル統合機能を追加する
 - [x] [0018](0018-link-candidate-ref-only.md) Link Candidate が `ref` collection だけをリンクする不具合を修正する
+- [x] [0019](0019-issue.md) 現行バージョンのリリース

@@ -27,6 +27,7 @@
 - [x] `docs/qcds-evaluation.md` の全観点が `A-` 以上になっている。
 - [x] `docs/installation-guide.md` と `docs/user-guide.md` を追加した。
 - [x] GitHub prerelease と docs ZIP を作成した。
+- [x] `Issues/0019-issue.md` で現行バージョンの release verification を完了した。
 
 ## Release Evidence
 
