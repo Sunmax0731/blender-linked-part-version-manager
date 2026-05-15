@@ -30,9 +30,14 @@
       "criteria": "integration .blend, part .blend files, registry, and manual test docs are packaged for testers"
     },
     "guiRegistryEditing": {
-      "status": "implemented-unit-tested",
+      "status": "implemented-unit-tested-link-selection-fixed",
       "evidence": "tests/test_registry_plan.py",
       "criteria": "scan and file-selector registry candidates default to safe local values, save through registry validation, and explicit Link operation does not auto-save .blend"
+    },
+    "linkCandidateSelection": {
+      "status": "implemented-unit-tested-cli-inspected",
+      "evidence": "tests/test_registry_plan.py",
+      "criteria": "Link Candidate inspects available collection/object names, prefers production targets, and does not fall back to first ref collection when requested collection is missing"
     },
     "japaneseUiLocalization": {
       "status": "implemented-unit-tested-cli-smoked",

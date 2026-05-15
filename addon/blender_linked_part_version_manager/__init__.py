@@ -21,6 +21,7 @@ except ImportError:  # pragma: no cover - normal unit-test path outside Blender
 from .blender.link import (
     integrate_linked_libraries,
     inspect_linked_libraries,
+    inspect_linkable_data_from_file,
     link_collection_from_file,
     reload_linked_libraries,
     resolve_target_paths,
@@ -291,16 +292,30 @@ class BLPVM_OT_add_link_candidate(bpy.types.Operator if bpy else object):
         resolved = Path(bpy.path.abspath(self.filepath))
         blend_path = _display_path_for_registry(resolved, _registry_relative_root(registry_path))
         existing_ids = {item.part_id for item in context.scene.blpvm_registry_parts if item.part_id}
+        linkable_data = inspect_linkable_data_from_file(bpy, str(resolved))
+        if linkable_data["failed"]:
+            context.scene.blpvm_preview_json = json.dumps({"linkableData": linkable_data}, ensure_ascii=False, indent=2)
+            self.report({"ERROR"}, _format_iface("Link candidate failed: {error}", error=linkable_data["failed"][0]["error"]))
+            return {"CANCELLED"}
+        linked_collection = (
+            self.linked_collection
+            or linkable_data["recommendedCollection"]
+            or resolved.stem
+        )
         part = build_registry_part_candidate(
             blend_path,
-            linked_collection=self.linked_collection or resolved.stem,
+            linked_collection=linked_collection,
             part_tag=self.part_tag,
             existing_ids=existing_ids,
         )
         item = context.scene.blpvm_registry_parts.add()
         _fill_registry_item(item, part)
         context.scene.blpvm_registry_index = len(context.scene.blpvm_registry_parts) - 1
-        context.scene.blpvm_preview_json = json.dumps({"addedCandidate": part}, ensure_ascii=False, indent=2)
+        context.scene.blpvm_preview_json = json.dumps(
+            {"addedCandidate": part, "linkableData": linkable_data},
+            ensure_ascii=False,
+            indent=2,
+        )
         self.report({"INFO"}, _format_iface("Added registry candidate: {part_id}.", part_id=part["partId"]))
         return {"FINISHED"}
 

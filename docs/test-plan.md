@@ -16,6 +16,7 @@
 | Auto Reload target selection | Blender add-on | `current` / `remote-newer` の saved linked files だけが監視対象になり、blocked part は対象外になる。 |
 | GUI registry candidate defaults | Blender add-on / core.registry | scan / file selector 由来の候補が安全な local source 初期値を持ち、保存後に registry validator を通過する。 |
 | GUI linked library scan | Blender add-on / blender.link | `bpy.data.libraries` と linked collection から `blendPath` と `linkedCollection` を持つ editable part 候補を生成できる。 |
+| Link candidate target selection | Blender add-on / blender.link | `Add File Candidate` / `Preview Link` が available collection / object を report し、`ref` への先頭 fallback を避けて production collection / object を選ぶ。 |
 | Japanese UI localization | Blender add-on / UI translations | `ja_JP` 翻訳テーブルが主要 panel、operator、button、property、message を持ち、Blender の `pgettext_iface` で日本語へ解決できる。 |
 | Link integration helper | Blender add-on / blender.link | dry-run は対象 datablock を報告するだけで local 化せず、実行時は選択 target の linked datablock だけを local 化する。 |
 | Release artifact check | dist / docs | add-on ZIP、docs ZIP、test summary、runtime gate、QCDS metrics が存在する。 |
@@ -53,3 +54,5 @@
 `npm test` は docs / JSON / 文字化け検査、Python unit test、Windows runtime gate、Blender CLI smoke、release package、release artifact check を行う。2026-05-15 時点で `D:\SteamLibrary\steamapps\common\Blender\blender.exe` から Blender 5.1.1 を検出し、add-on import smoke は通過済み。追加で `register()` / `unregister()` smoke も通過済み。統合 `.blend` と部位別 `.blend` の Link reload / Viewport 反映はユーザー手元の Blender 5.1.1 で手動確認済み。
 
 2026-05-15 時点で GUI registry candidate defaults、linked library scan、Japanese UI localization table coverage、link integration dry-run / localize helper は Python unit test に追加済み。Blender 5.1.1 CLI で `preferences.view.language='ja_JP'`、`use_translate_interface=True` を設定し、`Scan Current Links` と `Part Registry` が日本語へ解決されることを確認済み。Blender UI 上の `Scan Current Links`、`Save Registry`、`Add File Candidate`、`Preview Link`、`Link Candidate`、`Preview Integrate`、`Integrate Link`、日本語 UI 表示は次回 manual test で実機確認する。
+
+2026-05-16 時点で `D:\Work\Blender\Shirayukikokoro\blender\base_blender\base.blend` を Blender 5.1.1 CLI で inspection し、available collection が `ref`、`Collection`、`2_acc`、`1_costume`、`0_hair`、available object が `base_face`、`base_body`、`Armature` などであることを確認した。修正後の `Preview Link` はファイル名既定値 `base` から先頭 `ref` へ fallback せず、recommended collection `1_costume` を dry-run に出す。

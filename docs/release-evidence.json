@@ -59,7 +59,7 @@
     "trackingIssue": "Issues/0010-auto-reload-saved-links.md"
   },
   "guiRegistryEditing": {
-    "status": "implemented-unit-tested",
+    "status": "implemented-unit-tested-link-selection-fixed",
     "trackingIssues": [
       "Issues/0011-blender-gui-part-registry.md",
       "Issues/0012-blender-gui-part-registry.md",
@@ -85,6 +85,32 @@
       "tests/test_registry_plan.py"
     ],
     "manualStatus": "pending-next-manual-pass"
+  },
+  "linkCandidateSelection": {
+    "status": "implemented-unit-tested-cli-inspected",
+    "trackingIssue": "Issues/0018-link-candidate-ref-only.md",
+    "bugReport": "User reported Link Candidate linked only ref collection when trying to link D:\\Work\\Blender\\Shirayukikokoro\\blender\\base_blender\\base.blend.",
+    "cause": "The old implementation used the file stem as linkedCollection and silently fell back to data_from.collections[0] when the requested collection was missing.",
+    "fixedBehavior": [
+      "inspect available collection and object names before preview/link",
+      "prefer production collections over ref/reference/generic collections",
+      "fall back to production objects only when the generated file-stem collection is missing and no production collection exists",
+      "do not fall back to the first ref collection for explicit missing collection names",
+      "write availableCollections, availableObjects, recommendedCollection, recommendedObjects, linkMode, and failures into preview JSON"
+    ],
+    "blenderCliEvidence": {
+      "sourceFile": "D:\\Work\\Blender\\Shirayukikokoro\\blender\\base_blender\\base.blend",
+      "availableCollections": ["ref", "Collection", "2_acc", "1_costume", "0_hair"],
+      "availableObjects": ["ref4_side2", "ref3_side1", "ref2_back", "ref1_front", "Light", "Floor", "Camera", "base_face", "base_body", "Armature"],
+      "previewRequestedCollection": "base",
+      "previewRecommendedCollection": "1_costume",
+      "previewLinkMode": "collection"
+    },
+    "automatedEvidence": [
+      "python -m unittest tests.test_registry_plan",
+      "tests/test_registry_plan.py"
+    ],
+    "manualStatus": "pending-user-file-link-pass"
   },
   "japaneseUiLocalization": {
     "status": "implemented-unit-tested-cli-smoked",

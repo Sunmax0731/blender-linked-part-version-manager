@@ -6,7 +6,7 @@
 
 1. 統合 `.blend` と部位別 `.blend` の対応を registry JSON に記録する。
 2. JSON がまだない場合は Blender の `Linked Parts` パネルで `Scan Current Links` を実行し、GUI 上の候補を編集して `Save Registry` で保存する。
-3. 追加の `.blend` は `Add File Candidate` で選び、`Preview Link` で確認してから `Link Candidate` で現在の Blender tree へ明示的に Link する。
+3. 追加の `.blend` は `Add File Candidate` で選ぶ。preview に available collection / object と recommended target が出るので、`linkedCollection` を確認してから `Preview Link`、`Link Candidate` の順に現在の Blender tree へ明示的に Link する。
 4. `Validate Registry` を実行する。
 5. `Build Sync Preview` で更新候補、危険状態、reload 候補を確認する。
 6. `local-dirty`、`conflict-risk`、`broken-link` がある場合は自動更新せず、担当者に確認する。
@@ -18,6 +18,10 @@
 必須項目は `partId`、`partTag`、`blendPath`、`linkedCollection`、`owner`、`source`、`versionRef`、`updatePolicy`。`partTag` は `Hair`、`Body`、`Face`、`Accessories`、`Clothes`、`Rig`、`Props` を使う。
 
 GUI で生成した候補は `owner=unassigned`、`source.type=local`、`source.root=.`、`versionRef=local`、`updatePolicy=manual` で始まる。チーム運用に合わせて owner、Git source、branch、versionRef を編集してから保存する。
+
+## Link 候補の選び方
+
+`Add File Candidate` は source `.blend` 内の collection / object 名を読み取り、`ref`、`reference`、camera、light、floor 系を避けて production collection を推奨する。目的データが collection ではなく scene 直下 object の場合は、`Armature` や mesh 名を production object として Link 対象にする。明示的に入力した `linkedCollection` が存在しない場合は、先頭 collection へ勝手に fallback せず、候補一覧と失敗理由を preview に表示する。
 
 ## Status
 

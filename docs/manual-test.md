@@ -52,20 +52,21 @@ alpha release 後に手作業で実施する。
 6. `Scan Current Links` を実行し、現在の linked library / collection から editable な registry 候補が表示されることを確認する。
 7. 候補の `owner`、`source.type`、`versionRef`、`updatePolicy` が安全な初期値であることを確認し、必要に応じて GUI 上で編集する。
 8. `Save Registry` を実行し、`Registry Path` の JSON が保存されることを確認する。その後 `Validate Registry` を再実行し、保存済み registry が OK になることを確認する。
-9. `Add File Candidate` で Explorer / Blender file selector から `.blend` を選び、候補として追加できることを確認する。`Preview Link` は dry-run のみで、`Link Candidate` は明示操作として現在の Blender tree へ Link する。どちらも自動保存しない。
-10. `Build Sync Preview` を実行し、summary が表示され、`remote-newer`、`local-dirty`、`broken-link` の代表状態が dry-run report に記録されることを確認する。
-11. `Preview Reload` を実行し、Hair の library だけが dry-run `reloaded`、他の library が `skipped` として表示されることを確認する。
-12. 実 reload を確認する場合は、`parts/hair/main_hair.blend` を別ウィンドウで開き、Hair marker を少し移動して保存する。その後 `character_integration.blend` に戻り、`Reload Safe Links` を実行して Viewport の Hair が更新されることを確認する。
-13. `Preview Integrate` を実行し、選択中の registry 候補に対応する target linked file、output file、datablockCount が preview / report に出ることを確認する。
-14. `Integrate Link` を実行して確認ダイアログを表示し、`Cancel` した場合に `.blend` 本体、Link 状態、Part Registry、`Report Path` の内容が変わらないことを確認する。
-15. 実統合を確認する場合は fixture をコピーしてから `Integrate Link` を確認あり実行し、linked datablock が local data になり、`Report Path` に `operation=integrate-linked-library`、result、warning が保存されることを確認する。現在の `.blend` は自動保存されないため、確認後に保存するか破棄する。
-16. Auto Reload を確認する場合は、`Start Auto Reload` を実行してから `parts/hair/main_hair.blend` を別ウィンドウで変更して保存する。`Auto Reload Interval` の秒数以内に integration 側の Hair が更新されることを確認する。
-17. `Stop Auto Reload` で監視を停止する。
-18. Blender の Preferences > Interface > Translation で Language を `Japanese (日本語)` に変更し、Interface 翻訳を有効にする。
-19. `Linked Parts` タブ、`Part Registry` パネル、`Scan Current Links`、`Save Registry`、`Preview Link`、`Reload Safe Links`、`Preview Integrate`、`Integrate Link`、Auto Reload status、operator report が日本語で表示されることを確認する。
-20. Language を English または既定に戻し、英語表示が壊れていないことを確認する。
-21. Link 先ファイルを一時的に移動する場合は、コピーで退避してから `broken-link` 表示を確認し、必ず元の場所へ戻す。
-22. local-dirty / conflict-risk 相当は `representative-suite.json` の `expectedStatus` で dry-run 表示され、自動更新対象から外れることを確認する。
+9. `Add File Candidate` で Explorer / Blender file selector から `.blend` を選び、候補として追加できることを確認する。preview JSON に available collection / object、recommended target、warnings が出ることを確認する。`Preview Link` は dry-run のみで、`Link Candidate` は明示操作として現在の Blender tree へ Link する。どちらも自動保存しない。
+10. source `.blend` に `ref` collection と production collection / object が混在する場合、`Preview Link` が先頭 `ref` ではなく production collection または production object を target にすることを確認する。明示的に存在しない `linkedCollection` を入力した場合は、Link せず候補一覧と失敗理由が表示されることを確認する。
+11. `Build Sync Preview` を実行し、summary が表示され、`remote-newer`、`local-dirty`、`broken-link` の代表状態が dry-run report に記録されることを確認する。
+12. `Preview Reload` を実行し、Hair の library だけが dry-run `reloaded`、他の library が `skipped` として表示されることを確認する。
+13. 実 reload を確認する場合は、`parts/hair/main_hair.blend` を別ウィンドウで開き、Hair marker を少し移動して保存する。その後 `character_integration.blend` に戻り、`Reload Safe Links` を実行して Viewport の Hair が更新されることを確認する。
+14. `Preview Integrate` を実行し、選択中の registry 候補に対応する target linked file、output file、datablockCount が preview / report に出ることを確認する。
+15. `Integrate Link` を実行して確認ダイアログを表示し、`Cancel` した場合に `.blend` 本体、Link 状態、Part Registry、`Report Path` の内容が変わらないことを確認する。
+16. 実統合を確認する場合は fixture をコピーしてから `Integrate Link` を確認あり実行し、linked datablock が local data になり、`Report Path` に `operation=integrate-linked-library`、result、warning が保存されることを確認する。現在の `.blend` は自動保存されないため、確認後に保存するか破棄する。
+17. Auto Reload を確認する場合は、`Start Auto Reload` を実行してから `parts/hair/main_hair.blend` を別ウィンドウで変更して保存する。`Auto Reload Interval` の秒数以内に integration 側の Hair が更新されることを確認する。
+18. `Stop Auto Reload` で監視を停止する。
+19. Blender の Preferences > Interface > Translation で Language を `Japanese (日本語)` に変更し、Interface 翻訳を有効にする。
+20. `Linked Parts` タブ、`Part Registry` パネル、`Scan Current Links`、`Save Registry`、`Preview Link`、`Reload Safe Links`、`Preview Integrate`、`Integrate Link`、Auto Reload status、operator report が日本語で表示されることを確認する。
+21. Language を English または既定に戻し、英語表示が壊れていないことを確認する。
+22. Link 先ファイルを一時的に移動する場合は、コピーで退避してから `broken-link` 表示を確認し、必ず元の場所へ戻す。
+23. local-dirty / conflict-risk 相当は `representative-suite.json` の `expectedStatus` で dry-run 表示され、自動更新対象から外れることを確認する。
 
 期待される fixture path:
 
@@ -89,6 +90,7 @@ samples/representative-suite.json
 - Auto Reload も保存済みファイルだけを監視する。別 Blender ウィンドウの未保存編集は `.blend` に書き出されていないため、Blender Link reload では反映できない。
 - `Integrate Link` は linked datablock を local data に変えるため、確認あり実行はコピーした fixture で行う。cancel した場合は operator が実行されず、`.blend` と registry は変更されない。
 - `Report Path` は fixture root 直下の `blender-dry-run-report.json` など、書き込み可能で見つけやすい場所にする。
+- `Link Candidate` で `ref` だけが Link される場合は、`Preview Link` の `availableCollections`、`availableObjects`、`recommendedCollection`、`recommendedObjects` を確認する。修正後は指定 collection が見つからないと先頭 `ref` へ fallback せず、production collection または production object を report する。
 - 日本語表示が切り替わらない場合は Blender Preferences の Interface 翻訳が有効か確認する。アドオン側は `ja_JP` translation table を登録しているため、英語環境では英語 msgid がそのまま表示される。
 
 ## 未実施項目

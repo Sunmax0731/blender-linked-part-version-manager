@@ -59,7 +59,7 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 
 ## Blender Operations
 
-- Link 追加: `bpy.data.libraries.load(..., link=True)` を使う方針で設計する。
+- Link 追加: `bpy.data.libraries.load(..., link=True)` を使い、先に collection / object 名を inspection して dry-run report に残す。production collection を優先し、collection がない場合は production object を Link できる。
 - Link 状態検出: `bpy.data.libraries` と linked collection / object の library 情報を照合する。
 - Reload: linked library の reload API を使用し、失敗時は registry と result に原因を残す。
 - Auto Reload: 未保存変更は対象外とし、保存済み `.blend` の mtime が増えた場合だけ reload する。外部 pull / push は実行しない。
@@ -73,14 +73,16 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 | 操作 | 内容 | 破壊的変更 |
 | --- | --- | --- |
 | `Scan Current Links` | `bpy.data.libraries` と linked collection から registry 候補を作成する。 | なし |
-| `Add File Candidate` | Explorer / Blender file selector で選んだ `.blend` を local source の registry 候補として追加する。 | なし |
+| `Add File Candidate` | Explorer / Blender file selector で選んだ `.blend` を local source の registry 候補として追加し、linkable collection / object 候補を preview に出す。 | なし |
 | `Save Registry` | GUI 上の候補を `Registry Path` の JSON に保存し、既存 validator で検証する。 | registry JSON のみ |
-| `Preview Link` | 選択候補を現在の Blender tree へ Link する前の dry-run を表示する。 | なし |
-| `Link Candidate` | 選択候補の collection を現在の Blender tree へ明示的に Link する。 | 現在の Blender session のみ。自動保存しない。 |
+| `Preview Link` | 選択候補を現在の Blender tree へ Link する前の dry-run を表示し、available collection / object、recommended target、失敗理由を表示する。 | なし |
+| `Link Candidate` | 選択候補の collection または production object を現在の Blender tree へ明示的に Link する。 | 現在の Blender session のみ。自動保存しない。 |
 | `Preview Integrate` | 選択候補の linked datablock を local 化した場合の対象と warning を dry-run 表示する。 | なし |
 | `Integrate Link` | 選択候補の linked datablock を current file の local data に変える。 | 現在の Blender session のみ。確認ダイアログ必須。自動保存しない。 |
 
 GUI 生成候補の初期値は `owner=unassigned`、`source.type=local`、`source.root=.`、`versionRef=local`、`updatePolicy=manual` とする。
+
+`Link Candidate` は `linkedCollection` が実在する collection 名ならその collection を Link する。ファイル名から生成された既定値が collection と一致しない場合は、`ref` / `reference` / camera / light / floor 系を避けて production collection を推奨し、collection がない場合は production object を Link する。明示的に入力した collection 名が見つからない場合は、先頭 collection へ fallback せず失敗と候補一覧を report する。
 
 `Integrate Link` の confirmation が cancel された場合、operator の `execute` は走らず、`.blend` 本体、Link 状態、Part Registry は変更されない。実行後は `Report Path` に `operation=integrate-linked-library` の JSON report を保存し、ユーザーが保存前に結果と warning を確認できるようにする。
 
