@@ -11,6 +11,8 @@ from addon.blender_linked_part_version_manager.adapters.local import preview_loc
 from addon.blender_linked_part_version_manager import BLPVM_TRANSLATIONS, _auto_reload_target_paths
 from addon.blender_linked_part_version_manager.blender.link import (
     integrate_linked_libraries,
+    inspect_linkable_data_from_file,
+    link_collection_from_file,
     reload_linked_libraries,
     scan_linked_registry_parts,
 )
@@ -235,6 +237,102 @@ class RegistryPlanTests(unittest.TestCase):
         self.assertEqual(parts[0]["partTag"], "Hair")
         self.assertEqual(validate_registry(registry_from_parts(parts)), [])
 
+    def test_linkable_data_prefers_production_objects_over_ref_collection(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            blend_file = root / "base.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                root,
+                [],
+                available_collections=["ref"],
+                available_objects=["Armature", "base_body", "base_face", "Camera", "Light", "ref4_side2"],
+            )
+
+            result = inspect_linkable_data_from_file(bpy_module, "base.blend", base_dirs=[root])
+
+            self.assertEqual(result["failed"], [])
+            self.assertEqual(result["recommendedCollection"], None)
+            self.assertEqual(result["recommendedObjects"], ["Armature", "base_body", "base_face"])
+
+    def test_link_candidate_links_production_objects_when_default_collection_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            blend_file = root / "base.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                root,
+                [],
+                available_collections=["ref"],
+                available_objects=["Armature", "base_body", "base_face", "Camera", "Light", "ref4_side2"],
+            )
+
+            result = link_collection_from_file(
+                bpy_module,
+                "base.blend",
+                "base",
+                dry_run=False,
+                base_dirs=[root],
+            )
+
+            self.assertEqual(result["failed"], [])
+            self.assertEqual(result["linkMode"], "objects")
+            self.assertEqual(result["linkedCollection"], "base")
+            self.assertEqual(result["linkedObjects"], ["Armature", "base_body", "base_face"])
+            target = bpy_module.context.collection.children[0]
+            self.assertEqual(target.name, "base")
+            self.assertEqual([obj.name for obj in target.objects], ["Armature", "base_body", "base_face"])
+
+    def test_link_candidate_does_not_fallback_to_first_ref_collection_for_missing_request(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            blend_file = root / "base.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                root,
+                [],
+                available_collections=["ref"],
+                available_objects=["Armature", "base_body"],
+            )
+
+            result = link_collection_from_file(
+                bpy_module,
+                "base.blend",
+                "not_in_file",
+                dry_run=False,
+                base_dirs=[root],
+            )
+
+            self.assertEqual(result["linkedCollection"], None)
+            self.assertEqual(result["linkedObjects"], [])
+            self.assertTrue(result["failed"])
+            self.assertEqual(len(bpy_module.context.collection.children), 0)
+
+    def test_link_candidate_links_requested_collection(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            blend_file = root / "body.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                root,
+                [],
+                available_collections=["ref", "CHR_Body_Base"],
+                available_objects=["Camera", "Light"],
+            )
+
+            result = link_collection_from_file(
+                bpy_module,
+                "body.blend",
+                "CHR_Body_Base",
+                dry_run=False,
+                base_dirs=[root],
+            )
+
+            self.assertEqual(result["failed"], [])
+            self.assertEqual(result["linkMode"], "collection")
+            self.assertEqual(result["linkedCollection"], "CHR_Body_Base")
+            self.assertEqual([child.name for child in bpy_module.context.collection.children], ["CHR_Body_Base"])
+
     def test_integrate_linked_libraries_dry_run_reports_target_without_localizing(self) -> None:
         root = ROOT
         bpy_module = _FakeBpy(
@@ -287,24 +385,129 @@ class _FakeLibrary:
 
 
 class _FakeData:
-    def __init__(self, filepaths: list[str], collections: list[tuple[str, int]] | None = None) -> None:
+    def __init__(
+        self,
+        filepaths: list[str],
+        collections: list[tuple[str, int]] | None = None,
+        available_collections: list[str] | None = None,
+        available_objects: list[str] | None = None,
+    ) -> None:
         self.filepath = ""
-        self.libraries = [_FakeLibrary(filepath) for filepath in filepaths]
-        self.collections = [
+        self.libraries = _FakeLibraries(
+            [_FakeLibrary(filepath) for filepath in filepaths],
+            self,
+            available_collections=available_collections,
+            available_objects=available_objects,
+        )
+        self.collections = _FakeCollectionContainer([
             _FakeCollection(name, self.libraries[library_index])
             for name, library_index in collections or []
+        ])
+        self.objects = _FakeObjectContainer()
+
+
+class _FakeLibraries(list):
+    def __init__(
+        self,
+        libraries: list[_FakeLibrary],
+        data: _FakeData,
+        *,
+        available_collections: list[str] | None = None,
+        available_objects: list[str] | None = None,
+    ) -> None:
+        super().__init__(libraries)
+        self._data = data
+        self._available_collections = available_collections or []
+        self._available_objects = available_objects or []
+
+    def load(self, filepath: str, link: bool = True):
+        return _FakeLibraryLoadContext(
+            self._data,
+            filepath,
+            self._available_collections,
+            self._available_objects,
+        )
+
+
+class _FakeLibraryLoadContext:
+    def __init__(
+        self,
+        data: _FakeData,
+        filepath: str,
+        available_collections: list[str],
+        available_objects: list[str],
+    ) -> None:
+        self.data = data
+        self.library = _FakeLibrary(filepath)
+        self.available_collections = available_collections
+        self.available_objects = available_objects
+        self.data_to = _FakeDataTo()
+
+    def __enter__(self):
+        data_from = _FakeDataFrom(self.available_collections, self.available_objects)
+        return data_from, self.data_to
+
+    def __exit__(self, exc_type, exc, tb) -> bool:
+        if exc_type is not None:
+            return False
+        self.data.libraries.append(self.library)
+        self.data_to.collections = [
+            _FakeCollection(name, self.library)
+            for name in self.data_to.collections
         ]
+        self.data.collections.extend(self.data_to.collections)
+        self.data_to.objects = [
+            _FakeObject(name, self.library)
+            for name in self.data_to.objects
+        ]
+        self.data.objects.extend(self.data_to.objects)
+        return False
+
+
+class _FakeDataFrom:
+    def __init__(self, collections: list[str], objects: list[str]) -> None:
+        self.collections = collections
+        self.objects = objects
+
+
+class _FakeDataTo:
+    def __init__(self) -> None:
+        self.collections: list[str | _FakeCollection] = []
+        self.objects: list[str | _FakeObject] = []
 
 
 class _FakeCollection:
-    def __init__(self, name: str, library: _FakeLibrary) -> None:
+    def __init__(self, name: str, library: _FakeLibrary | None = None) -> None:
         self.name = name
         self.library = library
         self.make_local_count = 0
+        self.children = _FakeCollectionContainer()
+        self.objects = _FakeObjectContainer()
 
     def make_local(self) -> None:
         self.make_local_count += 1
         self.library = None
+
+
+class _FakeObject:
+    def __init__(self, name: str, library: _FakeLibrary | None = None) -> None:
+        self.name = name
+        self.library = library
+
+
+class _FakeCollectionContainer(list):
+    def link(self, collection: _FakeCollection) -> None:
+        self.append(collection)
+
+    def new(self, name: str) -> _FakeCollection:
+        collection = _FakeCollection(name)
+        self.append(collection)
+        return collection
+
+
+class _FakeObjectContainer(list):
+    def link(self, obj: _FakeObject) -> None:
+        self.append(obj)
 
 
 class _FakePath:
@@ -320,9 +523,27 @@ class _FakePath:
 
 
 class _FakeBpy:
-    def __init__(self, blend_dir: Path, filepaths: list[str], collections: list[tuple[str, int]] | None = None) -> None:
-        self.data = _FakeData(filepaths, collections=collections)
+    def __init__(
+        self,
+        blend_dir: Path,
+        filepaths: list[str],
+        collections: list[tuple[str, int]] | None = None,
+        available_collections: list[str] | None = None,
+        available_objects: list[str] | None = None,
+    ) -> None:
+        self.data = _FakeData(
+            filepaths,
+            collections=collections,
+            available_collections=available_collections,
+            available_objects=available_objects,
+        )
         self.path = _FakePath(blend_dir)
+        self.context = _FakeContext()
+
+
+class _FakeContext:
+    def __init__(self) -> None:
+        self.collection = _FakeCollection("Scene Collection")
 
 
 if __name__ == "__main__":

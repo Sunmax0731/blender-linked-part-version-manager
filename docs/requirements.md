@@ -34,7 +34,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - R11: Windows companion launcher は `%APPDATA%\BlenderLinkedPartVersionManager\settings.json` に設定を保存し、認証情報や `.blend` 本体を保存しない。
 - R12: alpha release では local executable / installer dry-run の platform runtime gate を必須にし、Blender Link reload 実機確認はリリース後の手動確認として追跡する。
 - R13: Blender GUI から現在の linked library / collection を scan し、Part Registry 候補を編集して保存できる。
-- R14: Blender GUI から Explorer / Blender file selector で部位 `.blend` を選び、dry-run 確認後の明示操作で現在の Blender tree へ Link できる。
+- R14: Blender GUI から Explorer / Blender file selector で部位 `.blend` を選び、dry-run 確認後の明示操作で現在の Blender tree へ Link できる。Link 対象は `.blend` 内の production collection を優先し、collection がない場合は production object を対象にできる。
 - R15: Blender の表示言語が日本語の場合、アドオンのパネル、ボタン、operator 名、主要メッセージを日本語で表示し、日本語以外の環境では既存の英語表示を維持する。
 - R16: Blender GUI から選択中の linked `.blend` を現在の Blender file へ統合する前に、対象ファイル、出力先、不可逆性を確認し、結果と warning を report として確認できる。
 
@@ -45,6 +45,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - Windows パス、相対パス、リポジトリ内パスを混在させず、registry では canonical path と表示用 path を分ける。
 - Link reload の前に保存状態と更新対象を表示し、ユーザーが破壊的操作を避けられるようにする。
 - GUI からの Link 追加は現在の Blender session に限定し、`.blend` 本体を自動保存しない。
+- GUI からの Link 追加は `ref` / `reference` / camera / light / floor 系だけを先頭 fallback で Link せず、候補一覧と推奨対象を dry-run report に残す。
 - linked file 統合は linked datablock を local data に変える操作であるため、confirmation cancel 時は `.blend` 本体、Link 状態、Part Registry を変更しない。
 - alpha 公開前の QCDS は Windows platform runtime gate と自動テストを含め、Blender 実機確認の未実施を明記する。
 

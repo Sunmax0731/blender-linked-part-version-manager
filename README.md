@@ -8,7 +8,7 @@ Blender Linked Part Version Manager は、キャラクターや複合モデル�
 
 - 現在の Blender Link から Part Registry を生成する
 - GUI で partId、部位タグ、担当者、リンク先 collection、source、versionRef、updatePolicy を編集する
-- `.blend` ファイルを選んで Link 候補として追加し、dry-run 後に明示操作で Blender tree に Link する
+- `.blend` ファイルを選んで Link 候補として追加し、ファイル内の collection / object 候補を確認してから Blender tree に Link する
 - registry の不備、missing-link、broken-link、local-dirty、conflict-risk を確認する
 - 更新前に sync preview を作り、安全な linked library だけ reload する
 - 保存済み linked `.blend` の変更を監視し、安全な対象だけ Auto Reload する
@@ -41,7 +41,7 @@ Blender Linked Part Version Manager は、キャラクターや複合モデル�
 
 既存の統合 `.blend` に Link が入っている場合は、`Linked Parts` パネルで `Scan Current Links` を実行します。現在の linked library / collection から Part Registry 候補が作られます。
 
-新しい部位ファイルを追加したい場合は、`Add File Candidate` で `.blend` を選びます。候補は安全な初期値で追加されます。
+新しい部位ファイルを追加したい場合は、`Add File Candidate` で `.blend` を選びます。候補は `.blend` 内の collection / object 名を確認し、`ref` や camera / light だけを暗黙選択しない安全な初期値で追加されます。
 
 - `owner=unassigned`
 - `source.type=local`
@@ -75,7 +75,7 @@ Blender Linked Part Version Manager は、キャラクターや複合モデル�
 
 ### 5. Link / Reload を実行する
 
-新しい候補を Link する場合は、先に `Preview Link` で dry-run を確認し、問題がなければ `Link Candidate` を実行します。
+新しい候補を Link する場合は、先に `Preview Link` で dry-run を確認し、問題がなければ `Link Candidate` を実行します。`linkedCollection` が `.blend` 内に存在しない場合でも、ファイル名から自動生成された既定値なら production collection を推奨し、collection がない場合は `Armature` や mesh などの production object を Link 対象にします。明示的に入力した collection 名が存在しない場合は、先頭 collection へ勝手に fallback せず失敗理由と候補一覧を表示します。
 
 既存の linked library を更新する場合は、先に `Preview Reload` を確認し、問題がなければ `Reload Safe Links` を実行します。現在の `.blend` は自動保存されないため、結果を確認してから手動で保存してください。
 

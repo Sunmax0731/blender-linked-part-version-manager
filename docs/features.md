@@ -46,7 +46,7 @@ Part Registry は、統合 `.blend` が参照する部位別 `.blend` の一覧�
 
 ## Add File Candidate
 
-`Add File Candidate` は、Explorer / Blender file selector で選んだ `.blend` を registry 候補に追加します。初期値は安全側に寄せています。
+`Add File Candidate` は、Explorer / Blender file selector で選んだ `.blend` を registry 候補に追加します。追加時に `.blend` 内の collection / object 名を inspection し、production collection を優先して `linkedCollection` に入れます。collection が `ref` など参照用しかない場合は、`Armature` や mesh 名など production object を Link 候補として preview に出します。
 
 初期値:
 
@@ -61,14 +61,17 @@ Part Registry は、統合 `.blend` が参照する部位別 `.blend` の一覧�
 - 新しい部位ファイルを registry に追加する
 - まだ Blender tree に Link していない `.blend` を候補化する
 - Link する前に collection 名や担当者を確認する
+- `ref`、camera、light、floor だけが誤って Link される状況を dry-run で避ける
 
 ## Preview Link / Link Candidate
 
-`Preview Link` は、選択中の候補を Link する前の dry-run です。`Link Candidate` は、選択中の `.blend` collection を現在の Blender tree に明示的に Link します。
+`Preview Link` は、選択中の候補を Link する前の dry-run です。available collection / object、recommended target、link mode、失敗理由を JSON preview に出します。`Link Candidate` は、選択中の `.blend` collection または production object を現在の Blender tree に明示的に Linkします。
 
 何のために使うか:
 
 - Link 前に対象 path と collection を確認する
+- collection が存在しない場合に先頭 collection へ勝手に fallback しない
+- source `.blend` の目的データが scene 直下 object の場合でも、参照用 `ref` ではなく production object を Link する
 - 誤った `.blend` を Link するリスクを下げる
 - Link 実行後も現在の `.blend` を自動保存しないことで、ユーザーが結果を見てから保存判断できるようにする
 

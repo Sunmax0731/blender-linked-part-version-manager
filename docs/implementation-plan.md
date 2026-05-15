@@ -27,6 +27,7 @@
 - [x] 保存済み linked `.blend` の Auto Reload を実装する。
 - [x] Blender GUI で Part Registry 候補を scan / edit / save できる導線を実装する。
 - [x] Explorer / Blender file selector から `.blend` を候補追加し、明示操作で Blender tree へ Link できる導線を実装する。
+- [x] Link 候補の collection / object inspection を追加し、`ref` への暗黙 fallback を防ぐ。
 - [x] Blender 表示言語が日本語の場合にパネル、ボタン、主要メッセージが日本語で表示される `ja_JP` UI 翻訳を実装する。
 - [x] 選択中の linked `.blend` を preview / confirmation 後に current file の local data へ統合する operator と report を実装する。
 - [x] Windows companion launcher、settings 保存、installer dry-run を実装する。
@@ -39,6 +40,7 @@
 - [x] 指定 Blender 実体パスで Blender CLI smoke と add-on import を確認する。
 - [x] Blender runtime gate で Integration File が Part File を Link し、reload できることを確認する。
 - [x] linked file integration の dry-run と local 化対象選別を Python unit test に追加する。
+- [x] Link Candidate が production collection / object を選び、missing collection 時に先頭 `ref` へ fallback しないことを Python unit test に追加する。
 - [x] 文字化け、JSON schema、docs completeness を `npm test` に含める。
 
 ## Phase 06 Release

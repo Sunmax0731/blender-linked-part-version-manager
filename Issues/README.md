@@ -36,3 +36,4 @@ This folder stores local Markdown issues linked from `TODO.md`.
 - [x] [0015](0015-user-facing-readme-features.md) GitHub トップ README を利用者向けに整理し、機能一覧ドキュメントを追加する
 - [x] [0016](0016-blender-ui.md) Blender表示言語に連動した日本語UI対応
 - [x] [0017](0017-issue.md) リンクファイル統合機能を追加する
+- [x] [0018](0018-link-candidate-ref-only.md) Link Candidate が `ref` collection だけをリンクする不具合を修正する
