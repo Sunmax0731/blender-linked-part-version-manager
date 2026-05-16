@@ -56,3 +56,4 @@ No current TODO. New uncategorized work should be moved into one of the phase se
 - [x] [P2] [Phase:05-test] リンクファイル統合機能を追加する [Issue](Issues/0017-issue.md) [QCDS:Quality,Cost,Satisfaction]
 - [x] [P1] [Phase:04-implementation] Link Candidate が `ref` collection だけをリンクする不具合を修正する [Issue](Issues/0018-link-candidate-ref-only.md) [QCDS:Quality,Delivery,Satisfaction]
 - [x] [P2] [Phase:06-release] 現行バージョンのリリース [Issue](Issues/0019-issue.md) [QCDS:Quality,Delivery,Satisfaction]
+- [x] [P2] [Phase:03-design] Character.blend統合構成の関係表作成 [Issue](Issues/0020-character-blend.md) [QCDS:Quality,Cost,Satisfaction]

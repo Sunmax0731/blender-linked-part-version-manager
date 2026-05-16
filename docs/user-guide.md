@@ -2,6 +2,8 @@
 
 各機能の詳しい説明は [機能一覧](features.md) を参照してください。
 
+`Character.blend` と素体、頭 / 表情、髪、服、アクセサリの参照方向を先に整理したい場合は [Character.blend 統合構成の関係表](character-blend-relationship.md) を参照してください。
+
 ## 基本フロー
 
 1. 統合 `.blend` と部位別 `.blend` の対応を registry JSON に記録する。
@@ -12,6 +14,12 @@
 6. `local-dirty`、`conflict-risk`、`broken-link` がある場合は自動更新せず、担当者に確認する。
 7. 問題がない部位だけ `Reload Safe Links` の dry-run を確認し、手動判断で reload する。
 8. Link 参照を 1 つの `.blend` にまとめる必要がある場合だけ、対象候補を選び `Preview Integrate` と `Integrate Link` の確認ダイアログを通す。
+
+## Character.blend 統合構成
+
+`Character.blend` は素体、頭 / 表情、髪、服、アクセサリを Link して統合表示する確認用ファイルとして扱う。頭 / 表情、髪、服、アクセサリの各 Part File は素体用 `.blend` を参照しながら個別編集し、最終表示は `Character.blend` 側で reload して確認する。
+
+アドオンの Link 管理対象は `Character.blend` が直接参照する Part File である。素体用 `.blend` が各 Part File から参照される関係は制作上の依存として関係表と検証レポートで確認し、外部 sync や `.blend` 自動保存とは混ぜない。
 
 ## Registry
 

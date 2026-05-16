@@ -15,6 +15,7 @@ Blender Linked Part Version Manager は、キャラクターや複合モデル�
 - 選択した linked `.blend` を確認ダイアログ後に現在の Blender ファイルへ統合する
 - Blender の表示言語が日本語の場合、パネル、ボタン、主要メッセージを日本語で表示する
 - Windows companion で registry validation、status preview、settings 保存、installer dry-run を実行する
+- `Character.blend` と素体、頭 / 表情、髪、服、アクセサリの参照関係を関係表として確認する
 
 詳しい機能は [機能一覧](docs/features.md) を参照してください。
 
@@ -113,6 +114,7 @@ windows\install-alpha.cmd --dry-run
 ## 追加ドキュメント
 
 - [機能一覧](docs/features.md)
+- [Character.blend 統合構成の関係表](docs/character-blend-relationship.md)
 - [インストールガイド](docs/installation-guide.md)
 - [ユーザーガイド](docs/user-guide.md)
 - [手動テスト手順](docs/manual-test.md)

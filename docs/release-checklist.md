@@ -24,6 +24,7 @@
 - [x] Link Candidate が source `.blend` の collection / object 候補を inspection し、先頭 `ref` collection へ暗黙 fallback しない。
 - [x] Blender 表示言語が日本語の場合の UI 翻訳が実装され、Blender CLI で `pgettext_iface` 解決を確認している。
 - [x] linked file 統合の preview、confirmation、report、local 化 helper が実装され、unit test で検証されている。
+- [x] `Character.blend` と素体、頭 / 表情、髪、服、アクセサリの参照関係をユーザー向け関係表として整理している。
 - [x] `docs/qcds-evaluation.md` の全観点が `A-` 以上になっている。
 - [x] `docs/installation-guide.md` と `docs/user-guide.md` を追加した。
 - [x] GitHub prerelease と docs ZIP を作成した。

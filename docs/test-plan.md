@@ -19,6 +19,7 @@
 | Link candidate target selection | Blender add-on / blender.link | `Add File Candidate` / `Preview Link` が available collection / object を report し、`ref` への先頭 fallback を避けて production collection / object を選ぶ。 |
 | Japanese UI localization | Blender add-on / UI translations | `ja_JP` 翻訳テーブルが主要 panel、operator、button、property、message を持ち、Blender の `pgettext_iface` で日本語へ解決できる。 |
 | Link integration helper | Blender add-on / blender.link | dry-run は対象 datablock を報告するだけで local 化せず、実行時は選択 target の linked datablock だけを local 化する。 |
+| Character relationship docs | docs / user guide | `Character.blend`、素体、頭 / 表情、髪、服、アクセサリの役割、参照方向、registry / report 上の扱いがユーザー向けに説明されている。 |
 | Release artifact check | dist / docs | add-on ZIP、docs ZIP、test summary、runtime gate、QCDS metrics が存在する。 |
 
 ## Blender Runtime Gate
@@ -28,18 +29,19 @@
 1. `blender-linked-part-version-manager-fixtures.zip` を展開する。
 2. Integration File `integration/character_integration.blend` を開く。
 3. Part Registry を生成する。
-4. `Scan Current Links` で linked library / collection から editable 候補が生成されることを確認する。
-5. `Add File Candidate` で Explorer / Blender file selector から `.blend` を候補追加し、`Preview Link` が dry-run 結果を出すことを確認する。
-6. `Save Registry` 後に `Validate Registry` と `Build Sync Preview` が通ることを確認する。
-7. Part File を更新した fixture を用意する。
-8. `Pull & Reload` の dry-run を実行する。
-9. 確認後に reload し、Viewport で更新が反映されることを確認する。
-10. `Start Auto Reload` 後に Hair source `.blend` を保存し、interval 内に Viewport へ反映されることを確認する。
-11. `Preview Integrate` で対象 linked file と report が表示されることを確認する。
-12. `Integrate Link` の確認ダイアログを cancel し、`.blend`、Link 状態、Part Registry が変わらないことを確認する。
-13. コピーした fixture で `Integrate Link` を確認あり実行し、linked datablock が local data になり、report に warning / result が残ることを確認する。
-14. Blender の表示言語を日本語に変更し、`Linked Parts` タブ、`Part Registry` パネル、主要ボタン、Auto Reload status、operator report が日本語表示になることを確認する。
-15. `dist/runtime-gate.json` に Blender version、対象ファイル、結果を保存する。
+4. `docs/character-blend-relationship.md` と fixture の Integration File / Part File / registry の対応を確認する。
+5. `Scan Current Links` で linked library / collection から editable 候補が生成されることを確認する。
+6. `Add File Candidate` で Explorer / Blender file selector から `.blend` を候補追加し、`Preview Link` が dry-run 結果を出すことを確認する。
+7. `Save Registry` 後に `Validate Registry` と `Build Sync Preview` が通ることを確認する。
+8. Part File を更新した fixture を用意する。
+9. `Pull & Reload` の dry-run を実行する。
+10. 確認後に reload し、Viewport で更新が反映されることを確認する。
+11. `Start Auto Reload` 後に Hair source `.blend` を保存し、interval 内に Viewport へ反映されることを確認する。
+12. `Preview Integrate` で対象 linked file と report が表示されることを確認する。
+13. `Integrate Link` の確認ダイアログを cancel し、`.blend`、Link 状態、Part Registry が変わらないことを確認する。
+14. コピーした fixture で `Integrate Link` を確認あり実行し、linked datablock が local data になり、report に warning / result が残ることを確認する。
+15. Blender の表示言語を日本語に変更し、`Linked Parts` タブ、`Part Registry` パネル、主要ボタン、Auto Reload status、operator report が日本語表示になることを確認する。
+16. `dist/runtime-gate.json` に Blender version、対象ファイル、結果を保存する。
 
 ## Manual Tests
 

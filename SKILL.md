@@ -7,7 +7,7 @@ Use this repository for Blender Link based part-version management work.
 1. Read `README.md`.
 2. Read `AGENTS.md`.
 3. Read this `SKILL.md`.
-4. Read `docs/requirements.md`, `docs/specification.md`, `docs/design.md`, and `docs/architecture.md`.
+4. Read `docs/requirements.md`, `docs/specification.md`, `docs/design.md`, `docs/architecture.md`, and `docs/character-blend-relationship.md`.
 5. For public-facing documentation changes, keep `README.md`, `docs/features.md`, `docs/installation-guide.md`, and `docs/user-guide.md` consistent.
 6. Check `TODO.md` and the linked file under `Issues/`.
 7. Run `npm test` after documentation, scaffold, runtime-gate, or release changes.
@@ -23,6 +23,7 @@ Use this repository for Blender Link based part-version management work.
 - File-selector link candidates must inspect linkable collection / object names before linking. Do not silently fall back to the first collection; avoid reference-only collections such as `ref`, and report available candidates when the requested collection is missing.
 - Blender UI strings must keep the English default labels stable and add `ja_JP` entries in `BLPVM_TRANSLATIONS`; dynamic reports should go through the local `pgettext_iface` helper.
 - Windows companion must stay outside `.blend` mutation. It may validate registry data, show status, launch installer dry-run, and save settings under `%APPDATA%`.
+- Character production topology is documented in `docs/character-blend-relationship.md`; keep `Character.blend` integration links, base-body references, Part Registry rows, and validation reports separate instead of adding hidden transitive Link behavior.
 - Alpha release validation must include the Windows local executable / installer launch gate and, when available, a non-mutating Blender CLI smoke from `BLENDER_EXE` or `D:\SteamLibrary\steamapps\common\Blender\blender.exe`. Blender Link reload remains a required manual test until an integration `.blend` and part `.blend` are confirmed by the user.
 
 ## Validation

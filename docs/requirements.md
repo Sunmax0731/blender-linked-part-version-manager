@@ -37,6 +37,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - R14: Blender GUI から Explorer / Blender file selector で部位 `.blend` を選び、dry-run 確認後の明示操作で現在の Blender tree へ Link できる。Link 対象は `.blend` 内の production collection を優先し、collection がない場合は production object を対象にできる。
 - R15: Blender の表示言語が日本語の場合、アドオンのパネル、ボタン、operator 名、主要メッセージを日本語で表示し、日本語以外の環境では既存の英語表示を維持する。
 - R16: Blender GUI から選択中の linked `.blend` を現在の Blender file へ統合する前に、対象ファイル、出力先、不可逆性を確認し、結果と warning を report として確認できる。
+- R17: `Character.blend` を統合表示用 file として使うユーザー向けに、素体、頭 / 表情、髪、服、アクセサリの参照関係、編集責務、Link 管理対象、検証レポート上の扱いを関係表で確認できる。
 
 ## Non Functional Requirements
 

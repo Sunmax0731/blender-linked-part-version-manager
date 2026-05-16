@@ -17,6 +17,7 @@
 - Blender パネルの情報設計を固める。
 - dry-run、risk 表示、disabled action のルールを定義する。
 - scheduled pull を MVP に含めるか、post-MVP に送るかを決める。
+- [x] `Character.blend` と素体、頭 / 表情、髪、服、アクセサリの参照関係と編集責務を関係表として整理する。
 
 ## Phase 04 Implementation
 

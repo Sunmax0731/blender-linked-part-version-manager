@@ -13,6 +13,17 @@ Part Registry は、統合 `.blend` が参照する部位別 `.blend` の一覧�
 - 更新前 preview、reload、Auto Reload の対象を決める
 - broken-link や missing-link を再現可能な JSON として残す
 
+## Character.blend 統合構成の関係表
+
+`Character.blend` を統合表示用ファイルとして使う場合の、素体、頭 / 表情、髪、服、アクセサリの参照方向と編集責務を [Character.blend 統合構成の関係表](character-blend-relationship.md) にまとめています。
+
+何のために使うか:
+
+- `Character.blend` が表示する部位と、各 Part File で編集する対象を分ける
+- 素体用 `.blend` が頭 / 表情、髪、服、アクセサリから参照される関係を確認する
+- Part Registry に入れる Link 管理対象と、検証レポートで確認する依存関係を混同しない
+- ユーザーへ部位別共同制作のユースケースを説明する
+
 ## Scan Current Links
 
 `Scan Current Links` は、現在開いている Blender ファイルの `bpy.data.libraries` と linked collection を読み取り、Part Registry 候補を作ります。

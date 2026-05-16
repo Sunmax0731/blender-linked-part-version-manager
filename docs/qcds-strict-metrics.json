@@ -49,6 +49,11 @@
       "evidence": "tests/test_registry_plan.py",
       "criteria": "Preview Integrate reports target linked datablocks without mutation; Integrate Link requires confirmation, makes selected linked datablocks local, writes a report, and does not auto-save .blend"
     },
+    "characterBlendRelationship": {
+      "status": "documented",
+      "evidence": "docs/character-blend-relationship.md",
+      "criteria": "Character.blend, base body, head/face, hair, clothes, and accessories roles, reference directions, registry rows, and validation report responsibilities are separated for user-facing workflow guidance"
+    },
     "releasePublication": {
       "status": "verified",
       "evidence": "Issues/0019-issue.md",

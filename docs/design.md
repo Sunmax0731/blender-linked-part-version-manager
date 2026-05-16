@@ -29,6 +29,10 @@
 - Part Registry の編集欄は `partId`、`partTag`、`displayName`、`blendPath`、`linkedCollection`、`owner`、`source`、`versionRef`、`updatePolicy` を 1 件ずつ確認できる密度にする。
 - UI 文言は Blender の表示言語に従う。日本語環境では操作名と主要メッセージを日本語にし、schema field 名や JSON evidence のキーは英語のまま維持する。
 
+## Character.blend Relationship Table
+
+`Character.blend` を統合表示用 file とする運用では、素体、頭 / 表情、髪、服、アクセサリの参照方向と編集責務を [Character.blend 統合構成の関係表](character-blend-relationship.md) に分離して示す。UI は `Character.blend` が直接 Link している部位を操作対象にし、素体が各 Part File から参照される依存は preview / report の確認事項として扱う。
+
 ## Default Tags
 
 | Tag | 用途 |

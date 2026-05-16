@@ -86,6 +86,10 @@ GUI 生成候補の初期値は `owner=unassigned`、`source.type=local`、`sour
 
 `Integrate Link` の confirmation が cancel された場合、operator の `execute` は走らず、`.blend` 本体、Link 状態、Part Registry は変更されない。実行後は `Report Path` に `operation=integrate-linked-library` の JSON report を保存し、ユーザーが保存前に結果と warning を確認できるようにする。
 
+## Character.blend Relationship Use Case
+
+`Character.blend` を統合表示用 file とする具体的な参照関係は [Character.blend 統合構成の関係表](character-blend-relationship.md) を正本にする。MVP では `Character.blend` が直接 Link する素体、頭 / 表情、髪、服、アクセサリを Part Registry の行として管理し、素体が各 Part File から参照される依存は validation / report と運用手順で確認する。素体依存を暗黙の transitive reload として自動処理しない。
+
 ## UI Localization
 
 Blender UI は英語を既定表示とし、Blender の表示言語が日本語の場合だけ `ja_JP` 翻訳を適用する。

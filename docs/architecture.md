@@ -28,6 +28,10 @@ MVP は Option A を採用する。処理が重くなる場合は adapter 実行
 | `windows` | Blender 外の registry 検証、設定保存、installer dry-run |
 | `scripts` | docs、unit test、runtime gate、release package 検証 |
 
+## Character Production Topology
+
+`Character.blend` の統合構成は [Character.blend 統合構成の関係表](character-blend-relationship.md) を正本にする。`blender.link` は `Character.blend` が直接参照する linked library / collection / object を扱い、`core.registry` は部位ごとの管理行を保持し、`report` は素体参照のような部位間依存を確認事項として出す。素体依存を hidden transitive reload として自動処理しないことで、Link 管理、部位レジストリ、検証レポートの責務を分ける。
+
 ## Data Flow
 
 ```mermaid
