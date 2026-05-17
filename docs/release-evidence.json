@@ -17,10 +17,11 @@
   "releasePublication": {
     "status": "verified",
     "trackingIssue": "Issues/0019-issue.md",
-    "verifiedAt": "2026-05-16",
+    "verifiedAt": "2026-05-17",
     "releaseTag": "v0.1.0-alpha.3",
     "implementationVersion": "0.1.2",
     "releaseUrl": "https://github.com/Sunmax0731/blender-linked-part-version-manager/releases/tag/v0.1.0-alpha.3",
+    "verificationNote": "v0.1.0-alpha.3 tag and prerelease assets were refreshed after closing Issues/0021-link-3d.md.",
     "validationCommand": "npm test",
     "requiredAssets": [
       "blender-linked-part-version-manager.zip",
