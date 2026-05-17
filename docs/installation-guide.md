@@ -25,7 +25,7 @@ GitHub Release `v0.1.0-alpha.3` から次を取得する。
 5. View3D Sidebar の `Linked Parts` タブを開く。
 6. `Registry Path` に registry JSON を指定し、`Validate Registry` と `Build Sync Preview` を実行する。
 7. 既存の Link から registry を作る場合は `Scan Current Links`、内容確認後に `Save Registry` を実行する。
-8. 新しい部位 `.blend` を追加する場合は `Add File Candidate` で選び、preview JSON の available collection / object と recommended target を確認する。`Preview Link` 後に `Link Candidate` を実行する。現在の `.blend` は自動保存されないため、結果を確認してから手動で保存する。
+8. 新しい部位 `.blend` を追加する場合は `Add File Candidate` で選び、preview JSON の available collection / object、availableObjectDetails、recommended target を確認する。Reference 用画像やライトは明示 object 名でだけ Link する。`Preview Link` 後に `Link Candidate` を実行する。現在の `.blend` は自動保存されないため、結果を確認してから手動で保存する。
 9. linked file を current file に統合する場合は `Preview Integrate` で対象を確認し、`Integrate Link` の確認ダイアログを通す。実行後も現在の `.blend` は自動保存されない。
 
 Blender の表示言語が日本語で Interface 翻訳が有効な場合、上記のタブ、ボタン、主要メッセージは日本語で表示される。

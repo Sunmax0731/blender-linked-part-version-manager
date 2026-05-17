@@ -22,6 +22,7 @@
 - [x] Blender GUI で Part Registry 候補を scan / edit / save できる。
 - [x] Explorer / Blender file selector から `.blend` を Link 候補へ追加し、明示操作で Blender tree に反映できる。
 - [x] Link Candidate が source `.blend` の collection / object 候補を inspection し、先頭 `ref` collection へ暗黙 fallback しない。
+- [x] Link Candidate が Reference 用画像、ライト、カメラを型付き明示候補として report し、floor / helper 系を除外理由付きで扱う。
 - [x] Blender 表示言語が日本語の場合の UI 翻訳が実装され、Blender CLI で `pgettext_iface` 解決を確認している。
 - [x] linked file 統合の preview、confirmation、report、local 化 helper が実装され、unit test で検証されている。
 - [x] `Character.blend` と素体、頭 / 表情、髪、服、アクセサリの参照関係をユーザー向け関係表として整理している。

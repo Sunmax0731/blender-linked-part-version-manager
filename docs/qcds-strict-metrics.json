@@ -39,6 +39,11 @@
       "evidence": "tests/test_registry_plan.py",
       "criteria": "Link Candidate inspects available collection/object names, prefers production targets, and does not fall back to first ref collection when requested collection is missing"
     },
+    "linkTargetTypeExpansion": {
+      "status": "implemented-unit-tested",
+      "evidence": "tests/test_registry_plan.py",
+      "criteria": "Reference image, light, and camera objects are reported as explicit typed candidates, floor/helper objects are excluded with reasons, and non-model objects are not selected implicitly"
+    },
     "japaneseUiLocalization": {
       "status": "implemented-unit-tested-cli-smoked",
       "evidence": "tests/test_registry_plan.py",

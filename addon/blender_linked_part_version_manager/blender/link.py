@@ -6,7 +6,8 @@ from typing import Any, Iterable
 from ..core.registry import build_registry_part_candidate
 
 REFERENCE_NAME_PREFIXES = ("ref", "reference")
-IGNORED_OBJECT_NAMES = {"camera", "floor", "light"}
+EXPLICIT_OBJECT_CATEGORIES = {"reference-image", "light", "camera"}
+AUTO_OBJECT_CATEGORIES = {"model", "rig", "generic-object"}
 PRODUCTION_NAME_HINTS = (
     "armature",
     "body",
@@ -95,8 +96,12 @@ def link_collection_from_file(
         "requestedCollection": collection_name,
         "availableCollections": [],
         "availableObjects": [],
+        "availableObjectDetails": [],
         "recommendedCollection": None,
         "recommendedObjects": [],
+        "recommendedObjectDetails": [],
+        "explicitObjectDetails": [],
+        "excludedObjectDetails": [],
         "linkMode": None,
         "linkedCollection": None,
         "linkedObjects": [],
@@ -105,7 +110,17 @@ def link_collection_from_file(
         "warnings": [],
     }
     inspection = inspect_linkable_data_from_file(bpy_module, resolved, base_dirs=base_dirs)
-    for key in ("availableCollections", "availableObjects", "recommendedCollection", "recommendedObjects", "warnings"):
+    for key in (
+        "availableCollections",
+        "availableObjects",
+        "availableObjectDetails",
+        "recommendedCollection",
+        "recommendedObjects",
+        "recommendedObjectDetails",
+        "explicitObjectDetails",
+        "excludedObjectDetails",
+        "warnings",
+    ):
         result[key] = inspection[key]
     if inspection["failed"]:
         result["failed"].extend(inspection["failed"])
@@ -116,6 +131,7 @@ def link_collection_from_file(
         resolved,
         inspection["availableCollections"],
         inspection["availableObjects"],
+        inspection["availableObjectDetails"],
     )
     if selection["failed"]:
         result["failed"].extend(selection["failed"])
@@ -178,8 +194,12 @@ def inspect_linkable_data_from_file(
         "filepath": resolved,
         "availableCollections": [],
         "availableObjects": [],
+        "availableObjectDetails": [],
         "recommendedCollection": None,
         "recommendedObjects": [],
+        "recommendedObjectDetails": [],
+        "explicitObjectDetails": [],
+        "excludedObjectDetails": [],
         "warnings": [],
         "failed": [],
     }
@@ -189,16 +209,41 @@ def inspect_linkable_data_from_file(
     try:
         with bpy_module.data.libraries.load(resolved, link=True) as (data_from, data_to):
             result["availableCollections"] = _name_list(getattr(data_from, "collections", []))
-            result["availableObjects"] = _name_list(getattr(data_from, "objects", []))
+            object_details = _object_candidate_details(getattr(data_from, "objects", []))
+            result["availableObjects"] = [detail["name"] for detail in object_details]
+            result["availableObjectDetails"] = object_details
     except Exception as exc:  # pragma: no cover - depends on Blender runtime
         result["failed"].append({"path": resolved, "error": str(exc)})
         return result
 
     result["recommendedCollection"] = _recommended_collection(result["availableCollections"])
-    result["recommendedObjects"] = _recommended_objects(result["availableObjects"])
+    result["recommendedObjectDetails"] = [
+        detail for detail in result["availableObjectDetails"] if detail["autoRecommended"]
+    ]
+    result["recommendedObjects"] = [detail["name"] for detail in result["recommendedObjectDetails"]]
+    result["explicitObjectDetails"] = [
+        detail
+        for detail in result["availableObjectDetails"]
+        if detail["supported"] and not detail["autoRecommended"]
+    ]
+    result["excludedObjectDetails"] = [
+        detail for detail in result["availableObjectDetails"] if not detail["supported"]
+    ]
     if result["availableCollections"] and not result["recommendedCollection"]:
         result["warnings"].append(
             "Only generic or reference-like collections were found; production objects will be preferred when possible."
+        )
+    if result["explicitObjectDetails"]:
+        result["warnings"].append(
+            "Non-model object candidates are available for explicit linking only: "
+            + _format_object_detail_list(result["explicitObjectDetails"])
+            + "."
+        )
+    if result["excludedObjectDetails"]:
+        result["warnings"].append(
+            "Unsupported helper object candidates were excluded: "
+            + _format_object_detail_list(result["excludedObjectDetails"])
+            + "."
         )
     if not result["availableCollections"] and not result["availableObjects"]:
         result["failed"].append({"path": resolved, "error": "No linkable collection or object found in .blend file."})
@@ -325,10 +370,23 @@ def _select_link_target(
     filepath: str,
     available_collections: list[str],
     available_objects: list[str],
+    available_object_details: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     requested = (requested_collection or "").strip()
     recommended_collection = _recommended_collection(available_collections)
-    recommended_objects = _recommended_objects(available_objects)
+    object_details = available_object_details or _object_candidate_details(available_objects)
+    object_details_by_name = {detail["name"]: detail for detail in object_details}
+    recommended_objects = _recommended_objects(object_details)
+    explicit_objects = [
+        detail["name"]
+        for detail in object_details
+        if detail["supported"] and not detail["autoRecommended"]
+    ]
+    excluded_objects = [
+        f"{detail['name']} ({detail['category']})"
+        for detail in object_details
+        if not detail["supported"]
+    ]
     fallback_name = Path(filepath).stem
     result: dict[str, Any] = {
         "mode": None,
@@ -343,6 +401,18 @@ def _select_link_target(
             result.update({"mode": "collection", "collection": requested, "targetCollection": requested})
             return result
         if requested in available_objects:
+            detail = object_details_by_name.get(requested, _object_candidate_detail(requested))
+            if not detail["supported"]:
+                result["failed"].append(
+                    {
+                        "path": filepath,
+                        "error": (
+                            f"Requested object '{requested}' is not supported for linking "
+                            f"({detail['category']}: {detail['reason']})."
+                        ),
+                    }
+                )
+                return result
             result.update({"mode": "objects", "objects": [requested], "targetCollection": requested})
             return result
         if _same_label(requested, fallback_name) and recommended_collection:
@@ -364,7 +434,9 @@ def _select_link_target(
                     f"Requested collection '{requested}' was not found. "
                     f"Available collections: {', '.join(available_collections) or '(none)'}. "
                     f"Recommended collection: {recommended_collection or '(none)'}. "
-                    f"Recommended objects: {', '.join(recommended_objects) or '(none)'}."
+                    f"Recommended objects: {', '.join(recommended_objects) or '(none)'}. "
+                    f"Explicit object candidates: {', '.join(explicit_objects) or '(none)'}. "
+                    f"Excluded objects: {', '.join(excluded_objects) or '(none)'}."
                 ),
             }
         )
@@ -388,7 +460,9 @@ def _select_link_target(
             "path": filepath,
             "error": (
                 "No production collection or object could be selected automatically. "
-                "Set linkedCollection explicitly or move the target model into a named collection."
+                "Set linkedCollection to an explicit supported object name, or move the target model into a named collection. "
+                f"Explicit object candidates: {', '.join(explicit_objects) or '(none)'}. "
+                f"Excluded objects: {', '.join(excluded_objects) or '(none)'}."
             ),
         }
     )
@@ -405,8 +479,9 @@ def _recommended_collection(collection_names: list[str]) -> str | None:
     return scored[0][2]
 
 
-def _recommended_objects(object_names: list[str]) -> list[str]:
-    return [name for name in object_names if _object_score(name) > 0]
+def _recommended_objects(object_values: list[Any]) -> list[str]:
+    details = object_values if _looks_like_object_details(object_values) else _object_candidate_details(object_values)
+    return [detail["name"] for detail in details if detail["autoRecommended"]]
 
 
 def _collection_score(name: str) -> int:
@@ -421,16 +496,93 @@ def _collection_score(name: str) -> int:
     return score
 
 
-def _object_score(name: str) -> int:
+def _object_candidate_details(values: Any) -> list[dict[str, Any]]:
+    return [
+        detail
+        for detail in (_object_candidate_detail(value) for value in values or [])
+        if detail["name"]
+    ]
+
+
+def _object_candidate_detail(value: Any) -> dict[str, Any]:
+    name = value if isinstance(value, str) else getattr(value, "name", "")
     normalized = _label_key(name)
-    if not normalized:
-        return -100
-    if normalized in IGNORED_OBJECT_NAMES or _is_reference_like_name(normalized):
-        return -100
-    score = 10
-    if any(hint in normalized for hint in PRODUCTION_NAME_HINTS):
-        score += 40
-    return score
+    explicit_type = "" if isinstance(value, str) else str(getattr(value, "type", "") or "")
+    empty_display_type = "" if isinstance(value, str) else str(getattr(value, "empty_display_type", "") or "")
+    blender_type = explicit_type.upper() or _infer_object_type(normalized)
+    category = _object_category(normalized, blender_type, empty_display_type.upper())
+    supported = category in AUTO_OBJECT_CATEGORIES or category in EXPLICIT_OBJECT_CATEGORIES
+    auto_recommended = supported and category in AUTO_OBJECT_CATEGORIES
+    return {
+        "name": name,
+        "type": blender_type,
+        "category": category,
+        "supported": supported,
+        "autoRecommended": auto_recommended,
+        "selection": "auto" if auto_recommended else "explicit" if supported else "excluded",
+        "reason": _object_candidate_reason(category),
+    }
+
+
+def _infer_object_type(normalized_name: str) -> str:
+    if not normalized_name:
+        return "UNKNOWN"
+    if "light" in normalized_name or normalized_name.startswith("lamp"):
+        return "LIGHT"
+    if "camera" in normalized_name or normalized_name in {"cam", "main_cam"}:
+        return "CAMERA"
+    if _is_reference_like_name(normalized_name) or "reference" in normalized_name or "image" in normalized_name:
+        return "EMPTY_IMAGE"
+    if "armature" in normalized_name or "rig" in normalized_name:
+        return "ARMATURE"
+    if any(hint in normalized_name for hint in PRODUCTION_NAME_HINTS):
+        return "MESH"
+    return "OBJECT"
+
+
+def _object_category(normalized_name: str, blender_type: str, empty_display_type: str) -> str:
+    if not normalized_name:
+        return "unsupported"
+    if "floor" in normalized_name:
+        return "floor-helper"
+    if blender_type == "LIGHT":
+        return "light"
+    if blender_type == "CAMERA":
+        return "camera"
+    if blender_type in {"EMPTY_IMAGE", "IMAGE"} or (
+        blender_type == "EMPTY" and empty_display_type == "IMAGE"
+    ) or _is_reference_like_name(normalized_name):
+        return "reference-image"
+    if blender_type == "ARMATURE" or "armature" in normalized_name or "rig" in normalized_name:
+        return "rig"
+    if blender_type in {"MESH", "CURVE", "SURFACE", "META", "FONT"}:
+        return "model"
+    if any(hint in normalized_name for hint in PRODUCTION_NAME_HINTS):
+        return "model"
+    if blender_type in {"OBJECT", "UNKNOWN"}:
+        return "generic-object"
+    return "unsupported"
+
+
+def _object_candidate_reason(category: str) -> str:
+    return {
+        "model": "production model object can be selected automatically",
+        "rig": "rig object can be selected automatically with model targets",
+        "generic-object": "generic object can be selected automatically when no stronger type is available",
+        "reference-image": "reference image object requires explicit user selection",
+        "light": "light object requires explicit user selection",
+        "camera": "camera object requires explicit user selection",
+        "floor-helper": "floor helper is not a safe link target",
+        "unsupported": "object type is not supported by the link target policy",
+    }.get(category, "object type is not supported by the link target policy")
+
+
+def _format_object_detail_list(details: list[dict[str, Any]]) -> str:
+    return ", ".join(f"{detail['name']} ({detail['type']}/{detail['category']})" for detail in details) or "(none)"
+
+
+def _looks_like_object_details(values: list[Any]) -> bool:
+    return bool(values) and all(isinstance(value, dict) and "name" in value for value in values)
 
 
 def _is_reference_like_name(normalized_name: str) -> bool:

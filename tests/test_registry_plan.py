@@ -283,6 +283,119 @@ class RegistryPlanTests(unittest.TestCase):
             self.assertEqual(target.name, "base")
             self.assertEqual([obj.name for obj in target.objects], ["Armature", "base_body", "base_face"])
 
+    def test_linkable_data_reports_explicit_non_model_candidate_types(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            blend_file = root / "lighting_refs.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                root,
+                [],
+                available_collections=["ref"],
+                available_objects=[
+                    _FakeAvailableObject("ref_front", "EMPTY", empty_display_type="IMAGE"),
+                    _FakeAvailableObject("Key_Light", "LIGHT"),
+                    _FakeAvailableObject("Floor", "MESH"),
+                ],
+            )
+
+            result = inspect_linkable_data_from_file(bpy_module, "lighting_refs.blend", base_dirs=[root])
+
+            by_name = {detail["name"]: detail for detail in result["availableObjectDetails"]}
+            self.assertEqual(result["recommendedObjects"], [])
+            self.assertEqual(by_name["ref_front"]["category"], "reference-image")
+            self.assertEqual(by_name["ref_front"]["selection"], "explicit")
+            self.assertEqual(by_name["Key_Light"]["category"], "light")
+            self.assertEqual(by_name["Key_Light"]["selection"], "explicit")
+            self.assertEqual(by_name["Floor"]["category"], "floor-helper")
+            self.assertEqual(by_name["Floor"]["selection"], "excluded")
+            self.assertIn("ref_front", result["warnings"][1])
+            self.assertIn("Floor", result["warnings"][2])
+
+    def test_link_candidate_does_not_implicitly_select_non_model_objects(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            blend_file = root / "lighting_refs.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                root,
+                [],
+                available_collections=["ref"],
+                available_objects=[
+                    _FakeAvailableObject("ref_front", "EMPTY", empty_display_type="IMAGE"),
+                    _FakeAvailableObject("Key_Light", "LIGHT"),
+                ],
+            )
+
+            result = link_collection_from_file(
+                bpy_module,
+                "lighting_refs.blend",
+                "lighting_refs",
+                dry_run=True,
+                base_dirs=[root],
+            )
+
+            self.assertEqual(result["linkMode"], None)
+            self.assertTrue(result["failed"])
+            self.assertIn("Explicit object candidates: ref_front, Key_Light", result["failed"][0]["error"])
+
+    def test_link_candidate_links_explicit_light_object(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            blend_file = root / "lighting_refs.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                root,
+                [],
+                available_collections=["ref"],
+                available_objects=[
+                    _FakeAvailableObject("ref_front", "EMPTY", empty_display_type="IMAGE"),
+                    _FakeAvailableObject("Key_Light", "LIGHT"),
+                ],
+            )
+
+            result = link_collection_from_file(
+                bpy_module,
+                "lighting_refs.blend",
+                "Key_Light",
+                dry_run=False,
+                base_dirs=[root],
+            )
+
+            self.assertEqual(result["failed"], [])
+            self.assertEqual(result["linkMode"], "objects")
+            self.assertEqual(result["linkedObjects"], ["Key_Light"])
+            target = bpy_module.context.collection.children[0]
+            self.assertEqual(target.name, "Key_Light")
+            self.assertEqual([obj.name for obj in target.objects], ["Key_Light"])
+
+    def test_link_candidate_rejects_explicit_floor_helper_object(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            blend_file = root / "lighting_refs.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                root,
+                [],
+                available_collections=["ref"],
+                available_objects=[
+                    _FakeAvailableObject("Floor", "MESH"),
+                ],
+            )
+
+            result = link_collection_from_file(
+                bpy_module,
+                "lighting_refs.blend",
+                "Floor",
+                dry_run=False,
+                base_dirs=[root],
+            )
+
+            self.assertEqual(result["linkMode"], None)
+            self.assertTrue(result["failed"])
+            self.assertIn("not supported", result["failed"][0]["error"])
+            self.assertEqual(len(bpy_module.context.collection.children), 0)
+
     def test_link_candidate_does_not_fallback_to_first_ref_collection_for_missing_request(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -493,6 +606,13 @@ class _FakeObject:
     def __init__(self, name: str, library: _FakeLibrary | None = None) -> None:
         self.name = name
         self.library = library
+
+
+class _FakeAvailableObject:
+    def __init__(self, name: str, object_type: str, empty_display_type: str = "") -> None:
+        self.name = name
+        self.type = object_type
+        self.empty_display_type = empty_display_type
 
 
 class _FakeCollectionContainer(list):

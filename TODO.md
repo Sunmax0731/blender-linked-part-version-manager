@@ -57,3 +57,4 @@ No current TODO. New uncategorized work should be moved into one of the phase se
 - [x] [P1] [Phase:04-implementation] Link Candidate が `ref` collection だけをリンクする不具合を修正する [Issue](Issues/0018-link-candidate-ref-only.md) [QCDS:Quality,Delivery,Satisfaction]
 - [x] [P2] [Phase:06-release] 現行バージョンのリリース [Issue](Issues/0019-issue.md) [QCDS:Quality,Delivery,Satisfaction]
 - [x] [P2] [Phase:03-design] Character.blend統合構成の関係表作成 [Issue](Issues/0020-character-blend.md) [QCDS:Quality,Cost,Satisfaction]
+- [x] [P2] [Phase:04-implementation] Link 対象種別を3Dモデル以外へ拡張 [Issue](Issues/0021-link-3d.md) [QCDS:Quality,Satisfaction]

@@ -29,7 +29,7 @@ GUI で生成した候補は `owner=unassigned`、`source.type=local`、`source.
 
 ## Link 候補の選び方
 
-`Add File Candidate` は source `.blend` 内の collection / object 名を読み取り、`ref`、`reference`、camera、light、floor 系を避けて production collection を推奨する。目的データが collection ではなく scene 直下 object の場合は、`Armature` や mesh 名を production object として Link 対象にする。明示的に入力した `linkedCollection` が存在しない場合は、先頭 collection へ勝手に fallback せず、候補一覧と失敗理由を preview に表示する。
+`Add File Candidate` は source `.blend` 内の collection / object 名と object 種別を読み取り、`ref`、`reference`、camera、light、floor 系を避けて production collection を推奨する。目的データが collection ではなく scene 直下 object の場合は、`Armature` や mesh 名を production object として Link 対象にする。Reference 用画像、ライト、カメラは `availableObjectDetails` に explicit candidate として出るため、Link したい場合は object 名を `linkedCollection` に明示してから `Preview Link` / `Link Candidate` を実行する。floor helper などの非対応 object は除外理由を preview に表示する。明示的に入力した `linkedCollection` が存在しない場合は、先頭 collection へ勝手に fallback せず、候補一覧と失敗理由を preview に表示する。
 
 ## Status
 

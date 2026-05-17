@@ -53,8 +53,8 @@ alpha release 後に手作業で実施する。
 7. `Scan Current Links` を実行し、現在の linked library / collection から editable な registry 候補が表示されることを確認する。
 8. 候補の `owner`、`source.type`、`versionRef`、`updatePolicy` が安全な初期値であることを確認し、必要に応じて GUI 上で編集する。
 9. `Save Registry` を実行し、`Registry Path` の JSON が保存されることを確認する。その後 `Validate Registry` を再実行し、保存済み registry が OK になることを確認する。
-10. `Add File Candidate` で Explorer / Blender file selector から `.blend` を選び、候補として追加できることを確認する。preview JSON に available collection / object、recommended target、warnings が出ることを確認する。`Preview Link` は dry-run のみで、`Link Candidate` は明示操作として現在の Blender tree へ Link する。どちらも自動保存しない。
-11. source `.blend` に `ref` collection と production collection / object が混在する場合、`Preview Link` が先頭 `ref` ではなく production collection または production object を target にすることを確認する。明示的に存在しない `linkedCollection` を入力した場合は、Link せず候補一覧と失敗理由が表示されることを確認する。
+10. `Add File Candidate` で Explorer / Blender file selector から `.blend` を選び、候補として追加できることを確認する。preview JSON に available collection / object、availableObjectDetails、recommended target、warnings が出ることを確認する。`Preview Link` は dry-run のみで、`Link Candidate` は明示操作として現在の Blender tree へ Link する。どちらも自動保存しない。
+11. source `.blend` に `ref` collection と production collection / object が混在する場合、`Preview Link` が先頭 `ref` ではなく production collection または production object を target にすることを確認する。Reference 用画像、ライト、カメラは type / category / selection が表示され、ファイル名既定値からは暗黙 Link されず、object 名を `linkedCollection` に明示した場合だけ Link されることを確認する。明示的に存在しない `linkedCollection` を入力した場合や floor helper を指定した場合は、Link せず候補一覧と失敗理由が表示されることを確認する。
 12. `Build Sync Preview` を実行し、summary が表示され、`remote-newer`、`local-dirty`、`broken-link` の代表状態が dry-run report に記録されることを確認する。
 13. `Preview Reload` を実行し、Hair の library だけが dry-run `reloaded`、他の library が `skipped` として表示されることを確認する。
 14. 実 reload を確認する場合は、`parts/hair/main_hair.blend` を別ウィンドウで開き、Hair marker を少し移動して保存する。その後 `character_integration.blend` に戻り、`Reload Safe Links` を実行して Viewport の Hair が更新されることを確認する。
@@ -91,9 +91,9 @@ samples/representative-suite.json
 - Auto Reload も保存済みファイルだけを監視する。別 Blender ウィンドウの未保存編集は `.blend` に書き出されていないため、Blender Link reload では反映できない。
 - `Integrate Link` は linked datablock を local data に変えるため、確認あり実行はコピーした fixture で行う。cancel した場合は operator が実行されず、`.blend` と registry は変更されない。
 - `Report Path` は fixture root 直下の `blender-dry-run-report.json` など、書き込み可能で見つけやすい場所にする。
-- `Link Candidate` で `ref` だけが Link される場合は、`Preview Link` の `availableCollections`、`availableObjects`、`recommendedCollection`、`recommendedObjects` を確認する。修正後は指定 collection が見つからないと先頭 `ref` へ fallback せず、production collection または production object を report する。
+- `Link Candidate` で `ref` だけが Link される場合は、`Preview Link` の `availableCollections`、`availableObjects`、`availableObjectDetails`、`recommendedCollection`、`recommendedObjects` を確認する。修正後は指定 collection が見つからないと先頭 `ref` へ fallback せず、production collection または production object を report する。Reference 用画像やライトは explicit candidate として出るため、自動選択されていないことを確認する。
 - 日本語表示が切り替わらない場合は Blender Preferences の Interface 翻訳が有効か確認する。アドオン側は `ja_JP` translation table を登録しているため、英語環境では英語 msgid がそのまま表示される。
 
 ## 未実施項目
 
-Blender 上での Link reload 実機確認はユーザー手元の Blender 5.1.1 で通過済み。今回追加した GUI registry editing、Explorer / Blender file selector からの Link 候補追加、link integration、日本語 UI 表示は、次回手動確認で `Scan Current Links`、`Save Registry`、`Add File Candidate`、`Preview Link`、`Link Candidate`、`Preview Integrate`、`Integrate Link`、日本語表示切替の順に確認する。
+Blender 上での Link reload 実機確認はユーザー手元の Blender 5.1.1 で通過済み。今回追加した GUI registry editing、Explorer / Blender file selector からの Link 候補追加、3D モデル以外の Link target type 表示、link integration、日本語 UI 表示は、次回手動確認で `Scan Current Links`、`Save Registry`、`Add File Candidate`、`Preview Link`、`Link Candidate`、`Preview Integrate`、`Integrate Link`、日本語表示切替の順に確認する。
