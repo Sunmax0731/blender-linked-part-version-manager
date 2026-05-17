@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "product": "blender-linked-part-version-manager",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0",
   "gitHubRelease": {
-    "tag": "v0.1.0-alpha.3",
-    "url": "https://github.com/Sunmax0731/blender-linked-part-version-manager/releases/tag/v0.1.0-alpha.3",
-    "prerelease": true,
-    "latest": false,
+    "tag": "v0.1.0",
+    "url": "https://github.com/Sunmax0731/blender-linked-part-version-manager/releases/tag/v0.1.0",
+    "prerelease": false,
+    "latest": true,
     "assets": [
       "blender-linked-part-version-manager.zip",
       "blender-linked-part-version-manager-docs.zip",
@@ -16,12 +16,13 @@
   },
   "releasePublication": {
     "status": "verified",
-    "trackingIssue": "Issues/0019-issue.md",
+    "trackingIssue": "Issues/0024-github.md; Issues/0025-github.md",
     "verifiedAt": "2026-05-17",
-    "releaseTag": "v0.1.0-alpha.3",
+    "releaseTag": "v0.1.0",
+    "previousPrerelease": "v0.1.0-alpha.3",
     "implementationVersion": "0.1.2",
-    "releaseUrl": "https://github.com/Sunmax0731/blender-linked-part-version-manager/releases/tag/v0.1.0-alpha.3",
-    "verificationNote": "v0.1.0-alpha.3 tag and prerelease assets were refreshed after closing Issues/0021-link-3d.md, Issues/0022-collection-checkbox-link.md, and Issues/0023-indirect-link-report.md.",
+    "releaseUrl": "https://github.com/Sunmax0731/blender-linked-part-version-manager/releases/tag/v0.1.0",
+    "verificationNote": "v0.1.0 formal release uses implementation version 0.1.2 from v0.1.0-alpha.3, with README, installation guide, QCDS, release notes, TODO, Issues, and release assets synchronized for public use.",
     "validationCommand": "npm test",
     "requiredAssets": [
       "blender-linked-part-version-manager.zip",

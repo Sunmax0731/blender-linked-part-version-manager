@@ -4,9 +4,9 @@
 
 | 観点 | 評価 | 理由 |
 | --- | --- | --- |
-| Quality | A- | registry validation、sync plan、Git/local adapter、Blender add-on shell、GUI registry editing、Character.blend 関係表、Link candidate collection/object selection、collection checkbox multi-link、indirect linked library report、Link target type expansion、Japanese UI localization、Windows runtime gate、Blender CLI smoke、manual reload、Auto Reload target selection、linked file integration helper、unit test が通っている。 |
+| Quality | A- | registry validation、sync plan、Git/local adapter、Blender add-on shell、GUI registry editing、Character.blend 関係表、Link candidate collection/object selection、collection checkbox multi-link、indirect linked library report、Link target type expansion、Japanese UI localization、Windows runtime gate、Blender CLI smoke、manual reload、Auto Reload target selection、linked file integration helper、unit test、正式リリース docs check が通っている。 |
 | Cost | A- | core、adapter、Blender binding、Windows companion を分離し、MVP の依存を Git / local folder / Node launcher に抑えている。Character.blend 関係表では素体依存を hidden transitive reload として実装せず、docs / registry / report の確認事項として扱う。 |
-| Delivery | A- | README、AGENTS、SKILL、docs、TODO、Issues、release checklist、docs ZIP、fixture ZIP、release notes、runtime gate evidence、Blender 実体パス検証 evidence、GUI registry editing evidence、Character.blend 関係表を同期した。 |
+| Delivery | A- | README、AGENTS、SKILL、docs、TODO、Issues、release checklist、docs ZIP、fixture ZIP、release notes、runtime gate evidence、Blender 実体パス検証 evidence、GUI registry editing evidence、Character.blend 関係表、正式リリース `v0.1.0` evidence を同期した。 |
 | Satisfaction | A- | Blender UI shell、GUI での registry 生成・編集・保存、Character.blend と素体 / 頭・表情 / 髪 / 服 / アクセのユースケース整理、日本語表示環境での主要 UI 翻訳、Explorer / Blender file selector からの Link 候補追加、読み込んだ collection をチェックボックスで複数 Link する導線、source `.blend` 内の nested Link dependency を report する導線、`ref` 誤リンクを避ける候補 inspection、Reference 用画像 / ライト / カメラの型付き明示 Link 候補、linked file 統合の preview / confirmation / report、Windows companion、手動テスト fixture で dry-run、手動 reload、保存後の Viewport 反映を確認できる。Auto Reload は保存済みファイル監視として未保存編集の限界を明記した。 |
 
 ## Gate
@@ -20,6 +20,19 @@ Link target type expansion は Python unit test で Reference 用画像 object �
 Japanese UI localization は Python unit test で主要 translation table coverage を検証し、Blender 5.1.1 CLI で `ja_JP` の `pgettext_iface` が `Scan Current Links` と `Part Registry` を日本語へ解決することを確認済み。
 Link integration は Python unit test で dry-run が local 化しないこと、確認あり実行側の helper が選択 target の linked datablock だけを local 化することを検証済み。Blender UI 上の confirmation cancel / 実統合は次回手動確認項目に追加済み。
 Character.blend 関係表は `docs/character-blend-relationship.md` に追加し、素体が頭 / 表情、髪、服、アクセサリから参照される関係、`Character.blend` 側の統合表示、Part Registry / Link 管理 / 検証レポートの責務分離を README、features、user guide、design、architecture、manual test へ接続済み。
+
+## Formal Release v0.1.0
+
+`v0.1.0` は `v0.1.0-alpha.3` の配布内容を正式リリース化する。実装バージョンは `0.1.2` のまま維持し、利用者向け README、installation guide、release notes、release checklist、release evidence、TODO / Issues を正式リリース向けに同期する。GitHub Release は prerelease ではなく通常 release とし、同じ配布物名で add-on ZIP、docs ZIP、fixture ZIP、manual-test.md を紐づける。
+
+## S 評価へ必要な TODO
+
+| 観点 | 現状 | S 評価へ必要な TODO |
+| --- | --- | --- |
+| Quality | Automated gate と Blender CLI smoke は通過済み。Blender UI 上の一部操作は次回手動確認として残る。 | GUI registry editing、collection checkbox multi-link、indirect linked library report、Link target type expansion、link integration、日本語 UI 表示切替を同一 manual pass で確認し、失敗があれば再現 Issue に分離する。 |
+| Cost | core / adapter / UI / Windows companion の責務分離は維持できている。 | 手動確認で得た再現手順を script 化できる範囲へ移し、次回 release で host 操作の再確認コストを下げる。 |
+| Delivery | `v0.1.0` の docs、evidence、release assets は同期済み。 | GitHub release 公開後に `gh release view v0.1.0 --json tagName,isPrerelease,targetCommitish,assets,url` で対象 commit と asset を確認し、次回 release checklist に結果を転記する。 |
+| Satisfaction | 利用者向け README、機能一覧、インストール、ユーザーガイド、manual test は揃っている。 | 実ユーザーの Blender UI 操作結果を反映し、初回導入時に迷いやすい `Add File Candidate` / `Preview Link` / `Integrate Link` のスクリーンショットまたは短い手順補足を追加する。 |
 
 ## Required Improvements
 

@@ -27,7 +27,7 @@ Use this repository for Blender Link based part-version management work.
 - Blender UI strings must keep the English default labels stable and add `ja_JP` entries in `BLPVM_TRANSLATIONS`; dynamic reports should go through the local `pgettext_iface` helper.
 - Windows companion must stay outside `.blend` mutation. It may validate registry data, show status, launch installer dry-run, and save settings under `%APPDATA%`.
 - Character production topology is documented in `docs/character-blend-relationship.md`; keep `Character.blend` integration links, base-body references, Part Registry rows, and validation reports separate instead of adding hidden transitive Link behavior.
-- Alpha release validation must include the Windows local executable / installer launch gate and, when available, a non-mutating Blender CLI smoke from `BLENDER_EXE` or `D:\SteamLibrary\steamapps\common\Blender\blender.exe`. Blender Link reload remains a required manual test until an integration `.blend` and part `.blend` are confirmed by the user.
+- Release validation must include the Windows local executable / installer launch gate and, when available, a non-mutating Blender CLI smoke from `BLENDER_EXE` or `D:\SteamLibrary\steamapps\common\Blender\blender.exe`. Blender Link reload remains a required manual test until an integration `.blend` and part `.blend` are confirmed by the user.
 
 ## Validation
 

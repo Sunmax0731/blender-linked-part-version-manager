@@ -42,3 +42,5 @@ This folder stores local Markdown issues linked from `TODO.md`.
 - [x] [0021](0021-link-3d.md) Link 対象種別を3Dモデル以外へ拡張
 - [x] [0022](0022-collection-checkbox-link.md) 読み込んだ `.blend` の collection をチェックボックスで複数 Link できるようにする
 - [x] [0023](0023-indirect-link-report.md) Link した Collection の間接 linked library を report する
+- [x] [0024](0024-github.md) 正式リリース向けドキュメント再整備とGitHubリリース
+- [x] [0025](0025-github.md) 正式リリース向けドキュメント再整備とGitHubリリース

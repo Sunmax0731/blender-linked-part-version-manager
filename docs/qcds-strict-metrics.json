@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "product": "blender-linked-part-version-manager",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0",
   "allowedGrades": ["S+", "S-", "A+", "A-", "B+", "B-", "C+", "C-", "D+", "D-"],
   "grades": {
     "Quality": "A-",
@@ -71,13 +71,15 @@
     },
     "releasePublication": {
       "status": "verified",
-      "evidence": "Issues/0019-issue.md",
-      "criteria": "v0.1.0-alpha.3 prerelease, release assets, TODO/Issues closure, and post-release verification evidence are synchronized"
+      "evidence": "Issues/0024-github.md; Issues/0025-github.md; docs/releases/v0.1.0.md",
+      "criteria": "v0.1.0 formal release, release assets, TODO/Issues closure, and post-release verification evidence are synchronized"
     }
   },
   "release": {
-    "tag": "v0.1.0-alpha.3",
-    "latest": false,
+    "tag": "v0.1.0",
+    "previousPrerelease": "v0.1.0-alpha.3",
+    "implementationVersion": "0.1.2",
+    "latest": true,
     "manualTestingAfterRelease": true
   }
 }

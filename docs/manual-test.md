@@ -42,7 +42,7 @@ windows\install-alpha.cmd --dry-run
 
 ## Blender 実機確認手順
 
-alpha release 後に手作業で実施する。
+release 後に手作業で実施する。
 
 1. release asset `blender-linked-part-version-manager-fixtures.zip` を展開する。repo から実施する場合は `D:\AI\BlenderAddon\blender-linked-part-version-manager` を fixture root として使う。
 2. `<fixture-root>\integration\character_integration.blend` を Blender で開く。

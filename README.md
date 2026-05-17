@@ -31,7 +31,7 @@ Blender Linked Part Version Manager は、キャラクターや複合モデル�
 
 ## インストール
 
-1. GitHub Releases から `v0.1.0-alpha.3` の `blender-linked-part-version-manager.zip` を取得する。
+1. GitHub Releases から正式リリース `v0.1.0` の `blender-linked-part-version-manager.zip` を取得する。
 2. Blender を開き、`Edit > Preferences > Add-ons > Install...` を選ぶ。
 3. `blender-linked-part-version-manager.zip` を選択して install する。
 4. `Blender Linked Part Version Manager` を有効化する。
@@ -135,6 +135,6 @@ npm test
 
 ## Release
 
-現在の prerelease は `v0.1.0-alpha.3` です。Blender add-on / Windows companion の実装バージョンは `0.1.2` です。
+現在の正式リリースは `v0.1.0` です。直前の prerelease は `v0.1.0-alpha.3`、Blender add-on / Windows companion の実装バージョンは `0.1.2` です。変更点と既知事項は [v0.1.0 release notes](docs/releases/v0.1.0.md) を参照してください。
 
 Public repo: https://github.com/Sunmax0731/blender-linked-part-version-manager

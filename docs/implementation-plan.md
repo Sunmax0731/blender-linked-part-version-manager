@@ -56,3 +56,6 @@
 - [x] alpha prerelease 用の add-on ZIP、docs ZIP、release notes を作成する。
 - [x] GitHub Release は prerelease とし、Blender 手動テスト未実施項目を明記する。
 - [x] MVP 後 P2 backlog の GUI registry / release prep 項目を TODO、Issues、docs、tests、QCDS evidence と同期して完了する。
+- [x] 正式リリース `v0.1.0` 向けに README、installation guide、release notes、release evidence、QCDS、TODO、Issues を再同期する。
+- [x] QCDS の現状評価と S 評価に必要な follow-up TODO を整理する。
+- [x] GitHub Release `v0.1.0` を正式リリースとして公開し、配布物と参照情報を紐づける。

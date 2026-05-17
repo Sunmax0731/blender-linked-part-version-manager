@@ -33,6 +33,14 @@
 - [x] GitHub prerelease と docs ZIP を作成した。
 - [x] `Issues/0019-issue.md` で現行バージョンの release verification を完了した。
 
+## 正式リリース前
+
+- [x] 正式リリース tag を `v0.1.0` に決め、直前 prerelease `v0.1.0-alpha.3` と実装バージョン `0.1.2` の関係を README と release notes に明記した。
+- [x] `docs/releases/v0.1.0.md` に変更点、検証、既知の制約をまとめた。
+- [x] `docs/qcds-evaluation.md` に現状評価と S 評価へ必要な follow-up TODO を整理した。
+- [x] `TODO.md`、`Issues/0024-github.md`、`Issues/0025-github.md`、`Issues/README.md` を正式リリース状態へ同期した。
+- [x] GitHub Release `v0.1.0` に add-on ZIP、docs ZIP、fixture ZIP、manual-test.md を紐づける。
+
 ## Release Evidence
 
 初回 release 前に次を作成する。
@@ -43,3 +51,4 @@
 - `dist/test-summary.json`
 - `dist/runtime-gate.json`
 - `docs/release-evidence.json`
+- `docs/releases/v0.1.0.md`

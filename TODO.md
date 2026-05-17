@@ -60,3 +60,5 @@ No current TODO. New uncategorized work should be moved into one of the phase se
 - [x] [P2] [Phase:04-implementation] Link 対象種別を3Dモデル以外へ拡張 [Issue](Issues/0021-link-3d.md) [QCDS:Quality,Satisfaction]
 - [x] [P2] [Phase:04-implementation] 読み込んだ `.blend` の collection をチェックボックスで複数 Link できるようにする [Issue](Issues/0022-collection-checkbox-link.md) [QCDS:Quality,Satisfaction]
 - [x] [P2] [Phase:04-implementation] Link した Collection の間接 linked library を report する [Issue](Issues/0023-indirect-link-report.md) [QCDS:Quality,Satisfaction]
+- [x] [P2] [Phase:06-release] 正式リリース向けドキュメント再整備とGitHubリリース [Issue](Issues/0024-github.md) [QCDS:Quality,Delivery,Satisfaction]
+- [x] [P2] [Phase:06-release] 正式リリース向けドキュメント再整備とGitHubリリース [Issue](Issues/0025-github.md) [QCDS:Quality,Cost,Delivery,Satisfaction]

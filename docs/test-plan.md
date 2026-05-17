@@ -66,3 +66,5 @@
 
 2026-05-17 時点で Collection checkbox multi-link の Python unit test を追加し、チェック済み collection が dry-run で `linkedCollections` に出ること、実行時に各 collection が scene tree へ Link されること、missing collection がある場合は実行前に失敗して何も Link しないことを確認した。
 2026-05-17 時点で Indirect linked library report の Python unit test を追加し、source `.blend` 内の nested Link が `sourceLinkedLibraries` に出ること、実行時に Blender が読み込んだ依存 library が `indirectLinkedLibraries` に出ることを確認した。
+
+2026-05-17 時点で正式リリース `v0.1.0` は、直前 prerelease `v0.1.0-alpha.3` と同じ実装バージョン `0.1.2` を配布対象にする。正式リリースの検証境界は `npm test`、Windows companion gate、Blender 5.1.1 CLI smoke、release artifact check、GitHub release asset 確認であり、Blender UI 上の GUI registry editing / collection checkbox multi-link / indirect linked library report / link target type expansion / link integration / 日本語表示切替は既知の手動 follow-up として `docs/manual-test.md` と QCDS に残す。

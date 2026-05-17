@@ -31,6 +31,7 @@ const requiredFiles = [
   "docs/releases/v0.1.0-alpha.1.md",
   "docs/releases/v0.1.0-alpha.2.md",
   "docs/releases/v0.1.0-alpha.3.md",
+  "docs/releases/v0.1.0.md",
   "samples/representative-suite.json",
   "scripts/create-blend-fixtures.py",
   "Issues/README.md",
@@ -51,6 +52,11 @@ const requiredFiles = [
   "Issues/0018-link-candidate-ref-only.md",
   "Issues/0019-issue.md",
   "Issues/0020-character-blend.md",
+  "Issues/0021-link-3d.md",
+  "Issues/0022-collection-checkbox-link.md",
+  "Issues/0023-indirect-link-report.md",
+  "Issues/0024-github.md",
+  "Issues/0025-github.md",
   "windows/blpvm-companion.mjs",
   "windows/blpvm-companion.cmd",
   "windows/install-alpha.cmd",
@@ -142,8 +148,8 @@ for (const key of ["Quality", "Cost", "Delivery", "Satisfaction"]) {
 }
 
 const releaseEvidence = JSON.parse(readText("docs/release-evidence.json"));
-if (releaseEvidence.version !== "0.1.0-alpha.3") {
-  throw new Error("release-evidence.json version must match alpha release.");
+if (releaseEvidence.version !== "0.1.0") {
+  throw new Error("release-evidence.json version must match formal release.");
 }
 
 console.log("Docs completeness check passed.");

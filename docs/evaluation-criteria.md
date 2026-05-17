@@ -20,8 +20,8 @@ QCDS は Quality、Cost、Delivery、Satisfaction を `S+ / S- / A+ / A- / B+ / 
 ## Delivery
 
 - README、導入手順、手動テスト、release checklist、QCDS が揃っている。
-- closed alpha package と docs ZIP が生成できる。
-- GitHub prerelease evidence が残っている。
+- release package と docs ZIP が生成できる。
+- GitHub release / prerelease evidence が残っている。
 
 ## Satisfaction
 
