@@ -29,6 +29,7 @@
 - [x] Blender GUI で Part Registry 候補を scan / edit / save できる導線を実装する。
 - [x] Explorer / Blender file selector から `.blend` を候補追加し、明示操作で Blender tree へ Link できる導線を実装する。
 - [x] Link 候補の collection / object inspection を追加し、`ref` への暗黙 fallback を防ぐ。
+- [x] 読み込んだ `.blend` の collection 一覧をチェックボックス表示し、チェック済み collection を複数 Link できる導線を実装する。
 - [x] Link 候補の object 種別を report し、Reference 用画像、ライト、カメラなど 3D モデル以外の object を明示選択で Link できるようにする。
 - [x] Blender 表示言語が日本語の場合にパネル、ボタン、主要メッセージが日本語で表示される `ja_JP` UI 翻訳を実装する。
 - [x] 選択中の linked `.blend` を preview / confirmation 後に current file の local data へ統合する operator と report を実装する。
@@ -43,6 +44,7 @@
 - [x] Blender runtime gate で Integration File が Part File を Link し、reload できることを確認する。
 - [x] linked file integration の dry-run と local 化対象選別を Python unit test に追加する。
 - [x] Link Candidate が production collection / object を選び、missing collection 時に先頭 `ref` へ fallback しないことを Python unit test に追加する。
+- [x] Link Candidate がチェック済み collection を dry-run / execute で複数 Link し、missing collection を実行前に止めることを Python unit test に追加する。
 - [x] Link Candidate が Reference 用画像 / ライトの型付き候補を表示し、明示選択だけで Link し、floor helper を除外することを Python unit test に追加する。
 - [x] 文字化け、JSON schema、docs completeness を `npm test` に含める。
 

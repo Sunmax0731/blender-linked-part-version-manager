@@ -23,6 +23,7 @@ from .blender.link import (
     inspect_linked_libraries,
     inspect_linkable_data_from_file,
     link_collection_from_file,
+    link_collections_from_file,
     reload_linked_libraries,
     resolve_target_paths,
     scan_linked_registry_parts,
@@ -73,6 +74,8 @@ BLPVM_JA_MESSAGES = {
     "updatePolicy": "更新ポリシー",
     "Blend File": "Blenderファイル",
     "Linked Collection": "リンクCollection",
+    "Collections in Selected File": "選択ファイル内のCollection",
+    "Link this collection": "このCollectionをリンク",
     "Dry Run": "ドライラン",
     "BLPVM Preview JSON": "BLPVMプレビューJSON",
     "BLPVM Auto Reload Status": "BLPVM自動リロード状態",
@@ -131,8 +134,11 @@ BLPVM_JA_MESSAGES = {
     "Registry has {count} issue(s); fix editable fields before saving.": "レジストリに{count}件の問題があります。保存前に編集項目を修正してください。",
     "Saved registry with {count} part(s).": "{count}件の部位を含むレジストリを保存しました。",
     "Link candidate failed: {error}": "リンク候補の処理に失敗しました: {error}",
+    "No checked collection is selected.": "チェックされたCollectionがありません。",
     "Link preview ready.": "リンクプレビューを作成しました。",
+    "Link preview ready for {count} selected collection(s).": "選択したCollection {count}件のリンクプレビューを作成しました。",
     "Linked selected collection into the scene tree.": "選択したcollectionをシーンツリーへリンクしました。",
+    "Linked {count} selected collection(s) into the scene tree.": "選択したCollection {count}件をシーンツリーへリンクしました。",
     "Registry has {count} issue(s).": "レジストリに{count}件の問題があります。",
     "Registry OK: {count} part(s).": "レジストリOK: {count}件の部位。",
     "Preview written with {count} blocked part(s).": "{count}件のブロック部位を含むプレビューを書き出しました。",
@@ -224,6 +230,11 @@ class BLPVM_Preferences(bpy.types.AddonPreferences if bpy else object):
         layout.prop(self, "auto_reload_interval")
 
 
+class BLPVM_LinkCollectionChoice(bpy.types.PropertyGroup if bpy else object):
+    collection_name: bpy.props.StringProperty(name="Linked Collection") if bpy else ""  # type: ignore[union-attr]
+    selected: bpy.props.BoolProperty(name="Link this collection", default=False) if bpy else False  # type: ignore[union-attr]
+
+
 class BLPVM_RegistryPartItem(bpy.types.PropertyGroup if bpy else object):
     part_id: bpy.props.StringProperty(name="partId") if bpy else ""  # type: ignore[union-attr]
     part_tag: bpy.props.EnumProperty(name="partTag", items=TAG_ITEMS, default="Props") if bpy else "Props"  # type: ignore[union-attr]
@@ -238,6 +249,7 @@ class BLPVM_RegistryPartItem(bpy.types.PropertyGroup if bpy else object):
     source_branch: bpy.props.StringProperty(name="source.branch", default="main") if bpy else "main"  # type: ignore[union-attr]
     version_ref: bpy.props.StringProperty(name="versionRef", default="local") if bpy else "local"  # type: ignore[union-attr]
     update_policy: bpy.props.EnumProperty(name="updatePolicy", items=UPDATE_POLICY_ITEMS, default="manual") if bpy else "manual"  # type: ignore[union-attr]
+    link_collection_choices: bpy.props.CollectionProperty(type=BLPVM_LinkCollectionChoice) if bpy else []  # type: ignore[union-attr]
 
 
 class BLPVM_UL_registry_parts(bpy.types.UIList if bpy else object):
@@ -310,6 +322,11 @@ class BLPVM_OT_add_link_candidate(bpy.types.Operator if bpy else object):
         )
         item = context.scene.blpvm_registry_parts.add()
         _fill_registry_item(item, part)
+        _fill_collection_choices(
+            item,
+            linkable_data["availableCollections"],
+            _initial_selected_collections(linkable_data["availableCollections"], linked_collection),
+        )
         context.scene.blpvm_registry_index = len(context.scene.blpvm_registry_parts) - 1
         context.scene.blpvm_preview_json = json.dumps(
             {"addedCandidate": part, "linkableData": linkable_data},
@@ -384,24 +401,51 @@ class BLPVM_OT_link_selected_candidate(bpy.types.Operator if bpy else object):
         item = parts[index]
         prefs = context.preferences.addons[__name__].preferences
         registry_path = Path(bpy.path.abspath(prefs.registry_path))
-        result = link_collection_from_file(
-            bpy,
-            item.blend_path,
-            item.linked_collection,
-            dry_run=self.dry_run,
-            target_collection=context.collection,
-            base_dirs=_registry_base_dirs(registry_path),
-        )
+        checked_collections = _checked_collection_names(item)
+        known_collections = _known_collection_names(item)
+        if checked_collections:
+            result = link_collections_from_file(
+                bpy,
+                item.blend_path,
+                checked_collections,
+                dry_run=self.dry_run,
+                target_collection=context.collection,
+                base_dirs=_registry_base_dirs(registry_path),
+            )
+        elif known_collections and (not item.linked_collection or item.linked_collection in known_collections):
+            result = {
+                "dryRun": self.dry_run,
+                "filepath": item.blend_path,
+                "requestedCollections": [],
+                "failed": [{"path": item.blend_path, "error": _iface("No checked collection is selected.")}],
+            }
+        else:
+            result = link_collection_from_file(
+                bpy,
+                item.blend_path,
+                item.linked_collection,
+                dry_run=self.dry_run,
+                target_collection=context.collection,
+                base_dirs=_registry_base_dirs(registry_path),
+            )
         context.scene.blpvm_preview_json = json.dumps(result, ensure_ascii=False, indent=2)
         if result["failed"]:
             self.report({"ERROR"}, _format_iface("Link candidate failed: {error}", error=result["failed"][0]["error"]))
             return {"CANCELLED"}
-        self.report(
-            {"INFO"},
-            _iface("Link preview ready.")
-            if self.dry_run
-            else _iface("Linked selected collection into the scene tree."),
-        )
+        if checked_collections:
+            self.report(
+                {"INFO"},
+                _format_iface("Link preview ready for {count} selected collection(s).", count=len(result["linkedCollections"]))
+                if self.dry_run
+                else _format_iface("Linked {count} selected collection(s) into the scene tree.", count=len(result["linkedCollections"])),
+            )
+        else:
+            self.report(
+                {"INFO"},
+                _iface("Link preview ready.")
+                if self.dry_run
+                else _iface("Linked selected collection into the scene tree."),
+            )
         return {"FINISHED"}
 
 
@@ -680,6 +724,13 @@ class BLPVM_PT_registry_panel(bpy.types.Panel if bpy else object):
                 box.prop(selected, "display_name")
                 box.prop(selected, "blend_path")
                 box.prop(selected, "linked_collection")
+                if getattr(selected, "link_collection_choices", None) and len(selected.link_collection_choices):
+                    collection_box = box.box()
+                    collection_box.label(text=_iface("Collections in Selected File"), icon="OUTLINER_COLLECTION")
+                    for choice in selected.link_collection_choices:
+                        row = collection_box.row(align=True)
+                        row.prop(choice, "selected", text="")
+                        row.label(text=choice.collection_name, icon="OUTLINER_COLLECTION")
                 box.prop(selected, "owner")
                 box.prop(selected, "source_type")
                 if selected.source_type == "git":
@@ -718,6 +769,7 @@ class BLPVM_PT_registry_panel(bpy.types.Panel if bpy else object):
 
 classes = (
     BLPVM_Preferences,
+    BLPVM_LinkCollectionChoice,
     BLPVM_RegistryPartItem,
     BLPVM_UL_registry_parts,
     BLPVM_OT_scan_current_links,
@@ -782,6 +834,35 @@ def _fill_registry_item(item, part: dict) -> None:
     item.source_branch = source.get("branch", "main")
     item.version_ref = part.get("versionRef", "local")
     item.update_policy = part.get("updatePolicy", "manual")
+
+
+def _fill_collection_choices(item, collection_names: list[str], selected_names: set[str]) -> None:
+    if not hasattr(item, "link_collection_choices"):
+        return
+    while len(item.link_collection_choices):
+        item.link_collection_choices.remove(0)
+    for collection_name in collection_names:
+        choice = item.link_collection_choices.add()
+        choice.collection_name = collection_name
+        choice.selected = collection_name in selected_names
+
+
+def _initial_selected_collections(collection_names: list[str], linked_collection: str) -> set[str]:
+    if linked_collection and linked_collection in collection_names:
+        return {linked_collection}
+    return set()
+
+
+def _checked_collection_names(item) -> list[str]:
+    if not hasattr(item, "link_collection_choices"):
+        return []
+    return [choice.collection_name for choice in item.link_collection_choices if choice.selected]
+
+
+def _known_collection_names(item) -> set[str]:
+    if not hasattr(item, "link_collection_choices"):
+        return set()
+    return {choice.collection_name for choice in item.link_collection_choices}
 
 
 def _registry_item_to_part(item) -> dict:

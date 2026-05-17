@@ -13,6 +13,7 @@ from addon.blender_linked_part_version_manager.blender.link import (
     integrate_linked_libraries,
     inspect_linkable_data_from_file,
     link_collection_from_file,
+    link_collections_from_file,
     reload_linked_libraries,
     scan_linked_registry_parts,
 )
@@ -190,6 +191,8 @@ class RegistryPlanTests(unittest.TestCase):
             "Report Path": "レポートパス",
             "Auto Reload Interval": "自動リロード間隔",
             "Preview Link": "リンクをプレビュー",
+            "Collections in Selected File": "選択ファイル内のCollection",
+            "Link this collection": "このCollectionをリンク",
             "Preview Integrate": "統合をプレビュー",
             "Integrate Link": "リンクを統合",
             "Reload Safe Links": "安全なリンクをリロード",
@@ -445,6 +448,83 @@ class RegistryPlanTests(unittest.TestCase):
             self.assertEqual(result["linkMode"], "collection")
             self.assertEqual(result["linkedCollection"], "CHR_Body_Base")
             self.assertEqual([child.name for child in bpy_module.context.collection.children], ["CHR_Body_Base"])
+
+    def test_checked_collections_preview_links_each_selected_collection(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            blend_file = root / "parts.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                root,
+                [],
+                available_collections=["ref", "CHR_Hair_Main", "CHR_ACC_Glasses"],
+                available_objects=[],
+            )
+
+            result = link_collections_from_file(
+                bpy_module,
+                "parts.blend",
+                ["CHR_Hair_Main", "CHR_ACC_Glasses"],
+                dry_run=True,
+                base_dirs=[root],
+            )
+
+            self.assertEqual(result["failed"], [])
+            self.assertEqual(result["linkMode"], "collections")
+            self.assertEqual(result["linkedCollections"], ["CHR_Hair_Main", "CHR_ACC_Glasses"])
+            self.assertEqual(result["actions"], ["link-collections-preview"])
+            self.assertEqual(len(bpy_module.context.collection.children), 0)
+
+    def test_checked_collections_execute_links_each_selected_collection(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            blend_file = root / "parts.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                root,
+                [],
+                available_collections=["ref", "CHR_Hair_Main", "CHR_ACC_Glasses"],
+                available_objects=[],
+            )
+
+            result = link_collections_from_file(
+                bpy_module,
+                "parts.blend",
+                ["CHR_Hair_Main", "CHR_ACC_Glasses"],
+                dry_run=False,
+                base_dirs=[root],
+            )
+
+            self.assertEqual(result["failed"], [])
+            self.assertEqual(result["linkedCollections"], ["CHR_Hair_Main", "CHR_ACC_Glasses"])
+            self.assertEqual(
+                [child.name for child in bpy_module.context.collection.children],
+                ["CHR_Hair_Main", "CHR_ACC_Glasses"],
+            )
+
+    def test_checked_collections_reject_missing_collection_before_linking(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            blend_file = root / "parts.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                root,
+                [],
+                available_collections=["CHR_Hair_Main"],
+                available_objects=[],
+            )
+
+            result = link_collections_from_file(
+                bpy_module,
+                "parts.blend",
+                ["CHR_Hair_Main", "Missing_Collection"],
+                dry_run=False,
+                base_dirs=[root],
+            )
+
+            self.assertTrue(result["failed"])
+            self.assertIn("Missing_Collection", result["failed"][0]["error"])
+            self.assertEqual(len(bpy_module.context.collection.children), 0)
 
     def test_integrate_linked_libraries_dry_run_reports_target_without_localizing(self) -> None:
         root = ROOT

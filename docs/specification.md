@@ -73,16 +73,18 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 | 操作 | 内容 | 破壊的変更 |
 | --- | --- | --- |
 | `Scan Current Links` | `bpy.data.libraries` と linked collection から registry 候補を作成する。 | なし |
-| `Add File Candidate` | Explorer / Blender file selector で選んだ `.blend` を local source の registry 候補として追加し、linkable collection / object 候補と object 種別を preview に出す。 | なし |
+| `Add File Candidate` | Explorer / Blender file selector で選んだ `.blend` を local source の registry 候補として追加し、linkable collection / object 候補、collection checkbox、object 種別を preview に出す。 | なし |
 | `Save Registry` | GUI 上の候補を `Registry Path` の JSON に保存し、既存 validator で検証する。 | registry JSON のみ |
-| `Preview Link` | 選択候補を現在の Blender tree へ Link する前の dry-run を表示し、available collection / object、object type、recommended target、失敗理由を表示する。 | なし |
-| `Link Candidate` | 選択候補の collection、production object、または明示選択された Reference 用画像 / ライト / カメラ object を現在の Blender tree へ Link する。 | 現在の Blender session のみ。自動保存しない。 |
+| `Preview Link` | 選択候補を現在の Blender tree へ Link する前の dry-run を表示し、checked collection、available collection / object、object type、recommended target、失敗理由を表示する。 | なし |
+| `Link Candidate` | チェック済み collection、選択候補の collection、production object、または明示選択された Reference 用画像 / ライト / カメラ object を現在の Blender tree へ Link する。 | 現在の Blender session のみ。自動保存しない。 |
 | `Preview Integrate` | 選択候補の linked datablock を local 化した場合の対象と warning を dry-run 表示する。 | なし |
 | `Integrate Link` | 選択候補の linked datablock を current file の local data に変える。 | 現在の Blender session のみ。確認ダイアログ必須。自動保存しない。 |
 
 GUI 生成候補の初期値は `owner=unassigned`、`source.type=local`、`source.root=.`、`versionRef=local`、`updatePolicy=manual` とする。
 
-`Link Candidate` は `linkedCollection` が実在する collection 名ならその collection を Link する。ファイル名から生成された既定値が collection と一致しない場合は、`ref` / `reference` / camera / light / floor 系を避けて production collection を推奨し、collection がない場合は production object を Link する。Reference 用画像、ライト、カメラなどの非 3D model object は `availableObjectDetails` に type / category / selection を出し、ユーザーが object 名を明示した場合だけ Link する。floor / helper 系など非対応 object は Link せず、除外理由を report する。明示的に入力した collection / object 名が見つからない場合は、先頭 collection へ fallback せず失敗と候補一覧を report する。
+`Link Candidate` は collection checkbox がある場合、チェック済み collection だけを Link する。チェック済み collection が複数ある場合は、各 collection を current scene tree へ Link し、`linkedCollections` として report する。collection checkbox があり、チェックがなく、`linkedCollection` が候補内 collection を指している場合は誤 Link を防ぐため失敗する。`linkedCollection` が object 名など collection 候補外を指す場合は既存の object 明示 Link として処理する。
+
+単一 Link fallback では、`linkedCollection` が実在する collection 名ならその collection を Link する。ファイル名から生成された既定値が collection と一致しない場合は、`ref` / `reference` / camera / light / floor 系を避けて production collection を推奨し、collection がない場合は production object を Link する。Reference 用画像、ライト、カメラなどの非 3D model object は `availableObjectDetails` に type / category / selection を出し、ユーザーが object 名を明示した場合だけ Link する。floor / helper 系など非対応 object は Link せず、除外理由を report する。明示的に入力した collection / object 名が見つからない場合は、先頭 collection へ fallback せず失敗と候補一覧を report する。
 
 `Integrate Link` の confirmation が cancel された場合、operator の `execute` は走らず、`.blend` 本体、Link 状態、Part Registry は変更されない。実行後は `Report Path` に `operation=integrate-linked-library` の JSON report を保存し、ユーザーが保存前に結果と warning を確認できるようにする。
 

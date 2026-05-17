@@ -39,6 +39,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - R16: Blender GUI から選択中の linked `.blend` を現在の Blender file へ統合する前に、対象ファイル、出力先、不可逆性を確認し、結果と warning を report として確認できる。
 - R17: `Character.blend` を統合表示用 file として使うユーザー向けに、素体、頭 / 表情、髪、服、アクセサリの参照関係、編集責務、Link 管理対象、検証レポート上の扱いを関係表で確認できる。
 - R18: Link 候補の object 種別を report に出し、Reference 用画像、ライト、カメラなど 3D モデル以外の object はユーザーが明示選択した場合だけ Link 対象にできる。floor / helper 系などサポート対象外は除外理由を report に残す。
+- R19: Blender GUI で読み込んだ `.blend` の collection 一覧をチェックボックス表示し、チェック済み collection だけを `Preview Link` / `Link Candidate` の対象にできる。
 
 ## Non Functional Requirements
 
@@ -48,6 +49,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - Link reload の前に保存状態と更新対象を表示し、ユーザーが破壊的操作を避けられるようにする。
 - GUI からの Link 追加は現在の Blender session に限定し、`.blend` 本体を自動保存しない。
 - GUI からの Link 追加は `ref` / `reference` / camera / light / floor 系だけを先頭 fallback で Link せず、候補一覧と推奨対象を dry-run report に残す。
+- collection checkbox がある場合、チェックされていない collection は Link 対象にしない。チェックがない場合は誤 Link を止め、既存の object 名明示 Link だけを fallback として残す。
 - 3D モデル以外の Link 候補は object type / category / selection policy を report に残し、Reference 用画像やライトを暗黙 Link しない。
 - linked file 統合は linked datablock を local data に変える操作であるため、confirmation cancel 時は `.blend` 本体、Link 状態、Part Registry を変更しない。
 - alpha 公開前の QCDS は Windows platform runtime gate と自動テストを含め、Blender 実機確認の未実施を明記する。

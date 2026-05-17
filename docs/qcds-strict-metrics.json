@@ -39,6 +39,11 @@
       "evidence": "tests/test_registry_plan.py",
       "criteria": "Link Candidate inspects available collection/object names, prefers production targets, and does not fall back to first ref collection when requested collection is missing"
     },
+    "collectionCheckboxMultiLink": {
+      "status": "implemented-unit-tested-manual-pending",
+      "evidence": "tests/test_registry_plan.py",
+      "criteria": "Loaded .blend collections are shown as checkbox choices and checked collections can be previewed and linked as multiple scene-tree collections"
+    },
     "linkTargetTypeExpansion": {
       "status": "implemented-unit-tested",
       "evidence": "tests/test_registry_plan.py",

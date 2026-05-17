@@ -183,6 +183,101 @@ def link_collection_from_file(
     return result
 
 
+def link_collections_from_file(
+    bpy_module: Any,
+    filepath: str,
+    collection_names: list[str],
+    *,
+    dry_run: bool = True,
+    target_collection: Any | None = None,
+    base_dirs: Iterable[str | Path] | None = None,
+) -> dict[str, Any]:
+    resolved = _resolve_target_path(bpy_module, filepath, base_dirs=base_dirs)
+    requested_collections = _unique_nonempty(collection_names)
+    result: dict[str, Any] = {
+        "dryRun": dry_run,
+        "filepath": resolved,
+        "requestedCollections": requested_collections,
+        "availableCollections": [],
+        "availableObjects": [],
+        "availableObjectDetails": [],
+        "recommendedCollection": None,
+        "recommendedObjects": [],
+        "recommendedObjectDetails": [],
+        "explicitObjectDetails": [],
+        "excludedObjectDetails": [],
+        "linkMode": "collections" if requested_collections else None,
+        "linkedCollection": requested_collections[0] if requested_collections else None,
+        "linkedCollections": [],
+        "linkedObjects": [],
+        "actions": [],
+        "failed": [],
+        "warnings": [],
+    }
+    inspection = inspect_linkable_data_from_file(bpy_module, resolved, base_dirs=base_dirs)
+    for key in (
+        "availableCollections",
+        "availableObjects",
+        "availableObjectDetails",
+        "recommendedCollection",
+        "recommendedObjects",
+        "recommendedObjectDetails",
+        "explicitObjectDetails",
+        "excludedObjectDetails",
+        "warnings",
+    ):
+        result[key] = inspection[key]
+    if inspection["failed"]:
+        result["failed"].extend(inspection["failed"])
+        return result
+    if not requested_collections:
+        result["failed"].append({"path": resolved, "error": "No collection targets were selected."})
+        return result
+
+    missing = [name for name in requested_collections if name not in inspection["availableCollections"]]
+    if missing:
+        result["failed"].append(
+            {
+                "path": resolved,
+                "error": (
+                    f"Requested collection(s) not found: {', '.join(missing)}. "
+                    f"Available collections: {', '.join(inspection['availableCollections']) or '(none)'}."
+                ),
+            }
+        )
+        return result
+
+    if dry_run:
+        result["linkedCollections"] = list(requested_collections)
+        result["actions"].append("link-collections-preview")
+        return result
+
+    try:
+        with bpy_module.data.libraries.load(resolved, link=True) as (data_from, data_to):
+            data_to.collections = list(requested_collections)
+        linked_collections = [collection for collection in getattr(data_to, "collections", []) if collection]
+        linked_by_name = {getattr(collection, "name", ""): collection for collection in linked_collections}
+        missing_from_blender = [name for name in requested_collections if name not in linked_by_name]
+        if missing_from_blender:
+            result["failed"].append(
+                {
+                    "path": resolved,
+                    "error": f"Blender did not return linked collection(s): {', '.join(missing_from_blender)}.",
+                }
+            )
+            return result
+        parent = target_collection or getattr(getattr(bpy_module, "context", None), "collection", None)
+        for name in requested_collections:
+            linked_collection = linked_by_name[name]
+            if parent is not None and _link_child_collection(parent, linked_collection):
+                result["actions"].append("linked-collection-to-scene-tree")
+            result["linkedCollections"].append(getattr(linked_collection, "name", ""))
+        result["actions"].append("linked-library-loaded")
+    except Exception as exc:  # pragma: no cover - depends on Blender runtime
+        result["failed"].append({"path": resolved, "error": str(exc)})
+    return result
+
+
 def inspect_linkable_data_from_file(
     bpy_module: Any,
     filepath: str,
@@ -594,6 +689,18 @@ def _is_reference_like_name(normalized_name: str) -> bool:
 
 def _same_label(left: str, right: str) -> bool:
     return _label_key(left) == _label_key(right)
+
+
+def _unique_nonempty(values: list[str]) -> list[str]:
+    unique_values: list[str] = []
+    seen: set[str] = set()
+    for value in values:
+        name = (value or "").strip()
+        if not name or name in seen:
+            continue
+        seen.add(name)
+        unique_values.append(name)
+    return unique_values
 
 
 def _label_key(value: str) -> str:

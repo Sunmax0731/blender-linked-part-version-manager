@@ -18,6 +18,7 @@
 - Windows companion は起動、設定保存、registry preview に限定し、`.blend` 本体の更新は Blender アドオン側の確認操作に残す。
 - Blender GUI で生成した Part Registry は `owner=unassigned`、`source.type=local`、`versionRef=local`、`updatePolicy=manual` を安全な初期値とし、Link 操作は明示ボタンで実行して自動保存しない。
 - `Link Candidate` は `.blend` 内の collection / object 候補を確認し、`ref` / `reference` / camera / light / floor 系を暗黙選択しない。指定 collection が不一致の場合は候補一覧を report し、先頭 collection へ fallback しない。
+- `.blend` から読み取った collection 一覧はチェックボックスで表示し、チェック済み collection だけを Link 対象にする。複数 collection Link も preview first とし、`.blend` は自動保存しない。
 - Reference 画像、ライト、カメラなど 3D モデル以外の object Link は型付き候補として report し、明示選択だけを許可する。floor / helper 系は除外理由を report する。
 - GitHub 操作はまず dry-run / status 確認を前面に出し、push / pull / reset 相当の危険操作は影響範囲を明示する。
 - `.blend` 本体の自動生成や破壊的更新を実装する前に、サンプル registry と dry-run レポートで検証する。
