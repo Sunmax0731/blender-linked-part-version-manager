@@ -30,6 +30,10 @@
 - Part Registry の編集欄は `partId`、`partTag`、`displayName`、`blendPath`、`linkedCollection`、`owner`、`source`、`versionRef`、`updatePolicy` を 1 件ずつ確認できる密度にする。
 - UI 文言は Blender の表示言語に従う。日本語環境では操作名と主要メッセージを日本語にし、schema field 名や JSON evidence のキーは英語のまま維持する。
 
+## Nested Link Report
+
+source `.blend` 内の Collection が別 `.blend` を Link している場合、UI は依存 library を Preview / Link report の確認対象として扱う。`Preview Link` は `sourceLinkedLibraries` を表示し、`Link Candidate` 実行後は直接 source を `linkedLibraries`、Blender が読み込んだ依存 library を `indirectLinkedLibraries` として表示する。依存 library の local 化や現在の `.blend` の自動保存は行わない。
+
 ## Character.blend Relationship Table
 
 `Character.blend` を統合表示用 file とする運用では、素体、頭 / 表情、髪、服、アクセサリの参照方向と編集責務を [Character.blend 統合構成の関係表](character-blend-relationship.md) に分離して示す。UI は `Character.blend` が直接 Link している部位を操作対象にし、素体が各 Part File から参照される依存は preview / report の確認事項として扱う。

@@ -21,7 +21,7 @@
     "releaseTag": "v0.1.0-alpha.3",
     "implementationVersion": "0.1.2",
     "releaseUrl": "https://github.com/Sunmax0731/blender-linked-part-version-manager/releases/tag/v0.1.0-alpha.3",
-    "verificationNote": "v0.1.0-alpha.3 tag and prerelease assets were refreshed after closing Issues/0021-link-3d.md and Issues/0022-collection-checkbox-link.md.",
+    "verificationNote": "v0.1.0-alpha.3 tag and prerelease assets were refreshed after closing Issues/0021-link-3d.md, Issues/0022-collection-checkbox-link.md, and Issues/0023-indirect-link-report.md.",
     "validationCommand": "npm test",
     "requiredAssets": [
       "blender-linked-part-version-manager.zip",
@@ -143,6 +143,21 @@
       "Preview Link reports requestedCollections and linkedCollections for selected collection sets",
       "Link Candidate links each checked collection into the current scene tree without auto-saving the .blend",
       "missing checked collections fail before mutating the scene tree"
+    ],
+    "automatedEvidence": [
+      "python -m unittest tests.test_registry_plan",
+      "tests/test_registry_plan.py"
+    ],
+    "manualStatus": "pending-next-manual-pass"
+  },
+  "indirectLinkedLibraryReport": {
+    "status": "implemented-unit-tested-manual-pending",
+    "trackingIssue": "Issues/0023-indirect-link-report.md",
+    "implementedBehavior": [
+      "Add File Candidate and Preview Link report nested source .blend dependencies as sourceLinkedLibraries",
+      "Link Candidate reports the direct source library as linkedLibraries",
+      "Link Candidate reports Blender-loaded nested dependencies as indirectLinkedLibraries",
+      "nested dependencies stay linked and are not localized or auto-saved"
     ],
     "automatedEvidence": [
       "python -m unittest tests.test_registry_plan",

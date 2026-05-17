@@ -52,6 +52,8 @@ Character.blend
 
 GUI で registry 候補を生成する場合、既定値は `owner=unassigned`、`source.type=local`、`source.root=.`、`versionRef=local`、`updatePolicy=manual` とする。素体参照のような部位間依存は自動 Link 対象として混ぜず、各 Part File の制作責務と検証レポートで明示する。
 
+source `.blend` の Collection がさらに別 `.blend` を Link している場合は、Blender 標準の indirect Link として読み込ませ、`sourceLinkedLibraries` / `indirectLinkedLibraries` で依存関係を確認する。これは dependency report であり、Part Registry の直接管理行や linked datablock local 化とは分けて扱う。
+
 ## Link 管理、Registry、検証レポートの責務分離
 
 | 領域 | 扱うもの | 扱わないもの |

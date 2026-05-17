@@ -23,7 +23,7 @@ MVP は Option A を採用する。処理が重くなる場合は adapter 実行
 | `core.plan` | status classification、sync plan 作成、risk 判定 |
 | `adapters.git` | Git status / fetch / pull / push preview |
 | `adapters.local` | 共有フォルダやローカル mirror の存在確認とコピー計画 |
-| `blender.link` | linked library 検出、Link 追加前の collection / object inspection、collection checkbox 選択の複数 Link、object type 分類、production target 推奨、非 3D model object の明示 Link、reload、linked datablock local 化、broken link レポート |
+| `blender.link` | linked library 検出、Link 追加前の collection / object / source linked library inspection、collection checkbox 選択の複数 Link、indirect linked library report、object type 分類、production target 推奨、非 3D model object の明示 Link、reload、linked datablock local 化、broken link レポート |
 | `report` | JSON / Markdown レポート、QCDS / release evidence 連携 |
 | `windows` | Blender 外の registry 検証、設定保存、installer dry-run |
 | `scripts` | docs、unit test、runtime gate、release package 検証 |

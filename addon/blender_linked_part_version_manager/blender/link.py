@@ -97,6 +97,7 @@ def link_collection_from_file(
         "availableCollections": [],
         "availableObjects": [],
         "availableObjectDetails": [],
+        "sourceLinkedLibraries": [],
         "recommendedCollection": None,
         "recommendedObjects": [],
         "recommendedObjectDetails": [],
@@ -104,6 +105,8 @@ def link_collection_from_file(
         "excludedObjectDetails": [],
         "linkMode": None,
         "linkedCollection": None,
+        "linkedLibraries": [],
+        "indirectLinkedLibraries": [],
         "linkedObjects": [],
         "actions": [],
         "failed": [],
@@ -114,6 +117,7 @@ def link_collection_from_file(
         "availableCollections",
         "availableObjects",
         "availableObjectDetails",
+        "sourceLinkedLibraries",
         "recommendedCollection",
         "recommendedObjects",
         "recommendedObjectDetails",
@@ -147,11 +151,19 @@ def link_collection_from_file(
         return result
 
     try:
+        before_libraries = _library_paths_by_normalized_path(bpy_module)
         with bpy_module.data.libraries.load(resolved, link=True) as (data_from, data_to):
             if selection["mode"] == "collection":
                 data_to.collections = [selection["collection"]]
             else:
                 data_to.objects = list(selection["objects"])
+        _fill_linked_library_report(
+            result,
+            bpy_module,
+            before_libraries,
+            resolved,
+            inspection["sourceLinkedLibraries"],
+        )
         parent = target_collection or getattr(getattr(bpy_module, "context", None), "collection", None)
         if selection["mode"] == "collection":
             linked_collections = [collection for collection in getattr(data_to, "collections", []) if collection]
@@ -178,6 +190,8 @@ def link_collection_from_file(
                         result["actions"].append("linked-object-to-scene-tree")
             result["linkedObjects"] = [getattr(obj, "name", "") for obj in linked_objects]
         result["actions"].append("linked-library-loaded")
+        if result["indirectLinkedLibraries"]:
+            result["actions"].append("indirect-linked-libraries-loaded")
     except Exception as exc:  # pragma: no cover - depends on Blender runtime
         result["failed"].append({"path": resolved, "error": str(exc)})
     return result
@@ -201,6 +215,7 @@ def link_collections_from_file(
         "availableCollections": [],
         "availableObjects": [],
         "availableObjectDetails": [],
+        "sourceLinkedLibraries": [],
         "recommendedCollection": None,
         "recommendedObjects": [],
         "recommendedObjectDetails": [],
@@ -209,6 +224,8 @@ def link_collections_from_file(
         "linkMode": "collections" if requested_collections else None,
         "linkedCollection": requested_collections[0] if requested_collections else None,
         "linkedCollections": [],
+        "linkedLibraries": [],
+        "indirectLinkedLibraries": [],
         "linkedObjects": [],
         "actions": [],
         "failed": [],
@@ -219,6 +236,7 @@ def link_collections_from_file(
         "availableCollections",
         "availableObjects",
         "availableObjectDetails",
+        "sourceLinkedLibraries",
         "recommendedCollection",
         "recommendedObjects",
         "recommendedObjectDetails",
@@ -253,8 +271,16 @@ def link_collections_from_file(
         return result
 
     try:
+        before_libraries = _library_paths_by_normalized_path(bpy_module)
         with bpy_module.data.libraries.load(resolved, link=True) as (data_from, data_to):
             data_to.collections = list(requested_collections)
+        _fill_linked_library_report(
+            result,
+            bpy_module,
+            before_libraries,
+            resolved,
+            inspection["sourceLinkedLibraries"],
+        )
         linked_collections = [collection for collection in getattr(data_to, "collections", []) if collection]
         linked_by_name = {getattr(collection, "name", ""): collection for collection in linked_collections}
         missing_from_blender = [name for name in requested_collections if name not in linked_by_name]
@@ -273,6 +299,8 @@ def link_collections_from_file(
                 result["actions"].append("linked-collection-to-scene-tree")
             result["linkedCollections"].append(getattr(linked_collection, "name", ""))
         result["actions"].append("linked-library-loaded")
+        if result["indirectLinkedLibraries"]:
+            result["actions"].append("indirect-linked-libraries-loaded")
     except Exception as exc:  # pragma: no cover - depends on Blender runtime
         result["failed"].append({"path": resolved, "error": str(exc)})
     return result
@@ -290,6 +318,7 @@ def inspect_linkable_data_from_file(
         "availableCollections": [],
         "availableObjects": [],
         "availableObjectDetails": [],
+        "sourceLinkedLibraries": [],
         "recommendedCollection": None,
         "recommendedObjects": [],
         "recommendedObjectDetails": [],
@@ -307,6 +336,11 @@ def inspect_linkable_data_from_file(
             object_details = _object_candidate_details(getattr(data_from, "objects", []))
             result["availableObjects"] = [detail["name"] for detail in object_details]
             result["availableObjectDetails"] = object_details
+            result["sourceLinkedLibraries"] = _library_reference_details(
+                bpy_module,
+                getattr(data_from, "libraries", []),
+                resolved,
+            )
     except Exception as exc:  # pragma: no cover - depends on Blender runtime
         result["failed"].append({"path": resolved, "error": str(exc)})
         return result
@@ -338,6 +372,12 @@ def inspect_linkable_data_from_file(
         result["warnings"].append(
             "Unsupported helper object candidates were excluded: "
             + _format_object_detail_list(result["excludedObjectDetails"])
+            + "."
+        )
+    if result["sourceLinkedLibraries"]:
+        result["warnings"].append(
+            "Source .blend contains linked library dependencies: "
+            + _format_library_detail_list(result["sourceLinkedLibraries"])
             + "."
         )
     if not result["availableCollections"] and not result["availableObjects"]:
@@ -458,6 +498,92 @@ def resolve_target_paths(
         resolved = _resolve_target_path(bpy_module, target_path, base_dirs=base_dirs)
         resolved_paths[_normalize(resolved)] = resolved
     return resolved_paths
+
+
+def _library_paths_by_normalized_path(bpy_module: Any) -> dict[str, str]:
+    paths: dict[str, str] = {}
+    data = getattr(bpy_module, "data", None)
+    for library in getattr(data, "libraries", []):
+        filepath = getattr(library, "filepath", "")
+        resolved = _abspath(bpy_module, filepath)
+        if resolved:
+            paths[_normalize(resolved)] = resolved
+    return paths
+
+
+def _fill_linked_library_report(
+    result: dict[str, Any],
+    bpy_module: Any,
+    before_libraries: dict[str, str],
+    source_path: str,
+    source_linked_libraries: list[dict[str, str]],
+) -> None:
+    source_normalized = _normalize(source_path)
+    dependency_paths = {_normalize(item["resolvedPath"]) for item in source_linked_libraries if item.get("resolvedPath")}
+    dependency_by_filepath = {item.get("filepath", ""): item for item in source_linked_libraries}
+    for entry in _current_library_entries(bpy_module, before_libraries):
+        source_dependency = dependency_by_filepath.get(entry["filepath"])
+        if source_dependency and entry["filepath"].startswith("//"):
+            entry = {**entry, "resolvedPath": source_dependency["resolvedPath"]}
+        normalized = _normalize(entry["resolvedPath"])
+        if normalized == source_normalized:
+            result.setdefault("linkedLibraries", []).append({**entry, "linkRole": "direct"})
+        elif normalized in dependency_paths or entry["loadState"] == "new":
+            result.setdefault("indirectLinkedLibraries", []).append({**entry, "linkRole": "indirect"})
+
+
+def _current_library_entries(bpy_module: Any, before_libraries: dict[str, str]) -> list[dict[str, str]]:
+    entries: list[dict[str, str]] = []
+    data = getattr(bpy_module, "data", None)
+    seen: set[str] = set()
+    for library in getattr(data, "libraries", []):
+        filepath = getattr(library, "filepath", "")
+        resolved = _abspath(bpy_module, filepath)
+        if not resolved:
+            continue
+        normalized = _normalize(resolved)
+        if normalized in seen:
+            continue
+        seen.add(normalized)
+        entries.append(
+            {
+                "filepath": filepath,
+                "resolvedPath": resolved,
+                "loadState": "existing" if normalized in before_libraries else "new",
+            }
+        )
+    return entries
+
+
+def _library_reference_details(
+    bpy_module: Any,
+    libraries: Any,
+    source_path: str,
+) -> list[dict[str, str]]:
+    details = []
+    for library in libraries or []:
+        filepath = _library_reference_path(library)
+        resolved = _resolve_library_reference_path(bpy_module, filepath, source_path)
+        if not resolved:
+            continue
+        details.append({"filepath": filepath, "resolvedPath": resolved})
+    return details
+
+
+def _library_reference_path(library: Any) -> str:
+    if isinstance(library, str):
+        return library
+    return str(getattr(library, "filepath", "") or getattr(library, "name", "") or "")
+
+
+def _resolve_library_reference_path(bpy_module: Any, filepath: str, source_path: str) -> str:
+    if not filepath:
+        return ""
+    if filepath.startswith("//"):
+        return str((Path(source_path).parent / filepath[2:]).resolve())
+    if Path(filepath).is_absolute():
+        return str(Path(filepath).resolve())
+    return _abspath(bpy_module, filepath)
 
 
 def _select_link_target(
@@ -674,6 +800,10 @@ def _object_candidate_reason(category: str) -> str:
 
 def _format_object_detail_list(details: list[dict[str, Any]]) -> str:
     return ", ".join(f"{detail['name']} ({detail['type']}/{detail['category']})" for detail in details) or "(none)"
+
+
+def _format_library_detail_list(details: list[dict[str, str]]) -> str:
+    return ", ".join(detail.get("filepath") or detail.get("resolvedPath") or "" for detail in details) or "(none)"
 
 
 def _looks_like_object_details(values: list[Any]) -> bool:

@@ -57,7 +57,7 @@ Part Registry は、統合 `.blend` が参照する部位別 `.blend` の一覧�
 
 ## Add File Candidate
 
-`Add File Candidate` は、Explorer / Blender file selector で選んだ `.blend` を registry 候補に追加します。追加時に `.blend` 内の collection / object 名と object 種別を inspection し、collection 一覧をチェックボックスとして表示します。production collection は既定でチェック候補になり、collection が `ref` など参照用しかない場合は、`Armature` や mesh 名など production object を Link 候補として preview に出します。Reference 用画像、ライト、カメラは型付きの明示候補として report に出しますが、自動選択しません。
+`Add File Candidate` は、Explorer / Blender file selector で選んだ `.blend` を registry 候補に追加します。追加時に `.blend` 内の collection / object 名と object 種別を inspection し、collection 一覧をチェックボックスとして表示します。source `.blend` がさらに別 `.blend` を Link している場合は `sourceLinkedLibraries` に依存 library を出します。production collection は既定でチェック候補になり、collection が `ref` など参照用しかない場合は、`Armature` や mesh 名など production object を Link 候補として preview に出します。Reference 用画像、ライト、カメラは型付きの明示候補として report に出しますが、自動選択しません。
 
 初期値:
 
@@ -78,7 +78,7 @@ Part Registry は、統合 `.blend` が参照する部位別 `.blend` の一覧�
 
 ## Preview Link / Link Candidate
 
-`Preview Link` は、選択中の候補を Link する前の dry-run です。チェック済み collection、available collection / object、availableObjectDetails、recommended target、link mode、失敗理由を JSON preview に出します。`Link Candidate` は、チェック済み collection、選択中の `.blend` collection、production object、または明示選択された Reference 用画像 / ライト / カメラ object を現在の Blender tree に Linkします。
+`Preview Link` は、選択中の候補を Link する前の dry-run です。チェック済み collection、available collection / object、availableObjectDetails、recommended target、link mode、`sourceLinkedLibraries`、失敗理由を JSON preview に出します。`Link Candidate` は、チェック済み collection、選択中の `.blend` collection、production object、または明示選択された Reference 用画像 / ライト / カメラ object を現在の Blender tree に Linkします。実行時に Blender が nested Link 依存を読み込んだ場合は、直接 source を `linkedLibraries`、依存側を `indirectLinkedLibraries` として report します。
 
 何のために使うか:
 

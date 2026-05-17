@@ -59,3 +59,4 @@ No current TODO. New uncategorized work should be moved into one of the phase se
 - [x] [P2] [Phase:03-design] Character.blend統合構成の関係表作成 [Issue](Issues/0020-character-blend.md) [QCDS:Quality,Cost,Satisfaction]
 - [x] [P2] [Phase:04-implementation] Link 対象種別を3Dモデル以外へ拡張 [Issue](Issues/0021-link-3d.md) [QCDS:Quality,Satisfaction]
 - [x] [P2] [Phase:04-implementation] 読み込んだ `.blend` の collection をチェックボックスで複数 Link できるようにする [Issue](Issues/0022-collection-checkbox-link.md) [QCDS:Quality,Satisfaction]
+- [x] [P2] [Phase:04-implementation] Link した Collection の間接 linked library を report する [Issue](Issues/0023-indirect-link-report.md) [QCDS:Quality,Satisfaction]

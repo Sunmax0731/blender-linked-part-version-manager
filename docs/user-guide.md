@@ -8,7 +8,7 @@
 
 1. 統合 `.blend` と部位別 `.blend` の対応を registry JSON に記録する。
 2. JSON がまだない場合は Blender の `Linked Parts` パネルで `Scan Current Links` を実行し、GUI 上の候補を編集して `Save Registry` で保存する。
-3. 追加の `.blend` は `Add File Candidate` で選ぶ。preview に available collection / object と recommended target が出るので、`linkedCollection` を確認してから `Preview Link`、`Link Candidate` の順に現在の Blender tree へ明示的に Link する。
+3. 追加の `.blend` は `Add File Candidate` で選ぶ。preview に available collection / object、recommended target、sourceLinkedLibraries が出るので、`linkedCollection` と dependency を確認してから `Preview Link`、`Link Candidate` の順に現在の Blender tree へ明示的に Link する。
 4. `Validate Registry` を実行する。
 5. `Build Sync Preview` で更新候補、危険状態、reload 候補を確認する。
 6. `local-dirty`、`conflict-risk`、`broken-link` がある場合は自動更新せず、担当者に確認する。
@@ -30,6 +30,8 @@ GUI で生成した候補は `owner=unassigned`、`source.type=local`、`source.
 ## Link 候補の選び方
 
 `Add File Candidate` は source `.blend` 内の collection / object 名と object 種別を読み取り、collection 一覧をチェックボックスとして表示する。複数 collection を Link したい場合は対象 collection にチェックを入れてから `Preview Link` / `Link Candidate` を実行する。チェック済み collection がある場合は、その collection だけが Link 対象になる。
+
+source `.blend` の Collection が別 `.blend` を Link している場合、Preview JSON の `sourceLinkedLibraries` で依存 library を確認できる。`Link Candidate` 実行後は、直接 source が `linkedLibraries`、Blender が読み込んだ依存 library が `indirectLinkedLibraries` に出る。依存 library は report 対象であり、この操作では local 化や自動保存をしない。
 
 `ref`、`reference`、camera、light、floor 系は暗黙選択しない。目的データが collection ではなく scene 直下 object の場合は、`Armature` や mesh 名を production object として Link 対象にする。Reference 用画像、ライト、カメラは `availableObjectDetails` に explicit candidate として出るため、Link したい場合は object 名を `linkedCollection` に明示してから `Preview Link` / `Link Candidate` を実行する。floor helper などの非対応 object は除外理由を preview に表示する。明示的に入力した `linkedCollection` が存在しない場合は、先頭 collection へ勝手に fallback せず、候補一覧と失敗理由を preview に表示する。
 

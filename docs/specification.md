@@ -59,7 +59,7 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 
 ## Blender Operations
 
-- Link 追加: `bpy.data.libraries.load(..., link=True)` を使い、先に collection / object 名と object 種別を inspection して dry-run report に残す。production collection を優先し、collection がない場合は production object を Link できる。Reference 用画像、ライト、カメラは明示選択用候補として扱い、自動選択しない。
+- Link 追加: `bpy.data.libraries.load(..., link=True)` を使い、先に collection / object 名、object 種別、source `.blend` 内の linked library 依存を inspection して dry-run report に残す。production collection を優先し、collection がない場合は production object を Link できる。Reference 用画像、ライト、カメラは明示選択用候補として扱い、自動選択しない。
 - Link 状態検出: `bpy.data.libraries` と linked collection / object の library 情報を照合する。
 - Reload: linked library の reload API を使用し、失敗時は registry と result に原因を残す。
 - Auto Reload: 未保存変更は対象外とし、保存済み `.blend` の mtime が増えた場合だけ reload する。外部 pull / push は実行しない。
@@ -82,7 +82,7 @@ MVP の registry は `samples/representative-suite.json` の `parts` 配列を�
 
 GUI 生成候補の初期値は `owner=unassigned`、`source.type=local`、`source.root=.`、`versionRef=local`、`updatePolicy=manual` とする。
 
-`Link Candidate` は collection checkbox がある場合、チェック済み collection だけを Link する。チェック済み collection が複数ある場合は、各 collection を current scene tree へ Link し、`linkedCollections` として report する。collection checkbox があり、チェックがなく、`linkedCollection` が候補内 collection を指している場合は誤 Link を防ぐため失敗する。`linkedCollection` が object 名など collection 候補外を指す場合は既存の object 明示 Link として処理する。
+`Link Candidate` は collection checkbox がある場合、チェック済み collection だけを Link する。チェック済み collection が複数ある場合は、各 collection を current scene tree へ Link し、`linkedCollections` として report する。source `.blend` 内の Collection が別 `.blend` を参照している場合、Preview は `sourceLinkedLibraries` を report し、実行結果は直接 source を `linkedLibraries`、Blender が読み込んだ依存 library を `indirectLinkedLibraries` として report する。collection checkbox があり、チェックがなく、`linkedCollection` が候補内 collection を指している場合は誤 Link を防ぐため失敗する。`linkedCollection` が object 名など collection 候補外を指す場合は既存の object 明示 Link として処理する。
 
 単一 Link fallback では、`linkedCollection` が実在する collection 名ならその collection を Link する。ファイル名から生成された既定値が collection と一致しない場合は、`ref` / `reference` / camera / light / floor 系を避けて production collection を推奨し、collection がない場合は production object を Link する。Reference 用画像、ライト、カメラなどの非 3D model object は `availableObjectDetails` に type / category / selection を出し、ユーザーが object 名を明示した場合だけ Link する。floor / helper 系など非対応 object は Link せず、除外理由を report する。明示的に入力した collection / object 名が見つからない場合は、先頭 collection へ fallback せず失敗と候補一覧を report する。
 

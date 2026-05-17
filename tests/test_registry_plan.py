@@ -315,6 +315,42 @@ class RegistryPlanTests(unittest.TestCase):
             self.assertIn("ref_front", result["warnings"][1])
             self.assertIn("Floor", result["warnings"][2])
 
+    def test_linkable_data_reports_source_linked_libraries(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source_dir = root / "parts" / "hair"
+            source_dir.mkdir(parents=True)
+            blend_file = source_dir / "main_hair.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            dependency = root / "parts" / "body" / "base_body.blend"
+            dependency.parent.mkdir(parents=True)
+            dependency.write_text("dependency", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                source_dir,
+                [],
+                available_collections=["CHR_Hair_Main"],
+                available_objects=[],
+                available_libraries=["//../body/base_body.blend"],
+            )
+
+            result = inspect_linkable_data_from_file(
+                bpy_module,
+                str(blend_file),
+                base_dirs=[root],
+            )
+
+            self.assertEqual(result["failed"], [])
+            self.assertEqual(
+                result["sourceLinkedLibraries"],
+                [
+                    {
+                        "filepath": "//../body/base_body.blend",
+                        "resolvedPath": str(dependency.resolve()),
+                    }
+                ],
+            )
+            self.assertIn("//../body/base_body.blend", result["warnings"][-1])
+
     def test_link_candidate_does_not_implicitly_select_non_model_objects(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -526,6 +562,49 @@ class RegistryPlanTests(unittest.TestCase):
             self.assertIn("Missing_Collection", result["failed"][0]["error"])
             self.assertEqual(len(bpy_module.context.collection.children), 0)
 
+    def test_checked_collections_execute_reports_indirect_linked_libraries(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source_dir = root / "parts" / "hair"
+            source_dir.mkdir(parents=True)
+            blend_file = source_dir / "main_hair.blend"
+            blend_file.write_text("fixture", encoding="utf-8")
+            dependency = root / "parts" / "body" / "base_body.blend"
+            dependency.parent.mkdir(parents=True)
+            dependency.write_text("dependency", encoding="utf-8")
+            bpy_module = _FakeBpy(
+                source_dir,
+                [],
+                available_collections=["CHR_Hair_Main"],
+                available_objects=[],
+                available_libraries=["//../body/base_body.blend"],
+            )
+
+            result = link_collections_from_file(
+                bpy_module,
+                str(blend_file),
+                ["CHR_Hair_Main"],
+                dry_run=False,
+                base_dirs=[root],
+            )
+
+            self.assertEqual(result["failed"], [])
+            self.assertEqual(result["linkedCollections"], ["CHR_Hair_Main"])
+            self.assertEqual(result["linkedLibraries"][0]["linkRole"], "direct")
+            self.assertEqual(result["linkedLibraries"][0]["resolvedPath"], str(blend_file.resolve()))
+            self.assertEqual(
+                result["indirectLinkedLibraries"],
+                [
+                    {
+                        "filepath": "//../body/base_body.blend",
+                        "resolvedPath": str(dependency.resolve()),
+                        "loadState": "new",
+                        "linkRole": "indirect",
+                    }
+                ],
+            )
+            self.assertIn("indirect-linked-libraries-loaded", result["actions"])
+
     def test_integrate_linked_libraries_dry_run_reports_target_without_localizing(self) -> None:
         root = ROOT
         bpy_module = _FakeBpy(
@@ -584,6 +663,7 @@ class _FakeData:
         collections: list[tuple[str, int]] | None = None,
         available_collections: list[str] | None = None,
         available_objects: list[str] | None = None,
+        available_libraries: list[str] | None = None,
     ) -> None:
         self.filepath = ""
         self.libraries = _FakeLibraries(
@@ -591,6 +671,7 @@ class _FakeData:
             self,
             available_collections=available_collections,
             available_objects=available_objects,
+            available_libraries=available_libraries,
         )
         self.collections = _FakeCollectionContainer([
             _FakeCollection(name, self.libraries[library_index])
@@ -607,11 +688,13 @@ class _FakeLibraries(list):
         *,
         available_collections: list[str] | None = None,
         available_objects: list[str] | None = None,
+        available_libraries: list[str] | None = None,
     ) -> None:
         super().__init__(libraries)
         self._data = data
         self._available_collections = available_collections or []
         self._available_objects = available_objects or []
+        self._available_libraries = available_libraries or []
 
     def load(self, filepath: str, link: bool = True):
         return _FakeLibraryLoadContext(
@@ -619,6 +702,7 @@ class _FakeLibraries(list):
             filepath,
             self._available_collections,
             self._available_objects,
+            self._available_libraries,
         )
 
 
@@ -629,21 +713,27 @@ class _FakeLibraryLoadContext:
         filepath: str,
         available_collections: list[str],
         available_objects: list[str],
+        available_libraries: list[str],
     ) -> None:
         self.data = data
         self.library = _FakeLibrary(filepath)
         self.available_collections = available_collections
         self.available_objects = available_objects
+        self.available_libraries = available_libraries
         self.data_to = _FakeDataTo()
 
     def __enter__(self):
-        data_from = _FakeDataFrom(self.available_collections, self.available_objects)
+        data_from = _FakeDataFrom(self.available_collections, self.available_objects, self.available_libraries)
         return data_from, self.data_to
 
     def __exit__(self, exc_type, exc, tb) -> bool:
         if exc_type is not None:
             return False
-        self.data.libraries.append(self.library)
+        if not self.data_to.collections and not self.data_to.objects:
+            return False
+        self._append_library_once(self.library)
+        for filepath in self.available_libraries:
+            self._append_library_once(_FakeLibrary(filepath))
         self.data_to.collections = [
             _FakeCollection(name, self.library)
             for name in self.data_to.collections
@@ -656,11 +746,17 @@ class _FakeLibraryLoadContext:
         self.data.objects.extend(self.data_to.objects)
         return False
 
+    def _append_library_once(self, library: _FakeLibrary) -> None:
+        if any(existing.filepath == library.filepath for existing in self.data.libraries):
+            return
+        self.data.libraries.append(library)
+
 
 class _FakeDataFrom:
-    def __init__(self, collections: list[str], objects: list[str]) -> None:
+    def __init__(self, collections: list[str], objects: list[str], libraries: list[str] | None = None) -> None:
         self.collections = collections
         self.objects = objects
+        self.libraries = libraries or []
 
 
 class _FakeDataTo:
@@ -730,12 +826,14 @@ class _FakeBpy:
         collections: list[tuple[str, int]] | None = None,
         available_collections: list[str] | None = None,
         available_objects: list[str] | None = None,
+        available_libraries: list[str] | None = None,
     ) -> None:
         self.data = _FakeData(
             filepaths,
             collections=collections,
             available_collections=available_collections,
             available_objects=available_objects,
+            available_libraries=available_libraries,
         )
         self.path = _FakePath(blend_dir)
         self.context = _FakeContext()

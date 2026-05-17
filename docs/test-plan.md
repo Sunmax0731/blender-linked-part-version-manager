@@ -18,6 +18,7 @@
 | GUI linked library scan | Blender add-on / blender.link | `bpy.data.libraries` と linked collection から `blendPath` と `linkedCollection` を持つ editable part 候補を生成できる。 |
 | Link candidate target selection | Blender add-on / blender.link | `Add File Candidate` / `Preview Link` が available collection / object を report し、`ref` への先頭 fallback を避けて production collection / object を選ぶ。 |
 | Collection checkbox multi-link | Blender add-on / UI / blender.link | 読み込んだ `.blend` の collection 一覧をチェックボックス表示し、チェック済み collection だけを dry-run / execute で複数 Link できる。 |
+| Indirect linked library report | Blender add-on / blender.link | source `.blend` 内の nested Blender Link を `sourceLinkedLibraries` として preview し、Link 実行時に `linkedLibraries` / `indirectLinkedLibraries` として report できる。 |
 | Link target type expansion | Blender add-on / blender.link | Reference 用画像 / ライト / カメラを型付きの明示候補として report し、自動選択せず、floor helper は除外理由付きで失敗する。 |
 | Japanese UI localization | Blender add-on / UI translations | `ja_JP` 翻訳テーブルが主要 panel、operator、button、property、message を持ち、Blender の `pgettext_iface` で日本語へ解決できる。 |
 | Link integration helper | Blender add-on / blender.link | dry-run は対象 datablock を報告するだけで local 化せず、実行時は選択 target の linked datablock だけを local 化する。 |
@@ -64,3 +65,4 @@
 2026-05-17 時点で Link target type expansion の Python unit test を追加し、Reference 用画像 object とライト object が explicit candidate として report され、ファイル名既定値からは暗黙選択されず、明示 object 名なら Link できることを確認した。floor helper は unsupported として除外理由を report する。
 
 2026-05-17 時点で Collection checkbox multi-link の Python unit test を追加し、チェック済み collection が dry-run で `linkedCollections` に出ること、実行時に各 collection が scene tree へ Link されること、missing collection がある場合は実行前に失敗して何も Link しないことを確認した。
+2026-05-17 時点で Indirect linked library report の Python unit test を追加し、source `.blend` 内の nested Link が `sourceLinkedLibraries` に出ること、実行時に Blender が読み込んだ依存 library が `indirectLinkedLibraries` に出ることを確認した。

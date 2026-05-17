@@ -15,6 +15,7 @@
 - 未保存の別 Blender 編集は Auto Reload では反映されないことを確認する。
 - `Scan Current Links`、`Save Registry`、`Add File Candidate`、`Preview Link`、`Link Candidate` が GUI registry editing の想定通りに動く。
 - 読み込んだ `.blend` の collection 一覧がチェックボックス表示され、チェック済み collection だけが `Preview Link` / `Link Candidate` で複数 Link される。
+- source `.blend` 内に nested Blender Link がある場合、`Preview Link` に `sourceLinkedLibraries`、実行結果に `linkedLibraries` / `indirectLinkedLibraries` が出る。
 - source `.blend` に `ref` collection と production collection / object が混在する場合、`Preview Link` が先頭 `ref` ではなく intended collection / object を recommended target にし、存在しない明示 collection は失敗として候補一覧を表示する。
 - Reference 用画像、ライト、カメラがある source `.blend` では `availableObjectDetails` に object type / category / selection が表示され、明示 object 名でだけ Link される。floor helper は除外理由付きで失敗する。
 - `Preview Integrate` が対象 linked file と output file を表示し、`Integrate Link` の cancel で `.blend`、Link 状態、Part Registry が変わらない。
@@ -23,4 +24,4 @@
 
 ## 判定
 
-Link reload と Viewport 反映は通過済み。GUI registry editing、collection checkbox multi-link、Link Candidate target selection、Link target type expansion、link integration、日本語 UI 表示の実機確認で失敗した場合は `Issues/` に再現手順、Blender version、registry、`dist/blender-dry-run-report.json` を記録する。
+Link reload と Viewport 反映は通過済み。GUI registry editing、collection checkbox multi-link、indirect linked library report、Link Candidate target selection、Link target type expansion、link integration、日本語 UI 表示の実機確認で失敗した場合は `Issues/` に再現手順、Blender version、registry、`dist/blender-dry-run-report.json` を記録する。

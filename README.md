@@ -10,6 +10,7 @@ Blender Linked Part Version Manager は、キャラクターや複合モデル�
 - GUI で partId、部位タグ、担当者、リンク先 collection、source、versionRef、updatePolicy を編集する
 - `.blend` ファイルを選んで Link 候補として追加し、ファイル内の collection / object 候補を確認してから Blender tree に Link する
 - 読み込んだ `.blend` の collection 一覧をチェックボックスで確認し、チェック済み collection をまとめて Link する
+- Link した Collection が別 `.blend` を参照している場合、Preview / Link report で source linked library と indirect linked library を確認する
 - Reference 画像、ライト、カメラなど 3D モデル以外の object も型付き候補として report し、明示選択した場合だけ Link する
 - registry の不備、missing-link、broken-link、local-dirty、conflict-risk を確認する
 - 更新前に sync preview を作り、安全な linked library だけ reload する
@@ -78,7 +79,7 @@ Blender Linked Part Version Manager は、キャラクターや複合モデル�
 
 ### 5. Link / Reload を実行する
 
-新しい候補を Link する場合は、先に `Preview Link` で dry-run を確認し、問題がなければ `Link Candidate` を実行します。collection 一覧にチェックが入っている場合は、チェック済み collection だけをまとめて Link します。`linkedCollection` が `.blend` 内に存在しない場合でも、ファイル名から自動生成された既定値なら production collection を推奨し、collection がない場合は `Armature` や mesh などの production object を Link 対象にします。Reference 画像、ライト、カメラは object 種別付きの明示候補として表示し、自動選択しません。明示的に入力した collection / object 名が存在しない場合や、floor など非対応 helper の場合は、先頭 collection へ勝手に fallback せず失敗理由と候補一覧を表示します。
+新しい候補を Link する場合は、先に `Preview Link` で dry-run を確認し、問題がなければ `Link Candidate` を実行します。collection 一覧にチェックが入っている場合は、チェック済み collection だけをまとめて Link します。source `.blend` 内の Collection が別 `.blend` を参照している場合は、Preview JSON に `sourceLinkedLibraries`、実行結果に `linkedLibraries` と `indirectLinkedLibraries` が表示されます。`linkedCollection` が `.blend` 内に存在しない場合でも、ファイル名から自動生成された既定値なら production collection を推奨し、collection がない場合は `Armature` や mesh などの production object を Link 対象にします。Reference 画像、ライト、カメラは object 種別付きの明示候補として表示し、自動選択しません。明示的に入力した collection / object 名が存在しない場合や、floor など非対応 helper の場合は、先頭 collection へ勝手に fallback せず失敗理由と候補一覧を表示します。
 
 既存の linked library を更新する場合は、先に `Preview Reload` を確認し、問題がなければ `Reload Safe Links` を実行します。現在の `.blend` は自動保存されないため、結果を確認してから手動で保存してください。
 

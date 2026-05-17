@@ -40,6 +40,7 @@ Blender Linked Part Version Manager は、複数人が Hair、Body、Face、Acce
 - R17: `Character.blend` を統合表示用 file として使うユーザー向けに、素体、頭 / 表情、髪、服、アクセサリの参照関係、編集責務、Link 管理対象、検証レポート上の扱いを関係表で確認できる。
 - R18: Link 候補の object 種別を report に出し、Reference 用画像、ライト、カメラなど 3D モデル以外の object はユーザーが明示選択した場合だけ Link 対象にできる。floor / helper 系などサポート対象外は除外理由を report に残す。
 - R19: Blender GUI で読み込んだ `.blend` の collection 一覧をチェックボックス表示し、チェック済み collection だけを `Preview Link` / `Link Candidate` の対象にできる。
+- R20: source `.blend` 内の Collection が別 `.blend` を Link している場合、依存 library を `sourceLinkedLibraries` / `indirectLinkedLibraries` として report し、local 化や自動保存は行わない。
 
 ## Non Functional Requirements
 
